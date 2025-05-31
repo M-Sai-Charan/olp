@@ -19,6 +19,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { CardModule } from 'primeng/card';
 import { DropdownModule } from 'primeng/dropdown';
 import { ChartModule } from 'primeng/chart';
+import { ProgressBarModule } from 'primeng/progressbar';
 @NgModule({
     declarations: [],
     imports: [
@@ -41,7 +42,8 @@ import { ChartModule } from 'primeng/chart';
         DividerModule,
         PanelModule,
         AvatarModule,
-        DropdownModule
+        DropdownModule,
+        ProgressBarModule
     ],
     exports: [
         ButtonModule,
@@ -63,7 +65,8 @@ import { ChartModule } from 'primeng/chart';
         AvatarModule,
         DropdownModule,
         CardModule,
-        ChartModule
+        ChartModule,
+        ProgressBarModule
     ],
     providers: [],
     bootstrap: []

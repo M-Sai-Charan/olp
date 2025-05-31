@@ -1,63 +1,76 @@
-<div class="dashboard p-4">
-  <div class="dashboard-grid">
-    <!-- KPIs -->
-    <p-card class="kpi-card kpi-green">
-      <div class="kpi-label">Revenue</div>
-      <div class="kpi-value text-green-600">$1548.26</div>
-    </p-card>
-    <p-card class="kpi-card">
-      <div class="kpi-label">Buyer Messages</div>
-      <div class="kpi-value text-blue-600">2</div>
-    </p-card>
-    <p-card class="kpi-card">
-      <div class="kpi-label">CTR</div>
-      <div class="kpi-value">12%</div>
-    </p-card>
-    <p-card class="kpi-card">
-      <div class="kpi-label">Out of Stock Products</div>
-      <div class="kpi-value text-orange-500">4</div>
-    </p-card>
+<div class="dashboard-container">
+  <!-- Top Summary Cards -->
+  <div class="summary-cards">
+    <div class="card campaign-alerts">
+      <i class="pi pi-bell"></i>
+      <div class="label">Campaign Alerts</div>
+      <div class="count">123k</div>
+      <div class="timestamp">11:08, 17 Aug</div>
+    </div>
+    <div class="card system-alerts">
+      <i class="pi pi-exclamation-triangle"></i>
+      <div class="label">System Alerts</div>
+      <div class="count">89k</div>
+      <div class="timestamp">14:15, 18 Aug</div>
+    </div>
+    <div class="card promo-offers">
+      <i class="pi pi-gift"></i>
+      <div class="label">Promotional Offers</div>
+      <div class="count">3k</div>
+      <div class="timestamp">09:30, 16 Aug</div>
+    </div>
+    <div class="card traffic-distribution">
+      <i class="pi pi-chart-line"></i>
+      <div class="label">Traffic Distribution</div>
+      <div class="count">175k</div>
+      <div class="timestamp">16:45, 19 Aug</div>
+    </div>
+  </div>
 
-    <!-- Orders Chart -->
-    <p-card header="Orders" class="wide-card">
-      <div class="flex justify-between items-center mb-3">
-        <span class="text-sm font-semibold">Your Daily Orders (Last 30 Days)</span>
+  <!-- Campaign Performance and Targets -->
+  <div class="main-content">
+    <!-- Campaign Performance -->
+    <div class="campaign-performance">
+      <h3>Campaign Performance</h3>
+      <div class="traffic-sources">
+        <div class="source-card active">
+          <div class="source-name">All Traffic</div>
+          <div class="visits">1250 Visits</div>
+        </div>
+        <div class="source-card">
+          <i class="pi pi-instagram"></i> Instagram - 660 Visits
+        </div>
+        <div class="source-card">
+          <i class="pi pi-linkedin"></i> LinkedIn - 733 Visits
+        </div>
+        <div class="source-card">
+          <i class="pi pi-google"></i> Google - 817 Visits
+        </div>
+        <div class="source-card">
+          <i class="pi pi-twitter"></i> X - 995 Visits
+        </div>
       </div>
-      <p-chart type="bar" [data]="ordersChartData" [options]="ordersChartOptions"></p-chart>
-    </p-card>
+    </div>
 
-    <!-- Waiting Actions -->
-    <!-- <p-card header="Waiting Actions">
-      <div class="flex flex-column gap-2">
-        <div>Order #85421 <p-tag value="New" severity="info" /></div>
-        <div>Order #85422 <p-tag value="Processing" severity="info" /></div>
+    <!-- Campaign Targets -->
+    <div class="campaign-targets">
+      <h3>Campaign Targets</h3>
+      <div class="percentage">{{ totalPercentage }}%</div>
+
+      <div class="multi-progress-bar">
+        <div *ngFor="let campaign of campaigns" class="segment" [ngClass]="campaign.color"
+          [ngStyle]="{ width: getWidth(campaign.value) }"></div>
       </div>
-    </p-card> -->
 
-    <!-- Sales by Category -->
-    <p-card header="Sales by Category">
-      <p-chart type="doughnut" [data]="categoryChartData"></p-chart>
-    </p-card>
+      <ul class="target-details">
+        <li *ngFor="let campaign of campaigns">
+          <span class="dot" [ngClass]="campaign.color"></span>
+          {{ campaign.label }} - {{ campaign.value }} / {{ campaign.target }}
+        </li>
+      </ul>
+    </div>
 
-    <!-- Clients Line Chart -->
-    <!-- <p-card header="Clients">
-      <p-chart type="line" [data]="clientsChartData"></p-chart>
-    </p-card> -->
 
-    <!-- Ad Management Table -->
-    <!-- <p-card header="Ad Management">
-      <p-table [value]="ads">
-        <ng-template pTemplate="header">
-          <tr><th>Ad Name</th><th>ROI</th><th>CTR</th></tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-ad>
-          <tr>
-            <td>{{ ad.name }}</td>
-            <td>{{ ad.roi }}</td>
-            <td>{{ ad.ctr }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </p-card> -->
+
   </div>
 </div>
