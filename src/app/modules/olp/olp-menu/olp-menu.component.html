@@ -1,0 +1,47 @@
+<div class="dashboard-shell">
+  <header class="header">
+    <div class="brand">
+      <span class="header-text">OLP</span>
+    </div>
+    <!-- <div class="user-header">
+      Hello, Sunny
+      Have a great day
+    </div> -->
+    <button class="theme-toggle" (click)="toggleTheme()">🌓</button>
+  </header>
+
+  <div class="dashboard-layout">
+    <nav class="sidebar">
+      <ul>
+        <li>
+          <a routerLink="/dashboard">
+            <i class="pi pi-home"></i>
+            <span class="menu-label">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/users">
+            <i class="pi pi-users"></i>
+            <span class="menu-label">Users</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/employees">
+            <i class="pi pi-cloud"></i>
+            <span class="menu-label">Employees</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/admin">
+            <i class="pi pi-cog"></i>
+            <span class="menu-label">Admin</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

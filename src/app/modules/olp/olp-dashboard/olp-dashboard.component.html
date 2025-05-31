@@ -1,0 +1,63 @@
+<div class="dashboard p-4">
+  <div class="dashboard-grid">
+    <!-- KPIs -->
+    <p-card class="kpi-card kpi-green">
+      <div class="kpi-label">Revenue</div>
+      <div class="kpi-value text-green-600">$1548.26</div>
+    </p-card>
+    <p-card class="kpi-card">
+      <div class="kpi-label">Buyer Messages</div>
+      <div class="kpi-value text-blue-600">2</div>
+    </p-card>
+    <p-card class="kpi-card">
+      <div class="kpi-label">CTR</div>
+      <div class="kpi-value">12%</div>
+    </p-card>
+    <p-card class="kpi-card">
+      <div class="kpi-label">Out of Stock Products</div>
+      <div class="kpi-value text-orange-500">4</div>
+    </p-card>
+
+    <!-- Orders Chart -->
+    <p-card header="Orders" class="wide-card">
+      <div class="flex justify-between items-center mb-3">
+        <span class="text-sm font-semibold">Your Daily Orders (Last 30 Days)</span>
+      </div>
+      <p-chart type="bar" [data]="ordersChartData" [options]="ordersChartOptions"></p-chart>
+    </p-card>
+
+    <!-- Waiting Actions -->
+    <!-- <p-card header="Waiting Actions">
+      <div class="flex flex-column gap-2">
+        <div>Order #85421 <p-tag value="New" severity="info" /></div>
+        <div>Order #85422 <p-tag value="Processing" severity="info" /></div>
+      </div>
+    </p-card> -->
+
+    <!-- Sales by Category -->
+    <p-card header="Sales by Category">
+      <p-chart type="doughnut" [data]="categoryChartData"></p-chart>
+    </p-card>
+
+    <!-- Clients Line Chart -->
+    <!-- <p-card header="Clients">
+      <p-chart type="line" [data]="clientsChartData"></p-chart>
+    </p-card> -->
+
+    <!-- Ad Management Table -->
+    <!-- <p-card header="Ad Management">
+      <p-table [value]="ads">
+        <ng-template pTemplate="header">
+          <tr><th>Ad Name</th><th>ROI</th><th>CTR</th></tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-ad>
+          <tr>
+            <td>{{ ad.name }}</td>
+            <td>{{ ad.roi }}</td>
+            <td>{{ ad.ctr }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card> -->
+  </div>
+</div>

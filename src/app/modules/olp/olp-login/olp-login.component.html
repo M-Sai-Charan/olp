@@ -1,0 +1,54 @@
+<div class="login-wrapper">
+
+  <div class="login-left">
+    <div class="olp-banner">
+      <h1 class="olp-text" [class.glow]="isHovered"><span>One</span>Look<span>Photography</span></h1>
+    </div>
+    <div class="olp-banner-text container">
+      <h1 class="neon">
+        <div *ngIf="userName">Hello, <span class="glow-text1" [class.glow]="isHovered">{{userName}}</span></div>Every
+        <span class="glow-text2" [class.glow]="isHovered">story</span> start's <span class="glow-text3"
+          [class.glow]="isHovered">here</span>
+      </h1>
+    </div>
+
+  </div>
+
+  <div class="login-right">
+    <div class="login-container">
+      <form *ngIf="olpLoginForm" [formGroup]="olpLoginForm" (ngSubmit)="onLogin()">
+        <div class="p-fluid">
+
+          <!-- Username with float label -->
+          <div class="p-field p-float-label">
+            <input id="username" type="text" pInputText formControlName="userName" [(ngModel)]="userName"
+              placeholder="Username" />
+            <!-- <label for="username">Username</label> -->
+            <small *ngIf="olpLoginForm.get('userName')?.invalid && olpLoginForm.get('userName')?.touched"
+              class="p-error">
+              Username is required.
+            </small>
+          </div>
+
+          <!-- Password with float label -->
+          <div class="p-field p-float-label">
+            <p-password id="password" formControlName="password" [toggleMask]="true" inputStyleClass="w-full"
+              placeholder="Password" [feedback]="false" />
+            <!-- <label for="password">Password</label> -->
+            <small *ngIf="olpLoginForm.get('password')?.invalid && olpLoginForm.get('password')?.touched"
+              class="p-error">
+              Password is required.
+            </small>
+          </div>
+
+          <!-- Submit button -->
+          <div class="p-field" *ngIf="!olpLoginForm.invalid">
+          <!-- <div class="p-field"> -->
+            <button pButton type="submit" label="Login" (mouseenter)="isHovered = true" (mouseleave)="isHovered = false"
+              class="login-button p-button-primary w-full"></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,353 @@
+[
+    {
+        "bride":"John",
+        "groom":"Stella",
+        "contactNumber":6301587956,
+        "email":"msunnylive@gmail.com",
+        "comments":"test",
+        "status":"New",
+        "createdOn":"27-05-2025 8:30AM",
+        "events":[
+            {
+                "eventName":"Wedding",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Reception",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Night",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Haldi",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Engagement",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            }
+        ]
+    },
+    {
+        "bride":"John",
+        "groom":"Stella",
+        "contactNumber":6301587956,
+        "email":"msunnylive@gmail.com",
+        "comments":"test",
+        "status":"New",
+        "createdOn":"27-05-2025 8:30AM",
+        "events":[
+            {
+                "eventName":"Wedding",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Reception",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Night",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Haldi",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Engagement",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            }
+        ]
+    },
+    {
+        "bride":"John",
+        "groom":"Stella",
+        "contactNumber":6301587956,
+        "email":"msunnylive@gmail.com",
+        "comments":"test",
+        "status":"New",
+        "createdOn":"27-05-2025 8:30AM",
+        "events":[
+            {
+                "eventName":"Wedding",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Reception",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Night",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Haldi",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Engagement",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            }
+        ]
+    },
+    {
+        "bride":"John",
+        "groom":"Stella",
+        "contactNumber":6301587956,
+        "email":"msunnylive@gmail.com",
+        "comments":"test",
+        "status":"New",
+        "createdOn":"27-05-2025 8:30AM",
+        "events":[
+            {
+                "eventName":"Wedding",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Reception",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Night",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Haldi",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Engagement",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            }
+        ]
+    },
+    {
+        "bride":"John",
+        "groom":"Stella",
+        "contactNumber":6301587956,
+        "email":"msunnylive@gmail.com",
+        "comments":"test",
+        "status":"New",
+        "createdOn":"27-05-2025 8:30AM",
+        "events":[
+            {
+                "eventName":"Wedding",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Reception",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Night",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Haldi",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Engagement",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            }
+        ]
+    },
+    {
+        "bride":"John",
+        "groom":"Stella",
+        "contactNumber":6301587956,
+        "email":"msunnylive@gmail.com",
+        "comments":"test",
+        "status":"New",
+        "createdOn":"27-05-2025 8:30AM",
+        "events":[
+            {
+                "eventName":"Wedding",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Reception",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Night",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Haldi",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Engagement",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            }
+        ]
+    },
+    {
+        "bride":"John",
+        "groom":"Stella",
+        "contactNumber":6301587956,
+        "email":"msunnylive@gmail.com",
+        "comments":"test",
+        "status":"New",
+        "createdOn":"27-05-2025 8:30AM",
+        "events":[
+            {
+                "eventName":"Wedding",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Reception",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Night",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Haldi",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Engagement",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            }
+        ]
+    },
+    {
+        "bride":"John",
+        "groom":"Stella",
+        "contactNumber":6301587956,
+        "email":"msunnylive@gmail.com",
+        "comments":"test",
+        "status":"New",
+        "createdOn":"27-05-2025 8:30AM",
+        "events":[
+            {
+                "eventName":"Wedding",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Reception",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Night",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Haldi",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Engagement",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            }
+        ]
+    },
+    {
+        "bride":"John",
+        "groom":"Stella",
+        "contactNumber":6301587956,
+        "email":"msunnylive@gmail.com",
+        "comments":"test",
+        "status":"New",
+        "createdOn":"27-05-2025 8:30AM",
+        "events":[
+            {
+                "eventName":"Wedding",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Reception",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Night",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Haldi",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            },
+             {
+                "eventName":"Engagement",
+                "eventDate":"01-06-2025",
+                "eventLocation":"Banglore",
+                "eventTime":"Early Morning",
+                "eventGuests":200
+            }
+        ]
+    }
+]

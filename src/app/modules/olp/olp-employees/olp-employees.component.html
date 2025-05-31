@@ -1,0 +1,13 @@
+<div class="flex justify-center overflow-x-auto">
+    <p-organization-chart [value]="data" selectionMode="multiple" [(selection)]="selectedNodes" [collapsible]="true">
+        <ng-template let-node pTemplate="person">
+            <div class="chart-node">
+                <div class="chart-node-content">
+                    <img [src]="node.data.image" class="chart-image" />
+                    <div class="chart-name">{{ node.data.name }}</div>
+                    <div class="chart-title">{{ node.data.title }}</div>
+                </div>
+            </div> 
+        </ng-template>
+    </p-organization-chart>
+</div>
