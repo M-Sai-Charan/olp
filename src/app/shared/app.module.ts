@@ -22,6 +22,11 @@ import { ChartModule } from 'primeng/chart';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { InputTextarea } from 'primeng/inputtextarea';
 import { MessageModule } from 'primeng/message';
+import { TabViewModule } from 'primeng/tabview';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CalendarModule } from 'primeng/calendar';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @NgModule({
     declarations: [],
     imports: [
@@ -47,7 +52,12 @@ import { MessageModule } from 'primeng/message';
         DropdownModule,
         ProgressBarModule,
         InputTextarea,
-        MessageModule
+        MessageModule,
+        TabViewModule,
+        InputNumberModule,
+        CalendarModule,
+        ToastModule,
+        ConfirmDialogModule
     ],
     exports: [
         ButtonModule,
@@ -72,7 +82,12 @@ import { MessageModule } from 'primeng/message';
         ChartModule,
         ProgressBarModule,
         InputTextarea,
-        MessageModule
+        MessageModule,
+        TabViewModule,
+        InputNumberModule,
+        CalendarModule,
+         ToastModule,
+        ConfirmDialogModule
     ],
     providers: [],
     bootstrap: []

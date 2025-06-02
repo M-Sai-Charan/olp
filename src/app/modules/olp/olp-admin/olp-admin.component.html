@@ -28,15 +28,23 @@
         <p-message *ngIf="isInvalid('role')" severity="error" text="Role is required"></p-message>
       </div>
 
+      <!-- Joining -->
+      <div class="field col-12 md:col-4">
+        <label for="joiningDate">Joining Date</label>
+        <p-calendar formControlName="joiningDate" dateFormat="dd/mm/yy" inputId="joiningDate" placeholder=""
+          styleClass="w-full"></p-calendar>
+        <p-message *ngIf="isInvalid('joiningDate')" severity="error" text="Joining Date is required"></p-message>
+      </div>
+
       <!-- Email -->
-      <div class="field col-12 md:col-6">
+      <div class="field col-12 md:col-4">
         <label for="email">Email</label>
         <input id="email" type="email" pInputText formControlName="email" />
         <p-message *ngIf="isInvalid('email')" severity="error" text="Valid email is required"></p-message>
       </div>
 
       <!-- Phone -->
-      <div class="field col-12 md:col-6">
+      <div class="field col-12 md:col-4">
         <label for="phone">Phone</label>
         <input id="phone" type="text" pInputText formControlName="phone" />
         <p-message *ngIf="isInvalid('phone')" severity="error" text="Phone is required"></p-message>

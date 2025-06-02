@@ -1,0 +1,85 @@
+<p-card header="Customer Event Budgeting">
+  <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()">
+    <div class="grid form-grid" style="border-top: 1px solid;margin-top: 5px;">
+
+      <!-- Customer Dropdown -->
+      <div class="col-12 md:col-6">
+        <span class="p-float-label">
+          <p-dropdown
+            inputId="customer"
+            formControlName="customer"
+            [options]="customers"
+            optionLabel="name"
+            placeholder="Select Customer"
+            [showClear]="true"
+            filter="true"
+          ></p-dropdown>
+        </span>
+        <small
+          *ngIf="budgetForm.controls['customer'].invalid && budgetForm.controls['customer'].touched"
+          class="p-error" style="color: red;"
+        >
+          Customer is required.
+        </small>
+      </div>
+
+      <!-- Events Tabs -->
+      <div class="col-12">
+        <p-tabView>
+          <p-tabPanel
+            *ngFor="let event of events; let i = index"
+            [header]="event.name"
+          >
+            <div class="grid align-items-center mb-3">
+              <div class="col-12 md:col-4">
+                <label for="budget-{{ i }}">Budget (₹)</label>
+              </div>
+              <div class="col-12 md:col-8">
+                <p-inputNumber
+                  [min]="0"
+                  [(ngModel)]="event.budget"
+                  (onInput)="calculateTotalBudget()"
+                  mode="currency"
+                  currency="INR"
+                  locale="en-IN"
+                  [showButtons]="true"
+                  [step]="1000"
+                  inputId="budget-{{ i }}"
+                  [ngModelOptions]="{ standalone: true }"
+                  class="w-full"
+                ></p-inputNumber>
+              </div>
+            </div>
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+
+<!-- Total Budget + Submit Button in One Row -->
+<div class="col-12">
+  <div class="grid justify-content-between align-items-center">
+    
+    <!-- Total Budget Left -->
+    <div class="col-12 md:col-6">
+      <div class="text-left text-lg font-medium">
+        Total Budget:
+        <strong>₹ {{ totalBudget | number: '1.2-2' }}</strong>
+      </div>
+    </div>
+
+    <!-- Submit Button Right -->
+    <div class="col-12 md:col-6 text-right">
+      <button
+        pButton
+        type="submit"
+        label="Generate Quote"
+        icon="pi pi-check"
+        [disabled]="budgetForm.invalid"
+      ></button>
+    </div>
+
+  </div>
+</div>
+
+    </div>
+  </form>
+</p-card>

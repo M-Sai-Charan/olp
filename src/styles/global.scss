@@ -334,36 +334,32 @@ h1.olp-text.glow span:nth-child(2) {
 
 //employees screen
 .chart-node {
-  padding: 0.5rem;
-  min-width: 120px;
-  background-color: #1f2937;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.25rem;
-  border-radius: 0.5rem;
+  .chart-node-content {
+    position: relative;
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid var(--surface-border);
+    border-radius: 6px;
+    background-color: var(--surface-card);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .chart-image {
+    width: 50px;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+  }
+
+  .chart-name {
+    font-weight: bold;
+  }
+
+  .chart-title {
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
 }
 
-.chart-image {
-  width: 50px; // smaller image
-  height: 50px;
-  margin-bottom: 0.25rem;
-  border-radius: 50%;
-}
-
-.chart-name {
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 0.15rem;
-  color: white;
-}
-
-.chart-title {
-  font-size: 0.75rem;
-  color: var(--text-color);
-  color: white;
-}
 
 // dashbaord screen
 .dashboard-container {
@@ -586,11 +582,46 @@ label {
 
 .p-dropdown,
 input,
-textarea {
+textarea,
+.p-calendar {
   width: 100%;
 }
 .admin-new-employee{
   position: absolute;
   left:90%;
   top:30px;
+}
+
+//budget screen
+.form-grid {
+  gap: 1rem;
+
+  .p-float-label {
+    width: 100%;
+  }
+
+  .total-budget {
+    font-size: 1.25rem;
+    color: var(--text-color);
+    text-align: right;
+    padding: 1rem 0;
+    border-top: 1px solid var(--surface-border);
+    margin-top: 1rem;
+  }
+
+  ::ng-deep .p-tabview {
+    margin-top: 1rem;
+  }
+
+  ::ng-deep .p-inputnumber {
+    width: 100%;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+
+  .p-error {
+    font-size: 0.875rem;
+  }
 }

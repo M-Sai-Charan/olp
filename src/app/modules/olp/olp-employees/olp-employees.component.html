@@ -1,13 +1,24 @@
 <div class="flex justify-center overflow-x-auto">
     <p-organization-chart [value]="data" selectionMode="multiple" [(selection)]="selectedNodes" [collapsible]="true">
         <ng-template let-node pTemplate="person">
-            <div class="chart-node">
+            <div class="chart-node relative">
                 <div class="chart-node-content">
+                    <!-- Delete Icon (top-right) -->
+                    <button pButton type="button" icon="pi pi-trash"
+                        class="p-button-rounded p-button-danger p-button-sm absolute top-0 right-0 m-1"
+                        (click)="confirmDelete(node)"></button>
+
                     <img [src]="node.data.image" class="chart-image" />
                     <div class="chart-name">{{ node.data.name }}</div>
                     <div class="chart-title">{{ node.data.title }}</div>
                 </div>
-            </div> 
+            </div>
         </ng-template>
     </p-organization-chart>
 </div>
+
+<!-- Confirm Dialog -->
+<p-confirmDialog></p-confirmDialog>
+
+<!-- Toast Message -->
+<p-toast></p-toast>

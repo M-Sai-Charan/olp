@@ -25,6 +25,7 @@ export class OlpAdminComponent implements OnInit {
       employee: ['', Validators.required],
       team: ['', Validators.required],
       role: ['', Validators.required],
+      joiningDate:['',Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
       address: ['', Validators.required]

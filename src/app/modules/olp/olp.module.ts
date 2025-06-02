@@ -8,6 +8,7 @@ import { OlpMenuComponent } from './olp-menu/olp-menu.component';
 import { OlpLoginComponent } from './olp-login/olp-login.component';
 import { OlpEmployeesComponent } from './olp-employees/olp-employees.component';
 import { OlpAdminComponent } from './olp-admin/olp-admin.component';
+import { OlpBudgetComponent } from './olp-budget/olp-budget.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { OlpAdminComponent } from './olp-admin/olp-admin.component';
     OlpMenuComponent,
     OlpLoginComponent,
     OlpEmployeesComponent,
-    OlpAdminComponent
+    OlpAdminComponent,
+    OlpBudgetComponent
   ],
   imports: [
     CommonModule,
