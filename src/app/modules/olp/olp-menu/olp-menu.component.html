@@ -7,7 +7,9 @@
       Hello, Sunny
       Have a great day
     </div> -->
-    <button class="theme-toggle" (click)="toggleTheme()">🌓</button>
+    <button class="theme-toggle" (click)="toggleTheme()">
+      <i class="pi" [ngClass]="isDarkMode ? 'pi-sun' : 'pi-moon'"></i>
+    </button>
   </header>
 
   <div class="dashboard-layout">

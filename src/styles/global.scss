@@ -390,7 +390,7 @@ h1.olp-text.glow span:nth-child(2) {
 
       i {
         font-size: 1.5rem;
-        color: #666;
+        color: #000;
       }
 
       .label {
@@ -561,4 +561,31 @@ h1.olp-text.glow span:nth-child(2) {
       }
     }
   }
+}
+
+// admin screen
+.form-container {
+  max-width: 600px;
+  margin: auto;
+  background: #1e293b; // dark background (from your screenshot)
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+  color: #fff;
+}
+
+.p-field {
+  margin-bottom: 1.25rem;
+}
+
+.p-dropdown,
+input,
+textarea {
+  width: 100%;
 }

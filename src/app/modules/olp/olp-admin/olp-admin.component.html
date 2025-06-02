@@ -1,1 +1,64 @@
-<p>olp-admin works!</p>
+<div class="card form-container p-4">
+  <h2 class="mb-4">Manage Employee</h2>
+
+  <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()" class="p-fluid">
+
+    <!-- Employee Selection + Add New -->
+    <div class="p-grid p-align-center">
+      <div class="p-col-12 p-md-9">
+        <label for="employeeId">Select Employee</label>
+        <p-dropdown inputId="employeeId" [options]="employeeOptions" placeholder="Select an Employee" formControlName="employeeId"></p-dropdown>
+      </div>
+      <div class="p-col-12 p-md-3">
+        <label>&nbsp;</label>
+        <button pButton type="button" icon="pi pi-plus" label="Add New" class="p-button-success w-full" (click)="showAddDialog = true"></button>
+      </div>
+    </div>
+
+    <!-- Team & Role Side-by-Side -->
+    <div class="p-grid p-formgrid">
+      <div class="p-col-12 p-md-6">
+        <label for="team">Team</label>
+        <p-dropdown inputId="team" [options]="teamOptions" placeholder="Select Team" formControlName="team"></p-dropdown>
+      </div>
+      <div class="p-col-12 p-md-6">
+        <label for="role">Role</label>
+        <p-dropdown inputId="role" [options]="roleOptions" placeholder="Select Role" formControlName="role"></p-dropdown>
+      </div>
+    </div>
+
+    <!-- Email & Phone Side-by-Side -->
+    <div class="p-grid p-formgrid">
+      <div class="p-col-12 p-md-6">
+        <label for="email">Email</label>
+        <input pInputText id="email" type="email" placeholder="Enter email" formControlName="email" />
+      </div>
+      <div class="p-col-12 p-md-6">
+        <label for="phone">Phone</label>
+        <input pInputText id="phone" type="text" placeholder="Enter number" formControlName="phone" />
+      </div>
+    </div>
+
+    <!-- Address Full Width -->
+    <div class="p-field">
+      <label for="address">Address{{employeeForm.invalid}}</label>
+      <textarea pInputTextarea id="address" rows="3" placeholder="Enter address" formControlName="address"></textarea>
+    </div>
+
+    <button pButton type="submit" label="Save" class="p-button-success w-full mt-3" [disabled]="employeeForm.invalid"></button>
+  </form>
+
+  <!-- Add Employee Dialog -->
+  <p-dialog header="Add New Employee" [(visible)]="showAddDialog" [modal]="true" [closable]="false" [style]="{ width: '300px' }">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="newEmployee">Employee Name</label>
+        <input pInputText id="newEmployee" [(ngModel)]="newEmployeeName" name="newEmployee" />
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton label="Cancel" icon="pi pi-times" (click)="cancelAddEmployee()" class="p-button-text" type="button"></button>
+      <button pButton label="Add" icon="pi pi-check" (click)="confirmAddEmployee()" [disabled]="!newEmployeeName" type="button"></button>
+    </ng-template>
+  </p-dialog>
+</div>
