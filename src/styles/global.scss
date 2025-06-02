@@ -595,33 +595,78 @@ textarea,
 //budget screen
 .form-grid {
   gap: 1rem;
+}
 
-  .p-float-label {
-    width: 100%;
-  }
+.p-float-label {
+  width: 100%;
+}
 
-  .total-budget {
-    font-size: 1.25rem;
-    color: var(--text-color);
-    text-align: right;
-    padding: 1rem 0;
-    border-top: 1px solid var(--surface-border);
-    margin-top: 1rem;
-  }
+.total-budget {
+  font-size: 1.25rem;
+  color: var(--text-color);
+  text-align: right;
+  padding: 1rem 0;
+  border-top: 1px solid var(--surface-border);
+  margin-top: 1rem;
+}
 
-  ::ng-deep .p-tabview {
-    margin-top: 1rem;
-  }
+::ng-deep .p-tabview {
+  margin-top: 1rem;
+}
 
-  ::ng-deep .p-inputnumber {
-    width: 100%;
-  }
+::ng-deep .p-inputnumber {
+  width: 100%;
+}
 
-  .text-right {
-    text-align: right;
-  }
+.text-right {
+  text-align: right;
+}
 
-  .p-error {
-    font-size: 0.875rem;
-  }
+.p-error {
+  font-size: 0.875rem;
+}
+
+.status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status.new {
+  background-color: #e3f2fd;
+  color: #2196f3;
+}
+
+.status.in-progress {
+  background-color: #fff3e0;
+  color: #fb8c00;
+}
+
+.status.done {
+  background-color: #e8f5e9;
+  color: #43a047;
+}
+
+.status.rejected {
+  background-color: #ffebee;
+  color: #e53935;
+}
+
+::ng-deep .p-tabview .p-tabview-nav li {
+  font-weight: bold;
+}
+
+::ng-deep .p-toast .p-toast-message {
+  font-size: 1rem;
+}
+
+.budget-header{
+  background: #111827 !important;
+    color: white !important;
+    border-radius: 5px !important;
+}
+.budget-olp{
+  border-top: 2px solid;
 }

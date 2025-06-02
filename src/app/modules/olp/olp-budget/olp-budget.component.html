@@ -1,85 +1,96 @@
+<p-toast></p-toast>
+
 <p-card header="Customer Event Budgeting">
-  <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()">
-    <div class="grid form-grid" style="border-top: 1px solid;margin-top: 5px;">
+    <div class="budget-olp">
+    <p-table [value]="customers" dataKey="id" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Events</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-cust>
+            <tr>
+                <td>{{ cust.name }}</td>
+                <td>{{ cust.phone }}</td>
+                <td>{{ cust.email }}</td>
+                <td>
+                    <ul>
+                        <li *ngFor="let e of cust.events">{{ e.name }}</li>
+                    </ul>
+                </td>
+                <td>
+                    <p-tag [value]="cust.status" [severity]="getStatusSeverity(cust.status)"></p-tag>
+                </td>
+                <td>
+                    <ng-container [ngSwitch]="cust.status">
+                        <button *ngSwitchCase="'new'" pButton type="button" icon="pi pi-plus" label="Add Budget"
+                            (click)="startBudgeting(cust)"></button>
 
-      <!-- Customer Dropdown -->
-      <div class="col-12 md:col-6">
-        <span class="p-float-label">
-          <p-dropdown
-            inputId="customer"
-            formControlName="customer"
-            [options]="customers"
-            optionLabel="name"
-            placeholder="Select Customer"
-            [showClear]="true"
-            filter="true"
-          ></p-dropdown>
-        </span>
-        <small
-          *ngIf="budgetForm.controls['customer'].invalid && budgetForm.controls['customer'].touched"
-          class="p-error" style="color: red;"
-        >
-          Customer is required.
-        </small>
-      </div>
+                        <button *ngSwitchCase="'in-progress'" pButton type="button" icon="pi pi-search" label="Review"
+                            (click)="reviewCustomer(cust)"></button>
 
-      <!-- Events Tabs -->
-      <div class="col-12">
-        <p-tabView>
-          <p-tabPanel
-            *ngFor="let event of events; let i = index"
-            [header]="event.name"
-          >
-            <div class="grid align-items-center mb-3">
-              <div class="col-12 md:col-4">
-                <label for="budget-{{ i }}">Budget (₹)</label>
-              </div>
-              <div class="col-12 md:col-8">
-                <p-inputNumber
-                  [min]="0"
-                  [(ngModel)]="event.budget"
-                  (onInput)="calculateTotalBudget()"
-                  mode="currency"
-                  currency="INR"
-                  locale="en-IN"
-                  [showButtons]="true"
-                  [step]="1000"
-                  inputId="budget-{{ i }}"
-                  [ngModelOptions]="{ standalone: true }"
-                  class="w-full"
-                ></p-inputNumber>
-              </div>
+                        <button *ngSwitchCase="'done'" pButton type="button" icon="pi pi-eye" label="View"
+                            (click)="viewQuote(cust)"></button>
+
+                        <div *ngSwitchCase="'rejected'">
+                            <p-tag severity="danger" value="Rejected"></p-tag>
+                            <button pButton type="button" icon="pi pi-undo" class="p-button-text p-ml-2" label="Undo"
+                                (click)="undoReject(cust)"></button>
+                        </div>
+                    </ng-container>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <ng-container *ngIf="selectedCustomer">
+        <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()" class="mt-4">
+            <div class="grid">
+                <div class="col-12 budget-header">
+                    <h4 class="mb-2">{{ formModeTitle }} for <span style="color: #10b981;">{{selectedCustomer?.name}}</span></h4>
+                </div>
+
+                <div class="col-12">
+                    <p-tabView>
+                        <p-tabPanel *ngFor="let event of selectedCustomer.events; let i = index" [header]="event.name">
+                            <div class="grid">
+                                <div class="col-12 md:col-4">
+                                    <label for="budget-{{ i }}">Budget (₹)</label>
+                                </div>
+                                <div class="col-12 md:col-8">
+                                    <p-inputNumber [min]="0" mode="currency" currency="INR" locale="en-IN"
+                                        [showButtons]="true" [step]="1000" [(ngModel)]="event.budget"
+                                        inputId="budget-{{ i }}" [disabled]="formDisabled" class="w-full"
+                                        [ngModelOptions]="{ standalone: true }" (onInput)="calculateTotalBudget()">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </p-tabPanel>
+                    </p-tabView>
+                </div>
+
+                <div class="col-12 text-right">
+                    <span class="mr-3 text-lg">Total Budget: <strong>₹{{ totalBudget | number: '1.2-2'
+                            }}</strong></span>
+                    <ng-container *ngIf="selectedCustomer.status === 'new'">
+                        <button pButton type="submit" icon="pi pi-check" label="Generate Quote"
+                            [disabled]="budgetForm.invalid"></button>
+                    </ng-container>
+
+                    <ng-container *ngIf="selectedCustomer.status === 'in-progress'">
+                        <button pButton type="button" icon="pi pi-check" label="Approve" class="p-button-success mr-2"
+                            (click)="approve(selectedCustomer)"></button>
+                        <button pButton type="button" icon="pi pi-times" label="Reject" class="p-button-danger"
+                            (click)="reject(selectedCustomer)"></button>
+                    </ng-container>
+                </div>
             </div>
-          </p-tabPanel>
-        </p-tabView>
-      </div>
-
-<!-- Total Budget + Submit Button in One Row -->
-<div class="col-12">
-  <div class="grid justify-content-between align-items-center">
-    
-    <!-- Total Budget Left -->
-    <div class="col-12 md:col-6">
-      <div class="text-left text-lg font-medium">
-        Total Budget:
-        <strong>₹ {{ totalBudget | number: '1.2-2' }}</strong>
-      </div>
+        </form>
+    </ng-container>
     </div>
-
-    <!-- Submit Button Right -->
-    <div class="col-12 md:col-6 text-right">
-      <button
-        pButton
-        type="submit"
-        label="Generate Quote"
-        icon="pi pi-check"
-        [disabled]="budgetForm.invalid"
-      ></button>
-    </div>
-
-  </div>
-</div>
-
-    </div>
-  </form>
 </p-card>

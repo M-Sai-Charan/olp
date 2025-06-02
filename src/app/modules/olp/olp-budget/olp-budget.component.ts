@@ -2,94 +2,141 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-olp-budget',
   templateUrl: './olp-budget.component.html',
   styleUrl: './olp-budget.component.css',
-  standalone: false
+  standalone: false,
+  providers: [MessageService]
 })
 export class OlpBudgetComponent implements OnInit {
-
   budgetForm!: FormGroup;
+  totalBudget = 0;
+  selectedCustomer: any = null;
+  formDisabled = false;
 
   customers = [
-    { id: 1, name: 'John Doe' },
-    { id: 2, name: 'Priya Sharma' },
-    { id: 3, name: 'Amit Kumar' }
+    {
+      id: 1,
+      name: 'John Doe',
+      phone: '9876543210',
+      email: 'john@example.com',
+      status: 'new',
+      events: [
+        { name: 'Wedding', budget: 0 },
+        { name: 'Reception', budget: 0 }
+      ]
+    },
+    {
+      id: 2,
+      name: 'Priya Sharma',
+      phone: '8765432109',
+      email: 'priya@example.com',
+      status: 'in-progress',
+      events: [
+        { name: 'Engagement', budget: 50000 },
+        { name: 'Mehendi', budget: 20000 }
+      ]
+    },
+    {
+      id: 3,
+      name: 'Amit Kumar',
+      phone: '9988776655',
+      email: 'amit@example.com',
+      status: 'done',
+      events: [
+        { name: 'Birthday', budget: 30000 }
+      ]
+    },
+    {
+      id: 4,
+      name: 'Sita Rao',
+      phone: '9090909090',
+      email: 'sita@example.com',
+      status: 'rejected',
+      events: [
+        { name: 'Baby Shower', budget: 45000 }
+      ]
+    }
   ];
 
-  events = [
-    { name: 'Wedding', budget: 0 },
-    { name: 'Reception', budget: 0 },
-    { name: 'Engagement', budget: 0 }
-  ];
-
-  totalBudget: number = 0;
-
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private messageService: MessageService) { }
 
   ngOnInit() {
     this.budgetForm = this.fb.group({
       customer: [null, Validators.required]
     });
+  }
+
+  get formModeTitle() {
+    if (!this.selectedCustomer) return '';
+    switch (this.selectedCustomer.status) {
+      case 'new': return 'Add Budget';
+      case 'in-progress': return 'Review & Approve Budget';
+      case 'done': return 'View Approved Budget';
+      case 'rejected': return 'Rejected Budget (Undo Available)';
+      default: return '';
+    }
+  }
+
+  getStatusSeverity(status: string): string {
+    switch (status) {
+      case 'new': return 'info';
+      case 'in-progress': return 'warning';
+      case 'done': return 'success';
+      case 'rejected': return 'danger';
+      default: return 'secondary';
+    }
+  }
+
+  startBudgeting(customer: any) {
+    this.selectedCustomer = customer;
+    this.formDisabled = false;
+    this.budgetForm.reset();
     this.calculateTotalBudget();
   }
 
   calculateTotalBudget() {
-    this.totalBudget = this.events.reduce(
-      (sum, e) => sum + (e.budget || 0),
-      0
-    );
+    if (this.selectedCustomer)
+      this.totalBudget = this.selectedCustomer.events.reduce(
+        (sum: number, e: any) => sum + (e.budget || 0), 0
+      );
   }
 
   onSubmit() {
     if (this.budgetForm.valid) {
-      const quote = {
-        customer: this.budgetForm.value.customer,
-        events: this.events,
-        totalBudget: this.totalBudget
-      };
-
-      console.log('Generated Quote:', quote);
-      this.generatePDF(quote);
+      this.selectedCustomer.status = 'in-progress';
+      this.messageService.add({ severity: 'success', summary: 'Quote Generated', detail: 'Status moved to in-progress.' });
     }
   }
-  generatePDF(quote: any) {
-    const doc = new jsPDF();
 
-    // Title
-    doc.setFontSize(18);
-    doc.text('Customer Event Budget Quote', 14, 20);
+  reviewCustomer(customer: any) {
+    this.selectedCustomer = customer;
+    this.formDisabled = true;
+    this.calculateTotalBudget();
+  }
 
-    // Customer Info
-    doc.setFontSize(12);
-    doc.text(`Customer: ${quote.customer.name}`, 14, 30);
-    doc.text(`Generated On: ${new Date().toLocaleString()}`, 14, 38);
+  approve(customer: any) {
+    customer.status = 'done';
+    this.selectedCustomer = null;
+    this.messageService.add({ severity: 'success', summary: 'Approved', detail: 'Budget approved successfully.' });
+  }
 
-    // Event Table
-    const rows = quote.events.map((e: any) => [
-      e.name,
-      `${e.budget?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
-    ]);
+  reject(customer: any) {
+    customer.status = 'rejected';
+    this.selectedCustomer = null;
+    this.messageService.add({ severity: 'warn', summary: 'Rejected', detail: 'Budget rejected. You can undo.' });
+  }
 
-    autoTable(doc, {
-      head: [['Event Name', 'Budget']],
-      body: rows,
-      startY: 45
-    });
+  undoReject(customer: any) {
+    customer.status = 'in-progress';
+    this.messageService.add({ severity: 'info', summary: 'Undo', detail: 'Rejection undone. Back to in-progress.' });
+  }
 
-    // Total
-    const finalY = (doc as any).lastAutoTable.finalY || 60;
-    doc.setFontSize(14);
-    doc.text(
-      `Total Budget: ${quote.totalBudget.toLocaleString('en-IN', {
-        minimumFractionDigits: 2
-      })}`,
-      14,
-      finalY + 10
-    );
-
-    // Save PDF
-    doc.save(`Quote_${quote.customer.name}.pdf`);
+  viewQuote(customer: any) {
+    this.selectedCustomer = customer;
+    this.formDisabled = true;
+    this.calculateTotalBudget();
   }
 }

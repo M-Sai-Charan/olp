@@ -27,6 +27,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MenuModule } from 'primeng/menu';
 @NgModule({
     declarations: [],
     imports: [
@@ -57,7 +58,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         InputNumberModule,
         CalendarModule,
         ToastModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        MenuModule
     ],
     exports: [
         ButtonModule,
@@ -87,7 +89,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         InputNumberModule,
         CalendarModule,
          ToastModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        MenuModule
     ],
     providers: [],
     bootstrap: []
