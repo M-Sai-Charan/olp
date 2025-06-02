@@ -1,64 +1,68 @@
-<div class="card form-container p-4">
-  <h2 class="mb-4">Manage Employee</h2>
+<div class="surface-card p-4 shadow-2 border-round max-w-screen-lg mx-auto" style="position: relative;">
+  <h2 class="text-2xl font-bold mb-4">Manage Employee</h2>
+  <div class="admin-new-employee"> <button pButton type="button" icon="pi pi-user-plus" (click)="showAddDialog()"
+      class="p-button-secondary"></button></div>
+  <form [formGroup]="adminForm" (ngSubmit)="submitForm()">
+    <div class="grid formgrid p-fluid">
 
-  <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()" class="p-fluid">
-
-    <!-- Employee Selection + Add New -->
-    <div class="p-grid p-align-center">
-      <div class="p-col-12 p-md-9">
-        <label for="employeeId">Select Employee</label>
-        <p-dropdown inputId="employeeId" [options]="employeeOptions" placeholder="Select an Employee" formControlName="employeeId"></p-dropdown>
+      <!-- Employee -->
+      <div class="field col-12 md:col-4">
+        <label for="employee">Employee</label>
+        <p-dropdown formControlName="employee" [options]="employees" optionLabel="name"
+          placeholder="Select Employee"></p-dropdown>
+        <p-message *ngIf="isInvalid('employee')" severity="error" text="Employee is required"></p-message>
       </div>
-      <div class="p-col-12 p-md-3">
-        <label>&nbsp;</label>
-        <button pButton type="button" icon="pi pi-plus" label="Add New" class="p-button-success w-full" (click)="showAddDialog = true"></button>
-      </div>
-    </div>
 
-    <!-- Team & Role Side-by-Side -->
-    <div class="p-grid p-formgrid">
-      <div class="p-col-12 p-md-6">
+      <!-- Team -->
+      <div class="field col-12 md:col-4">
         <label for="team">Team</label>
-        <p-dropdown inputId="team" [options]="teamOptions" placeholder="Select Team" formControlName="team"></p-dropdown>
+        <p-dropdown formControlName="team" [options]="teams" optionLabel="name" placeholder="Select Team"></p-dropdown>
+        <p-message *ngIf="isInvalid('team')" severity="error" text="Team is required"></p-message>
       </div>
-      <div class="p-col-12 p-md-6">
+
+      <!-- Role -->
+      <div class="field col-12 md:col-4">
         <label for="role">Role</label>
-        <p-dropdown inputId="role" [options]="roleOptions" placeholder="Select Role" formControlName="role"></p-dropdown>
+        <p-dropdown formControlName="role" [options]="roles" optionLabel="name" placeholder="Select Role"></p-dropdown>
+        <p-message *ngIf="isInvalid('role')" severity="error" text="Role is required"></p-message>
       </div>
-    </div>
 
-    <!-- Email & Phone Side-by-Side -->
-    <div class="p-grid p-formgrid">
-      <div class="p-col-12 p-md-6">
+      <!-- Email -->
+      <div class="field col-12 md:col-6">
         <label for="email">Email</label>
-        <input pInputText id="email" type="email" placeholder="Enter email" formControlName="email" />
+        <input id="email" type="email" pInputText formControlName="email" />
+        <p-message *ngIf="isInvalid('email')" severity="error" text="Valid email is required"></p-message>
       </div>
-      <div class="p-col-12 p-md-6">
+
+      <!-- Phone -->
+      <div class="field col-12 md:col-6">
         <label for="phone">Phone</label>
-        <input pInputText id="phone" type="text" placeholder="Enter number" formControlName="phone" />
+        <input id="phone" type="text" pInputText formControlName="phone" />
+        <p-message *ngIf="isInvalid('phone')" severity="error" text="Phone is required"></p-message>
       </div>
+
+      <!-- Address -->
+      <div class="field col-12">
+        <label for="address">Address</label>
+        <textarea id="address" pInputTextarea formControlName="address" rows="3"></textarea>
+        <p-message *ngIf="isInvalid('address')" severity="error" text="Address is required"></p-message>
+      </div>
+
     </div>
 
-    <!-- Address Full Width -->
-    <div class="p-field">
-      <label for="address">Address{{employeeForm.invalid}}</label>
-      <textarea pInputTextarea id="address" rows="3" placeholder="Enter address" formControlName="address"></textarea>
+    <div class="text-right mt-4">
+      <button pButton type="submit" label="Save" class="p-button-success" [disabled]="adminForm.invalid"></button>
     </div>
-
-    <button pButton type="submit" label="Save" class="p-button-success w-full mt-3" [disabled]="employeeForm.invalid"></button>
   </form>
-
-  <!-- Add Employee Dialog -->
-  <p-dialog header="Add New Employee" [(visible)]="showAddDialog" [modal]="true" [closable]="false" [style]="{ width: '300px' }">
-    <div class="p-fluid">
-      <div class="p-field">
-        <label for="newEmployee">Employee Name</label>
-        <input pInputText id="newEmployee" [(ngModel)]="newEmployeeName" name="newEmployee" />
-      </div>
-    </div>
-    <ng-template pTemplate="footer">
-      <button pButton label="Cancel" icon="pi pi-times" (click)="cancelAddEmployee()" class="p-button-text" type="button"></button>
-      <button pButton label="Add" icon="pi pi-check" (click)="confirmAddEmployee()" [disabled]="!newEmployeeName" type="button"></button>
-    </ng-template>
-  </p-dialog>
 </div>
+<p-dialog header="Add New Employee" [(visible)]="showDialog" [modal]="true" [closable]="false">
+  <div class="p-fluid mt-4">
+    <div class="field">
+      <input pInputText [(ngModel)]="newEmployeeName" placeholder="Enter name" />
+    </div>
+  </div>
+  <div class="p-dialog-footer">
+    <button pButton label="Cancel" class="p-button-text" (click)="cancelAddEmployee()"></button>
+    <button pButton label="Add" [disabled]="!newEmployeeName" (click)="confirmAddEmployee()"></button>
+  </div>
+</p-dialog>

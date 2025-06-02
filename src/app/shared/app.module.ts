@@ -21,6 +21,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ChartModule } from 'primeng/chart';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { InputTextarea } from 'primeng/inputtextarea';
+import { MessageModule } from 'primeng/message';
 @NgModule({
     declarations: [],
     imports: [
@@ -45,7 +46,8 @@ import { InputTextarea } from 'primeng/inputtextarea';
         AvatarModule,
         DropdownModule,
         ProgressBarModule,
-        InputTextarea
+        InputTextarea,
+        MessageModule
     ],
     exports: [
         ButtonModule,
@@ -69,7 +71,8 @@ import { InputTextarea } from 'primeng/inputtextarea';
         CardModule,
         ChartModule,
         ProgressBarModule,
-        InputTextarea
+        InputTextarea,
+        MessageModule
     ],
     providers: [],
     bootstrap: []

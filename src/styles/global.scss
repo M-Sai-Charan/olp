@@ -570,14 +570,14 @@ h1.olp-text.glow span:nth-child(2) {
   background: #1e293b; // dark background (from your screenshot)
   color: #fff;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 label {
   font-weight: 500;
   margin-bottom: 0.5rem;
   display: block;
-  color: #fff;
+  color: #000;
 }
 
 .p-field {
@@ -588,4 +588,9 @@ label {
 input,
 textarea {
   width: 100%;
+}
+.admin-new-employee{
+  position: absolute;
+  left:90%;
+  top:30px;
 }

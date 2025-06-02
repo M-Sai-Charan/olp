@@ -8,64 +8,54 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   standalone: false
 })
 export class OlpAdminComponent implements OnInit {
-  employeeForm!: FormGroup;
-
-  employeeOptions: any[] = [
-    { label: 'John Doe', value: '1' },
-    { label: 'Jane Smith', value: '2' },
-    { label: 'Arjun Kumar', value: '3' }
+  adminForm: FormGroup;
+  employees = [{ name: 'John' }, { name: 'Jane' }];
+  teams = [{ name: 'Team A', value: 'A' }, { name: 'Team B', value: 'B' }];
+  roles = [
+    { name: 'Cameraman', value: 'cameraman' },
+    { name: 'Lightman', value: 'lightman' },
+    { name: 'Editor', value: 'editor' }
   ];
 
-  teamOptions = [
-    { label: 'Team A', value: 'A' },
-    { label: 'Team B', value: 'B' },
-    { label: 'Team C', value: 'C' }
-  ];
+  showDialog = false;
+  newEmployeeName = '';
 
-  roleOptions = [
-    { label: 'Cameraman', value: 'cameraman' },
-    { label: 'Lightman', value: 'lightman' },
-    { label: 'Editor', value: 'editor' }
-  ];
-
-  showAddDialog: boolean = false;
-  newEmployeeName: string = '';
-
-  constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {
-    this.employeeForm = this.fb.group({
-      employeeId: [null],
-      team: [null, Validators.required],
-      role: [null, Validators.required],
+  constructor(private fb: FormBuilder) {
+    this.adminForm = this.fb.group({
+      employee: ['', Validators.required],
+      team: ['', Validators.required],
+      role: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      phone: ['', Validators.required],
       address: ['', Validators.required]
     });
   }
+  ngOnInit(): void {
 
-  saveEmployee() {
-    if (this.employeeForm.valid) {
-      console.log('Form Submitted', this.employeeForm.value);
-      // Call service to save employee assignment here
-    }
+  }
+  showAddDialog() {
+    this.showDialog = true;
+    this.newEmployeeName = '';
   }
 
   cancelAddEmployee() {
-    this.newEmployeeName = '';
-    this.showAddDialog = false;
+    this.showDialog = false;
+  }
+ isInvalid(field: string): boolean {
+    const control = this.adminForm.get(field);
+    return !!(control && control.invalid && (control.dirty || control.touched));
   }
 
   confirmAddEmployee() {
-    if (this.newEmployeeName.trim()) {
-      const newId = (this.employeeOptions.length + 1).toString();
-      this.employeeOptions.push({ label: this.newEmployeeName, value: newId });
+    this.employees.push({ name: this.newEmployeeName });
+    this.adminForm.patchValue({ employee: this.newEmployeeName });
+    this.showDialog = false;
+  }
 
-      // Optionally select the new employee in the form
-      this.employeeForm.patchValue({ employeeId: newId });
-
-      this.newEmployeeName = '';
-      this.showAddDialog = false;
+  submitForm() {
+    if (this.adminForm.valid) {
+      console.log('Submitted Data:', this.adminForm.value);
     }
   }
+  onReset(){}
 }
