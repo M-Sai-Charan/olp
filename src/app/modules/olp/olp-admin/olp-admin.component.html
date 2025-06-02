@@ -1,5 +1,6 @@
 <div class="surface-card p-4 shadow-2 border-round max-w-screen-lg mx-auto" style="position: relative;">
-  <h2 class="text-2xl font-bold mb-4">Manage Employee</h2>
+  <h2 class="text-2xl font-bold mb-4" style="border-bottom: 2px solid;
+    padding: 10px;">Add/Manage Employee</h2>
   <div class="admin-new-employee"> <button pButton type="button" icon="pi pi-user-plus" (click)="showAddDialog()"
       class="p-button-secondary"></button></div>
   <form [formGroup]="adminForm" (ngSubmit)="submitForm()">
