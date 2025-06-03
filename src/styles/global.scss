@@ -965,3 +965,98 @@ textarea,
     margin: 0;
   }
 }
+
+// team assing .scss
+:host {
+  display: block;
+  padding: 1rem;
+}
+
+.assigned-team {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    &.photographer {
+      background-color: #2196f3;
+    }
+
+    &.videographer {
+      background-color: #9c27b0;
+    }
+
+    &.editor {
+      background-color: #ff9800;
+    }
+
+    &.tooltip {
+      position: relative;
+
+      .tooltiptext {
+        visibility: hidden;
+        width: max-content;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 4px 8px;
+        border-radius: 4px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        white-space: nowrap;
+      }
+
+      &:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+}
+// invoice .scss
+.status-pending {
+  color: #f0ad4e; /* Orange */
+  font-weight: 600;
+}
+
+.status-approved {
+  color: #5cb85c; /* Green */
+  font-weight: 600;
+}
+
+.status-rejected {
+  color: #d9534f; /* Red */
+  font-weight: 600;
+}
+
+.status-paid {
+  color: #28a745; /* Green */
+  font-weight: 600;
+}
+
+.status-partial {
+  color: #ffc107; /* Yellow */
+  font-weight: 600;
+}
+
+.status-overdue {
+  color: #dc3545; /* Red */
+  font-weight: 600;
+}
+

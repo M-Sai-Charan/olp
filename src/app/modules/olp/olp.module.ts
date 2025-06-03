@@ -10,6 +10,8 @@ import { OlpEmployeesComponent } from './olp-employees/olp-employees.component';
 import { OlpAdminComponent } from './olp-admin/olp-admin.component';
 import { OlpBudgetComponent } from './olp-budget/olp-budget.component';
 import { OlpInventoryComponent } from './olp-inventory/olp-inventory.component';
+import { OlpTeamAssignComponent } from '../../olp-team-assign/olp-team-assign.component';
+import { OlpInvoiceComponent } from './olp-invoice/olp-invoice.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { OlpInventoryComponent } from './olp-inventory/olp-inventory.component';
     OlpEmployeesComponent,
     OlpAdminComponent,
     OlpBudgetComponent,
-    OlpInventoryComponent
+    OlpInventoryComponent,
+    OlpTeamAssignComponent,
+    OlpInvoiceComponent
   ],
   imports: [
     CommonModule,

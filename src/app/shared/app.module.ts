@@ -32,6 +32,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { SidebarModule } from 'primeng/sidebar';
 import { BadgeModule } from 'primeng/badge';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ToolbarModule } from 'primeng/toolbar';
 @NgModule({
     declarations: [],
     imports: [
@@ -67,7 +69,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
         TooltipModule,
         SidebarModule,
         BadgeModule,
-        MultiSelectModule 
+        MultiSelectModule ,
+        DragDropModule,
+        ToolbarModule
     ],
     exports: [
         ButtonModule,
@@ -102,7 +106,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
         TooltipModule,
          SidebarModule,
         BadgeModule,
-        MultiSelectModule
+        MultiSelectModule,
+        DragDropModule,
+        ToolbarModule
     ],
     providers: [],
     bootstrap: []
