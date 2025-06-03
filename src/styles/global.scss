@@ -105,8 +105,10 @@ body {
     .menu-label {
       opacity: 1;
       transform: translateX(0);
+      display: block;
     }
   }
+
 
   ul {
     list-style: none;
@@ -140,6 +142,22 @@ body {
     transform: translateX(-10px);
     transition: $transition;
     white-space: nowrap;
+    display: none;
+  }
+}
+
+.sidebar a.active {
+  background-color: #f1f5f9;
+  width: 90px;
+
+  i {
+    color: #000000;
+  }
+
+  .menu-label {
+    font-weight: bold;
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -578,10 +596,21 @@ body.dark-mode .sidebar a:hover {
         transform: scale(1.04);
       }
 
-      &.bookings i { color: #42A5F5; }
-      &.revenue i { color: #66BB6A; }
-      &.events i { color: #FF7043; }
-      &.rating i { color: #FFD700; }
+      &.bookings i {
+        color: #42A5F5;
+      }
+
+      &.revenue i {
+        color: #66BB6A;
+      }
+
+      &.events i {
+        color: #FF7043;
+      }
+
+      &.rating i {
+        color: #FFD700;
+      }
     }
   }
 
@@ -629,10 +658,21 @@ body.dark-mode .sidebar a:hover {
           height: 100%;
         }
 
-        .wedding { background-color: #42A5F5; }
-        .birthday { background-color: #66BB6A; }
-        .corporate { background-color: #FFA726; }
-        .other { background-color: #AB47BC; }
+        .wedding {
+          background-color: #42A5F5;
+        }
+
+        .birthday {
+          background-color: #66BB6A;
+        }
+
+        .corporate {
+          background-color: #FFA726;
+        }
+
+        .other {
+          background-color: #AB47BC;
+        }
       }
 
       .target-details {
@@ -646,10 +686,21 @@ body.dark-mode .sidebar a:hover {
             margin-right: 8px;
             border-radius: 50%;
 
-            &.wedding { background: #42A5F5; }
-            &.birthday { background: #66BB6A; }
-            &.corporate { background: #FFA726; }
-            &.other { background: #AB47BC; }
+            &.wedding {
+              background: #42A5F5;
+            }
+
+            &.birthday {
+              background: #66BB6A;
+            }
+
+            &.corporate {
+              background: #FFA726;
+            }
+
+            &.other {
+              background: #AB47BC;
+            }
           }
         }
       }
@@ -854,6 +905,7 @@ textarea,
     text-align: center;
   }
 }
+
 //inventory.scss
 .inventory-wrapper {
   margin: 0 auto;
@@ -913,4 +965,3 @@ textarea,
     margin: 0;
   }
 }
-
