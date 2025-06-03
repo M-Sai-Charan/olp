@@ -28,6 +28,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MenuModule } from 'primeng/menu';
+import { TooltipModule } from 'primeng/tooltip';
 @NgModule({
     declarations: [],
     imports: [
@@ -59,7 +60,8 @@ import { MenuModule } from 'primeng/menu';
         CalendarModule,
         ToastModule,
         ConfirmDialogModule,
-        MenuModule
+        MenuModule,
+        TooltipModule
     ],
     exports: [
         ButtonModule,
@@ -90,7 +92,8 @@ import { MenuModule } from 'primeng/menu';
         CalendarModule,
          ToastModule,
         ConfirmDialogModule,
-        MenuModule
+        MenuModule,
+        TooltipModule
     ],
     providers: [],
     bootstrap: []

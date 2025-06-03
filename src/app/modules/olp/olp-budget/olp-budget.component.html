@@ -2,95 +2,99 @@
 
 <p-card header="Customer Event Budgeting">
     <div class="budget-olp">
-    <p-table [value]="customers" dataKey="id" responsiveLayout="scroll">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Events</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-cust>
-            <tr>
-                <td>{{ cust.name }}</td>
-                <td>{{ cust.phone }}</td>
-                <td>{{ cust.email }}</td>
-                <td>
-                    <ul>
-                        <li *ngFor="let e of cust.events">{{ e.name }}</li>
-                    </ul>
-                </td>
-                <td>
-                    <p-tag [value]="cust.status" [severity]="getStatusSeverity(cust.status)"></p-tag>
-                </td>
-                <td>
-                    <ng-container [ngSwitch]="cust.status">
-                        <button *ngSwitchCase="'new'" pButton type="button" icon="pi pi-plus" label="Add Budget"
-                            (click)="startBudgeting(cust)"></button>
+        <p-table [value]="customers" dataKey="id" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Events</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-cust>
+                <tr>
+                    <td>{{ cust.name }}</td>
+                    <td>{{ cust.phone }}</td>
+                    <td>{{ cust.email }}</td>
+                    <td>
+                        <ul>
+                            <li *ngFor="let e of cust.events">{{ e.name }}</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <p-tag [value]="cust.status" [severity]="getStatusSeverity(cust.status)"></p-tag>
+                    </td>
+                    <td>
+                        <ng-container [ngSwitch]="cust.status">
+                            <button *ngSwitchCase="'new'" pButton type="button" icon="pi pi-plus-circle"
+                                pTooltip="Add Budget" class="p-button-text p-ml-2" tooltipPosition="top"
+                                (click)="startBudgeting(cust)"></button>
 
-                        <button *ngSwitchCase="'in-progress'" pButton type="button" icon="pi pi-search" label="Review"
-                            (click)="reviewCustomer(cust)"></button>
+                            <button *ngSwitchCase="'in-progress'" pButton type="button" icon="pi pi-search"
+                                class="p-button-text p-ml-2" pTooltip="Approve/Reject" tooltipPosition="top"
+                                (click)="reviewCustomer(cust)"></button>
 
-                        <button *ngSwitchCase="'done'" pButton type="button" icon="pi pi-eye" label="View"
-                            (click)="viewQuote(cust)"></button>
+                            <button *ngSwitchCase="'done'" pButton type="button" icon="pi pi-verified" pTooltip="View"
+                                class="p-button-text p-ml-2" tooltipPosition="top" (click)="viewQuote(cust)"></button>
 
-                        <div *ngSwitchCase="'rejected'">
-                            <p-tag severity="danger" value="Rejected"></p-tag>
-                            <button pButton type="button" icon="pi pi-undo" class="p-button-text p-ml-2" label="Undo"
+                            <button *ngSwitchCase="'rejected'" pButton type="button" icon="pi pi-undo"
+                                class="p-button-text p-ml-2" pTooltip="Undo" tooltipPosition="top"
                                 (click)="undoReject(cust)"></button>
-                        </div>
-                    </ng-container>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+                        </ng-container>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
 
-    <ng-container *ngIf="selectedCustomer">
-        <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()" class="mt-4">
-            <div class="grid">
-                <div class="col-12 budget-header">
-                    <h4 class="mb-2">{{ formModeTitle }} for <span style="color: #10b981;">{{selectedCustomer?.name}}</span></h4>
-                </div>
+        <ng-container *ngIf="selectedCustomer">
+            <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()" class="mt-4">
+                <div class="grid">
+                    <div class="col-12 budget-header">
+                        <h4 class="mb-2">{{ formModeTitle }} for <span
+                                style="color: #10b981;">{{selectedCustomer?.name}}</span></h4>
+                    </div>
 
-                <div class="col-12">
-                    <p-tabView>
-                        <p-tabPanel *ngFor="let event of selectedCustomer.events; let i = index" [header]="event.name">
-                            <div class="grid">
-                                <div class="col-12 md:col-4">
-                                    <label for="budget-{{ i }}">Budget (₹)</label>
+                    <div class="col-12">
+                        <p-tabView>
+                            <p-tabPanel *ngFor="let event of selectedCustomer.events; let i = index"
+                                [header]="event.name">
+                                <div class="grid">
+                                    <div class="col-12 md:col-4">
+                                        <label for="budget-{{ i }}">Budget (₹)</label>
+                                    </div>
+                                    <div class="col-12 md:col-8">
+                                        <p-inputNumber [min]="0" mode="currency" currency="INR" locale="en-IN"
+                                            [showButtons]="true" [step]="1000" [(ngModel)]="event.budget"
+                                            inputId="budget-{{ i }}" [disabled]="formDisabled" class="w-full"
+                                            [ngModelOptions]="{ standalone: true }" (onInput)="calculateTotalBudget()">
+                                        </p-inputNumber>
+                                    </div>
                                 </div>
-                                <div class="col-12 md:col-8">
-                                    <p-inputNumber [min]="0" mode="currency" currency="INR" locale="en-IN"
-                                        [showButtons]="true" [step]="1000" [(ngModel)]="event.budget"
-                                        inputId="budget-{{ i }}" [disabled]="formDisabled" class="w-full"
-                                        [ngModelOptions]="{ standalone: true }" (onInput)="calculateTotalBudget()">
-                                    </p-inputNumber>
-                                </div>
-                            </div>
-                        </p-tabPanel>
-                    </p-tabView>
-                </div>
+                            </p-tabPanel>
+                        </p-tabView>
+                    </div>
 
-                <div class="col-12 text-right">
-                    <span class="mr-3 text-lg">Total Budget: <strong>₹{{ totalBudget | number: '1.2-2'
-                            }}</strong></span>
-                    <ng-container *ngIf="selectedCustomer.status === 'new'">
-                        <button pButton type="submit" icon="pi pi-check" label="Generate Quote"
-                            [disabled]="budgetForm.invalid"></button>
-                    </ng-container>
-
-                    <ng-container *ngIf="selectedCustomer.status === 'in-progress'">
-                        <button pButton type="button" icon="pi pi-check" label="Approve" class="p-button-success mr-2"
-                            (click)="approve(selectedCustomer)"></button>
-                        <button pButton type="button" icon="pi pi-times" label="Reject" class="p-button-danger"
-                            (click)="reject(selectedCustomer)"></button>
-                    </ng-container>
+                    <div class="col-12 text-right">
+                        <span class="mr-3 text-lg">Total Budget: <strong>₹{{ totalBudget | number: '1.2-2'
+                                }}</strong></span>
+                        <ng-container *ngIf="selectedCustomer.status === 'new'">
+                            <button pButton type="submit" icon="pi pi-check" label="Generate Quote"
+                                [disabled]="!isAllBudgetsEntered()"></button>
+                        </ng-container>
+                        <small *ngIf="!isAllBudgetsEntered()" class="p-error mt-2 block" style="color:red;font-family:'primeicons'">
+                            Please enter budget amount for all events before generating a quote.
+                        </small>
+                        <ng-container *ngIf="selectedCustomer.status === 'in-progress'">
+                            <button pButton type="button" icon="pi pi-check" label="Approve"
+                                class="p-button-success mr-2" (click)="approve(selectedCustomer)"></button>
+                            <button pButton type="button" icon="pi pi-times" label="Reject" class="p-button-danger"
+                                (click)="reject(selectedCustomer)"></button>
+                        </ng-container>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </ng-container>
+            </form>
+        </ng-container>
     </div>
 </p-card>

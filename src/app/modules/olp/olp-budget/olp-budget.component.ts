@@ -139,4 +139,9 @@ export class OlpBudgetComponent implements OnInit {
     this.formDisabled = true;
     this.calculateTotalBudget();
   }
+  isAllBudgetsEntered(): boolean {
+  if (!this.selectedCustomer || !this.selectedCustomer.events) return false;
+  return this.selectedCustomer.events.every((event: any) => event.budget && event.budget > 0);
+}
+
 }

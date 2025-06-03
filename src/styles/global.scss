@@ -179,54 +179,7 @@ body.dark-mode .sidebar a:hover {
 }
 
 //login
-/* Default H1 style */
-h1.olp-text {
-  color: #484848;
-  font-size: 50px;
-  font-weight: bold;
-  font-family: monospace;
-  letter-spacing: 7px;
-  text-align: center;
-  transition: all 0.4s ease;
-}
-
-h1.olp-text span {
-  transition: 0.4s ease;
-}
-
-h1.olp-text.glow span {
-  color: #fff;
-  text-shadow:
-    0 0 10px #fff,
-    0 0 20px #05a8f3,
-    0 0 40px #05a8f3;
-}
-
-h1.olp-text.glow span:nth-child(1) {
-  margin-right: 5px;
-}
-
-h1.olp-text.glow span:nth-child(2) {
-  margin-left: 30px;
-}
-
-.neon {
-  color: #484848;
-}
-
-.neon span {
-  transition: 0.4s ease;
-}
-
-.neon .glow-text1.glow,
-.neon .glow-text2.glow,
-.neon .glow-text3.glow {
-  color: #fff;
-  text-shadow:
-    0 0 10px #fff,
-    0 0 20px #05a8f3,
-    0 0 40px #05a8f3;
-}
+// login.component.scss
 
 .login-wrapper {
   display: flex;
@@ -239,22 +192,6 @@ h1.olp-text.glow span:nth-child(2) {
   }
 }
 
-.olp-banner {
-  position: absolute;
-  top: 5%;
-  left: 105%;
-  transform: translateX(-50%);
-  text-align: center;
-}
-
-.olp-banner-text {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-}
-
 .login-left {
   flex: 1;
   position: relative;
@@ -262,47 +199,153 @@ h1.olp-text.glow span:nth-child(2) {
 
   @media (min-width: 768px) {
     display: block;
-    background: url('/assets/login-bg.svg') no-repeat center center;
-    background-size: cover;
+  }
+}
+
+.slideshow {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.slideshow-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  z-index: 1;
+
+  &.active {
+    opacity: 1;
+    z-index: 2;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
 .login-right {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
   background-color: #1f2937;
-}
+  color: #fff;
 
-.login-container {
-  width: 100%;
-  max-width: 400px;
-  background: #ffffff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  color: #000;
+  .branding-text {
+    margin-bottom: 2rem;
+    text-align: center;
 
-  .p-inputtext,
-  .p-password {
-    width: 100%;
-  }
+    .olp-text {
+      font-size: 2.5rem;
+      font-weight: bold;
+      font-family: monospace;
+      letter-spacing: 5px;
+      margin-bottom: 0.5rem;
+      color: #ccc;
+      transition: all 0.4s ease;
 
-  .p-float-label {
-    margin-bottom: 1.5rem;
+      &.glow {
+        color: #fff;
+        text-shadow:
+          0 0 10px #fff,
+          0 0 20px #05a8f3,
+          0 0 40px #05a8f3;
+      }
 
-    input:focus+label,
-    input.ng-dirty+label,
-    input.ng-touched.ng-invalid+label {
-      color: #3f51b5;
+      span {
+        transition: 0.4s ease;
+      }
+    }
+
+    .neon {
+      font-weight: 300;
+      font-size: 1.5rem;
+      color: #bbb;
+
+      span {
+        transition: 0.4s ease;
+      }
+
+      .glow-text1.glow,
+      .glow-text2.glow,
+      .glow-text3.glow {
+        color: #fff;
+        text-shadow:
+          0 0 10px #fff,
+          0 0 20px #05a8f3,
+          0 0 40px #05a8f3;
+      }
     }
   }
 
-  button {
-    margin-top: 1rem;
+  .login-container {
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: #000;
+
+    .p-inputtext,
+    .p-password {
+      width: 100%;
+    }
+
+    .p-float-label {
+      margin-bottom: 1.5rem;
+
+      input:focus + label,
+      input.ng-dirty + label,
+      input.ng-touched.ng-invalid + label {
+        color: #3f51b5;
+      }
+    }
+
+    button {
+      margin-top: 1rem;
+    }
   }
+
+  .forgot-password {
+    margin-bottom: 1rem;
+    text-align: right;
+
+    a {
+      font-size: 0.9rem;
+      color: #3f51b5;
+      text-decoration: none;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #1a237e;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* Optional preloader */
+.preloader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1000;
 }
 
 // users screen
