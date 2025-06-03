@@ -7,25 +7,76 @@ import { Component } from '@angular/core';
   standalone: false
 })
 export class OlpDashboardComponent {
-  totalTarget = 10000;
+  bookings = 1245;
+  revenue = 82450;
+  upcomingEvents = 23;
+  rating = 4.8;
 
-  campaigns = [
-    { label: 'New Subscriptions', value: 152, target: 300, color: 'new' },
-    { label: 'Renewal Contracts', value: 63, target: 500, color: 'renewal' },
-    { label: 'Upsell Revenue', value: 23, target: 1000, color: 'upsell' },
-    { label: 'Add-On Sales', value: 42, target: 2000, color: 'addon' },
+  topEmployees = [
+    { name: 'Anya Gupta', completedEvents: 42 },
+    { name: 'Rohan Das', completedEvents: 38 },
+    { name: 'Maya Nair', completedEvents: 34 }
   ];
 
-  get totalPercentage(): number {
-    return parseFloat(((this.totalAchieved / this.totalTarget) * 100).toFixed(1));
-  }
+  topLocations = [
+    { location: 'Mumbai', count: 68 },
+    { location: 'Delhi', count: 52 },
+    { location: 'Bangalore', count: 46 },
+    { location: 'Hyderabad', count: 41 }
+  ];
 
-  get totalAchieved(): number {
-    return this.campaigns.reduce((sum, c) => sum + c.value, 0);
+  eventCategories = [
+    { label: 'Wedding', value: 70, color: 'wedding' },
+    { label: 'Birthday', value: 35, color: 'birthday' },
+    { label: 'Corporate', value: 50, color: 'corporate' },
+    { label: 'Other', value: 20, color: 'other' }
+  ];
+
+  get totalEvents(): number {
+    return this.eventCategories.reduce((sum, e) => sum + e.value, 0);
   }
 
   getWidth(value: number): string {
-    return this.totalAchieved === 0 ? '0%' : `${(value / this.totalAchieved) * 100}%`;
+    return `${(value / this.totalEvents) * 100}%`;
   }
 
+  chartData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+    datasets: [
+      {
+        label: 'Earnings',
+        data: [12000, 15000, 13000, 17000, 18000],
+        borderColor: '#42A5F5',
+        backgroundColor: 'rgba(66,165,245,0.2)',
+        fill: true,
+        tension: 0.4
+      }
+    ]
+  };
+
+  chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      y: {
+        ticks: {
+          color: '#888'
+        },
+        grid: {
+          color: '#eee'
+        }
+      },
+      x: {
+        ticks: {
+          color: '#888'
+        },
+        grid: {
+          color: '#eee'
+        }
+      }
+    }
+  };
 }

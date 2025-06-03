@@ -14,7 +14,7 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-cust>
-                <tr>
+                <tr class="row-fade">
                     <td>{{ cust.name }}</td>
                     <td>{{ cust.phone }}</td>
                     <td>{{ cust.email }}</td>
@@ -28,32 +28,37 @@
                     </td>
                     <td>
                         <ng-container [ngSwitch]="cust.status">
-                            <button *ngSwitchCase="'new'" pButton type="button" icon="pi pi-plus-circle"
-                                pTooltip="Add Budget" class="p-button-text p-ml-2" tooltipPosition="top"
-                                (click)="startBudgeting(cust)"></button>
+                            <button *ngSwitchCase="'new'" pButton icon="pi pi-plus-circle"
+                                class="p-button-text p-ml-2 bounce-hover" pTooltip="Add Budget"
+                                (click)="startBudgeting(cust)">
+                            </button>
 
-                            <button *ngSwitchCase="'in-progress'" pButton type="button" icon="pi pi-search"
-                                class="p-button-text p-ml-2" pTooltip="Approve/Reject" tooltipPosition="top"
-                                (click)="reviewCustomer(cust)"></button>
+                            <button *ngSwitchCase="'in-progress'" pButton icon="pi pi-search"
+                                class="p-button-text p-ml-2 bounce-hover" pTooltip="Approve/Reject"
+                                (click)="reviewCustomer(cust)">
+                            </button>
 
-                            <button *ngSwitchCase="'done'" pButton type="button" icon="pi pi-verified" pTooltip="View"
-                                class="p-button-text p-ml-2" tooltipPosition="top" (click)="viewQuote(cust)"></button>
+                            <button *ngSwitchCase="'done'" pButton icon="pi pi-verified"
+                                class="p-button-text p-ml-2 bounce-hover" pTooltip="View" (click)="viewQuote(cust)">
+                            </button>
 
-                            <button *ngSwitchCase="'rejected'" pButton type="button" icon="pi pi-undo"
-                                class="p-button-text p-ml-2" pTooltip="Undo" tooltipPosition="top"
-                                (click)="undoReject(cust)"></button>
+                            <button *ngSwitchCase="'rejected'" pButton icon="pi pi-undo"
+                                class="p-button-text p-ml-2 bounce-hover" pTooltip="Undo" (click)="undoReject(cust)">
+                            </button>
                         </ng-container>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
 
-        <ng-container *ngIf="selectedCustomer">
+        <div *ngIf="selectedCustomer" class="slide-in-form">
             <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()" class="mt-4">
                 <div class="grid">
                     <div class="col-12 budget-header">
-                        <h4 class="mb-2">{{ formModeTitle }} for <span
-                                style="color: #10b981;">{{selectedCustomer?.name}}</span></h4>
+                        <h4 class="mb-2">
+                            {{ formModeTitle }} for
+                            <span style="color: #10b981;">{{ selectedCustomer?.name }}</span>
+                        </h4>
                     </div>
 
                     <div class="col-12">
@@ -65,11 +70,11 @@
                                         <label for="budget-{{ i }}">Budget (₹)</label>
                                     </div>
                                     <div class="col-12 md:col-8">
-                                        <p-inputNumber [min]="0" mode="currency" currency="INR" locale="en-IN"
-                                            [showButtons]="true" [step]="1000" [(ngModel)]="event.budget"
-                                            inputId="budget-{{ i }}" [disabled]="formDisabled" class="w-full"
-                                            [ngModelOptions]="{ standalone: true }" (onInput)="calculateTotalBudget()">
-                                        </p-inputNumber>
+                                        <p-inputNumber inputId="budget-{{ i }}" [(ngModel)]="event.budget"
+                                            mode="currency" currency="INR" locale="en-IN" [step]="1000" [min]="0"
+                                            [showButtons]="true" [disabled]="formDisabled" class="w-full"
+                                            (onInput)="calculateTotalBudget()"
+                                            [ngModelOptions]="{ standalone: true }"></p-inputNumber>
                                     </div>
                                 </div>
                             </p-tabPanel>
@@ -77,24 +82,27 @@
                     </div>
 
                     <div class="col-12 text-right">
-                        <span class="mr-3 text-lg">Total Budget: <strong>₹{{ totalBudget | number: '1.2-2'
-                                }}</strong></span>
-                        <ng-container *ngIf="selectedCustomer.status === 'new'">
-                            <button pButton type="submit" icon="pi pi-check" label="Generate Quote"
-                                [disabled]="!isAllBudgetsEntered()"></button>
+                        <span class="mr-3 total-budget pulse">
+                            Total Budget: <strong>₹{{ totalBudget | number: '1.2-2' }}</strong>
+                        </span>
+
+                        <ng-container [ngSwitch]="selectedCustomer.status">
+                            <button *ngSwitchCase="'new'" pButton type="submit" icon="pi pi-check"
+                                label="Generate Quote" [disabled]="!isAllBudgetsEntered()"
+                                class="bounce-hover"></button>
+
+                            <button *ngSwitchCase="'in-progress'" pButton icon="pi pi-check" label="Approve"
+                                class="p-button-success mr-2 bounce-hover" (click)="approve(selectedCustomer)"></button>
+                            <button *ngSwitchCase="'in-progress'" pButton icon="pi pi-times" label="Reject"
+                                class="p-button-danger bounce-hover" (click)="reject(selectedCustomer)"></button>
                         </ng-container>
-                        <small *ngIf="!isAllBudgetsEntered()" class="p-error mt-2 block" style="color:red;font-family:'primeicons'">
-                            Please enter budget amount for all events before generating a quote.
+
+                        <small *ngIf="!isAllBudgetsEntered()" class="p-error mt-2 block">
+                            Please enter budget for all events before generating a quote.
                         </small>
-                        <ng-container *ngIf="selectedCustomer.status === 'in-progress'">
-                            <button pButton type="button" icon="pi pi-check" label="Approve"
-                                class="p-button-success mr-2" (click)="approve(selectedCustomer)"></button>
-                            <button pButton type="button" icon="pi pi-times" label="Reject" class="p-button-danger"
-                                (click)="reject(selectedCustomer)"></button>
-                        </ng-container>
                     </div>
                 </div>
             </form>
-        </ng-container>
+        </div>
     </div>
 </p-card>

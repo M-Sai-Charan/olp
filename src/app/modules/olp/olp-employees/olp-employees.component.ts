@@ -6,82 +6,59 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   templateUrl: './olp-employees.component.html',
   styleUrl: './olp-employees.component.css',
   standalone: false,
-   providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService],
 })
 export class OlpEmployeesComponent {
-selectedNodes!: TreeNode[];
-data: TreeNode[] = [
+  selectedNodes!: TreeNode[];
+
+  data: TreeNode[] = [
     {
       expanded: true,
       type: 'person',
       data: {
         image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png',
         name: 'Amy Elsner',
-        title: 'CEO'
+        title: 'Lead Photographer',
       },
       children: [
         {
-          expanded: true,
           type: 'person',
           data: {
             image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/annafali.png',
-            name: 'Anna Fali',
-            title: 'CMO'
+            name: 'Sam Rider',
+            title: 'Lighting Specialist',
           },
-          children: [
-            {
-              type: 'person',
-              data: {
-                image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/annafali.png',
-                name: 'Anna Fali',
-                title: 'CMO'
-              },
-            },
-            {
-              type: 'person',
-              data: {
-                image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/annafali.png',
-                name: 'Anna Fali',
-                title: 'CMO'
-              },
-            }
-          ]
         },
         {
-          expanded: true,
           type: 'person',
           data: {
             image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/annafali.png',
-            name: 'Anna Fali',
-            title: 'CMO'
+            name: 'Lisa Wong',
+            title: 'Editor',
           },
-          children: [
-            {
-              type: 'person',
-              data: {
-                image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/annafali.png',
-                name: 'Anna Fali',
-                title: 'CMO'
-              },
-            },
-            {
-              type: 'person',
-              data: {
-                image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/annafali.png',
-                name: 'Anna Fali',
-                title: 'CMO'
-              },
-            }
-          ]
-        }
-      ]
-    }
+        },
+      ],
+    },
   ];
 
-  constructor(
-    private confirmationService: ConfirmationService,
-    private messageService: MessageService
-  ) {}
+  constructor(private confirmationService: ConfirmationService, private messageService: MessageService) { }
+
+  getRoleSeverity(role: string): string {
+    switch (role.toLowerCase()) {
+      case 'ceo':
+      case 'lead photographer':
+        return 'success';
+      case 'cmo':
+      case 'lighting specialist':
+        return 'info';
+      case 'editor':
+        return 'warning';
+      case 'assistant':
+        return 'help';
+      default:
+        return 'secondary';
+    }
+  }
 
   confirmDelete(node: TreeNode) {
     this.confirmationService.confirm({
@@ -92,8 +69,9 @@ data: TreeNode[] = [
         this.deleteNode(node, this.data);
         this.messageService.add({
           severity: 'success',
-          summary: 'Deleted',
-          detail: `${node.data.name} deleted successfully`,
+          summary: 'Removed',
+          detail: `${node.data.name} has been removed from the team.`,
+          life: 3000,
         });
       },
     });
