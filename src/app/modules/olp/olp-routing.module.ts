@@ -7,6 +7,7 @@ import { OlpLoginComponent } from './olp-login/olp-login.component';
 import { OlpEmployeesComponent } from './olp-employees/olp-employees.component';
 import { OlpAdminComponent } from './olp-admin/olp-admin.component';
 import { OlpBudgetComponent } from './olp-budget/olp-budget.component';
+import { OlpInventoryComponent } from './olp-inventory/olp-inventory.component';
 
 const routes: Routes = [
   { path: '', component: OlpLoginComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'employees', component: OlpEmployeesComponent },
       { path: 'admin', component: OlpAdminComponent },
       { path: 'budget', component: OlpBudgetComponent },
+      {path:'inventory',component:OlpInventoryComponent},
       { path: '', redirectTo: 'login', pathMatch: 'full' }
     ]
   }

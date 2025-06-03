@@ -854,3 +854,63 @@ textarea,
     text-align: center;
   }
 }
+//inventory.scss
+.inventory-wrapper {
+  margin: 0 auto;
+}
+
+.name-cell {
+  align-items: center;
+  gap: 0.5rem;
+
+  i.pi-camera {
+    color: #3b82f6;
+  }
+
+  i.pi-send {
+    color: #f59e0b;
+  }
+}
+
+.overdue-icon {
+  color: #ef4444;
+}
+
+.maintenance-list,
+.booking-list {
+  list-style: none;
+  padding: 0.5rem;
+  margin: 0;
+  border: 1px solid var(--surface-border);
+  border-radius: 4px;
+  background: var(--surface-card);
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.maintenance-list li,
+.booking-list li {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.maintenance-list li:last-child,
+.booking-list li:last-child {
+  border-bottom: none;
+}
+
+.add-maintenance-form {
+  border-top: 1px solid var(--surface-border);
+  padding-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .inventory-wrapper {
+    padding: 0.5rem;
+  }
+
+  p-card {
+    margin: 0;
+  }
+}
+

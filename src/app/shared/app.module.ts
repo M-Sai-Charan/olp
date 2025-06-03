@@ -29,6 +29,9 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MenuModule } from 'primeng/menu';
 import { TooltipModule } from 'primeng/tooltip';
+import { SidebarModule } from 'primeng/sidebar';
+import { BadgeModule } from 'primeng/badge';
+import { MultiSelectModule } from 'primeng/multiselect';
 @NgModule({
     declarations: [],
     imports: [
@@ -61,7 +64,10 @@ import { TooltipModule } from 'primeng/tooltip';
         ToastModule,
         ConfirmDialogModule,
         MenuModule,
-        TooltipModule
+        TooltipModule,
+        SidebarModule,
+        BadgeModule,
+        MultiSelectModule 
     ],
     exports: [
         ButtonModule,
@@ -93,7 +99,10 @@ import { TooltipModule } from 'primeng/tooltip';
          ToastModule,
         ConfirmDialogModule,
         MenuModule,
-        TooltipModule
+        TooltipModule,
+         SidebarModule,
+        BadgeModule,
+        MultiSelectModule
     ],
     providers: [],
     bootstrap: []
