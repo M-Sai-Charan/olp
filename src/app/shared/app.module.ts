@@ -19,6 +19,19 @@ import { AvatarModule } from 'primeng/avatar';
 import { CardModule } from 'primeng/card';
 import { DropdownModule } from 'primeng/dropdown';
 import { ChartModule } from 'primeng/chart';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { InputTextarea } from 'primeng/inputtextarea';
+import { MessageModule } from 'primeng/message';
+import { TabViewModule } from 'primeng/tabview';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CalendarModule } from 'primeng/calendar';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MenuModule } from 'primeng/menu';
+import { TooltipModule } from 'primeng/tooltip';
+import { SidebarModule } from 'primeng/sidebar';
+import { BadgeModule } from 'primeng/badge';
+import { MultiSelectModule } from 'primeng/multiselect';
 @NgModule({
     declarations: [],
     imports: [
@@ -41,7 +54,20 @@ import { ChartModule } from 'primeng/chart';
         DividerModule,
         PanelModule,
         AvatarModule,
-        DropdownModule
+        DropdownModule,
+        ProgressBarModule,
+        InputTextarea,
+        MessageModule,
+        TabViewModule,
+        InputNumberModule,
+        CalendarModule,
+        ToastModule,
+        ConfirmDialogModule,
+        MenuModule,
+        TooltipModule,
+        SidebarModule,
+        BadgeModule,
+        MultiSelectModule 
     ],
     exports: [
         ButtonModule,
@@ -63,7 +89,20 @@ import { ChartModule } from 'primeng/chart';
         AvatarModule,
         DropdownModule,
         CardModule,
-        ChartModule
+        ChartModule,
+        ProgressBarModule,
+        InputTextarea,
+        MessageModule,
+        TabViewModule,
+        InputNumberModule,
+        CalendarModule,
+         ToastModule,
+        ConfirmDialogModule,
+        MenuModule,
+        TooltipModule,
+         SidebarModule,
+        BadgeModule,
+        MultiSelectModule
     ],
     providers: [],
     bootstrap: []

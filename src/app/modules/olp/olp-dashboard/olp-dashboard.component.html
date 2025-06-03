@@ -1,63 +1,87 @@
-<div class="dashboard p-4">
-  <div class="dashboard-grid">
-    <!-- KPIs -->
-    <p-card class="kpi-card kpi-green">
-      <div class="kpi-label">Revenue</div>
-      <div class="kpi-value text-green-600">$1548.26</div>
-    </p-card>
-    <p-card class="kpi-card">
-      <div class="kpi-label">Buyer Messages</div>
-      <div class="kpi-value text-blue-600">2</div>
-    </p-card>
-    <p-card class="kpi-card">
-      <div class="kpi-label">CTR</div>
-      <div class="kpi-value">12%</div>
-    </p-card>
-    <p-card class="kpi-card">
-      <div class="kpi-label">Out of Stock Products</div>
-      <div class="kpi-value text-orange-500">4</div>
-    </p-card>
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h2>OLP Admin Dashboard</h2>
+    <p>Monitor key business insights in real-time</p>
+  </div>
 
-    <!-- Orders Chart -->
-    <p-card header="Orders" class="wide-card">
-      <div class="flex justify-between items-center mb-3">
-        <span class="text-sm font-semibold">Your Daily Orders (Last 30 Days)</span>
+  <!-- KPI Cards -->
+  <div class="dashboard-kpis">
+    <div class="kpi-card bounce-hover bookings">
+      <i class="pi pi-calendar-plus"></i>
+      <div>
+        <h4>Total Bookings</h4>
+        <p>{{ bookings }}</p>
       </div>
-      <p-chart type="bar" [data]="ordersChartData" [options]="ordersChartOptions"></p-chart>
-    </p-card>
-
-    <!-- Waiting Actions -->
-    <!-- <p-card header="Waiting Actions">
-      <div class="flex flex-column gap-2">
-        <div>Order #85421 <p-tag value="New" severity="info" /></div>
-        <div>Order #85422 <p-tag value="Processing" severity="info" /></div>
+    </div>
+    <div class="kpi-card bounce-hover revenue">
+      <i class="pi pi-dollar"></i>
+      <div>
+        <h4>Total Earnings</h4>
+        <p>${{ revenue }}</p>
       </div>
-    </p-card> -->
+    </div>
+    <div class="kpi-card bounce-hover events">
+      <i class="pi pi-image"></i>
+      <div>
+        <h4>Upcoming Events</h4>
+        <p>{{ upcomingEvents }}</p>
+      </div>
+    </div>
+    <div class="kpi-card bounce-hover rating">
+      <i class="pi pi-star-fill"></i>
+      <div>
+        <h4>Customer Rating</h4>
+        <p>{{ rating }}/5</p>
+      </div>
+    </div>
+  </div>
 
-    <!-- Sales by Category -->
-    <p-card header="Sales by Category">
-      <p-chart type="doughnut" [data]="categoryChartData"></p-chart>
-    </p-card>
+  <!-- Sections -->
+  <div class="dashboard-sections">
+    <!-- Top Employees -->
+    <div class="dashboard-card">
+      <h3>Top Performing Employees</h3>
+      <ul>
+        <li *ngFor="let emp of topEmployees">
+          <span>{{ emp.name }}</span>
+          <span>{{ emp.completedEvents }} events</span>
+        </li>
+      </ul>
+    </div>
 
-    <!-- Clients Line Chart -->
-    <!-- <p-card header="Clients">
-      <p-chart type="line" [data]="clientsChartData"></p-chart>
-    </p-card> -->
+    <!-- Top Locations -->
+    <div class="dashboard-card">
+      <h3>Top Event Locations</h3>
+      <ul>
+        <li *ngFor="let loc of topLocations">
+          <span>{{ loc.location }}</span>
+          <span>{{ loc.count }} events</span>
+        </li>
+      </ul>
+    </div>
 
-    <!-- Ad Management Table -->
-    <!-- <p-card header="Ad Management">
-      <p-table [value]="ads">
-        <ng-template pTemplate="header">
-          <tr><th>Ad Name</th><th>ROI</th><th>CTR</th></tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-ad>
-          <tr>
-            <td>{{ ad.name }}</td>
-            <td>{{ ad.roi }}</td>
-            <td>{{ ad.ctr }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </p-card> -->
+    <!-- Event Category Breakdown -->
+    <div class="dashboard-card">
+      <h3>Event Type Breakdown</h3>
+      <div class="multi-progress-bar">
+        <div *ngFor="let category of eventCategories"
+             class="segment"
+             [ngClass]="category.color"
+             [ngStyle]="{ width: getWidth(category.value) }"></div>
+      </div>
+      <ul class="target-details">
+        <li *ngFor="let category of eventCategories">
+          <span class="dot" [ngClass]="category.color"></span>
+          {{ category.label }} - {{ category.value }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Chart -->
+    <div class="dashboard-card">
+      <h3>Monthly Earnings</h3>
+      <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
+    </div>
   </div>
 </div>

@@ -1,59 +1,99 @@
 <div class="card">
-    <p-table #dt2 [value]="olpUsers" [tableStyle]="{ 'min-width': '60rem'}" [paginator]="true"
-        tableStyleClass="my-custom-table" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]"
-        [globalFilterFields]="['bride', 'groom', 'contactNumber', 'email','status']">
-        <ng-template #caption>
-            <div class="flex justify-between items-center w-full flex-wrap gap-5">
-                <div class="flex-none" style="position: absolute;">
-                    <p-iconfield iconPosition="left">
-                        <p-inputicon>
-                            <i class="pi pi-search"></i>
-                        </p-inputicon>
-                        <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search here..."
-                            class="w-64" />
-                    </p-iconfield>
-                </div>
-                <div class="flex-none ml-auto" style="    position: relative;
-    left: 82%;">
-                    <p-dropdown [options]="statusOptions" [(ngModel)]="selectedStatus" placeholder="Filter by Status"
-                        optionLabel="label" (onChange)="filterByStatus()" styleClass="w-48">
-                    </p-dropdown>
-                </div>
-            </div>
-        </ng-template>
-        <ng-template #header>
-            <tr>
-                <th>Bride</th>
-                <th>Groom</th>
-                <th>Contact</th>
-                <th>Email</th>
-                <th>Status</th>
-                <th>Created On</th>
-                <th>Actions</th>
-            </tr>
-        </ng-template>
+  <p-table
+    #dt2
+    [value]="olpUsers"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [globalFilterFields]="['bride', 'groom', 'contactNumber', 'email', 'status']"
+    [tableStyle]="{ 'min-width': '65rem' }"
+    tableStyleClass="my-custom-table"
+  >
+    <!-- Table Caption -->
+    <ng-template #caption>
+      <div class="flex justify-between flex-wrap gap-4 items-center">
+        <div class="flex items-center gap-2">
+          <p-iconfield iconPosition="left">
+            <p-inputicon>
+              <i class="pi pi-search"></i>
+            </p-inputicon>
+            <input
+              pInputText
+              type="text"
+              (input)="onGlobalFilter($event)"
+              placeholder="Search bride, groom, email..."
+              class="w-64"
+            />
+          </p-iconfield>
+        </div>
+        <div class="ml-auto">
+          <p-dropdown
+            [options]="statusOptions"
+            [(ngModel)]="selectedStatus"
+            placeholder="Filter by Status"
+            optionLabel="label"
+            (onChange)="filterByStatus()"
+            styleClass="w-48"
+          ></p-dropdown>
+        </div>
+      </div>
+    </ng-template>
 
-        <ng-template #body let-product>
-            <tr class="scrollable-table-body">
-                <td>{{ product.bride }}</td>
-                <td>{{ product.groom }}</td>
-                <td>{{ product.contactNumber }}</td>
-                <td>{{ product.email }}</td>
-                <td>
-                    <p-tag [value]="product.status" [severity]="getSeverity(product.status)" />
-                </td>
-                <td>{{ product.createdOn }}</td>
-                <td>
-                    <p-button rounded icon="pi pi-cog" (click)="selectOLP(product)" />
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+    <!-- Table Header -->
+    <ng-template #header>
+      <tr>
+        <th>Bride</th>
+        <th>Groom</th>
+        <th>Contact</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Created On</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+
+    <!-- Table Body -->
+    <ng-template #body let-user>
+      <tr class="hover:bg-surface-200 transition-all duration-150">
+        <td>{{ user.bride }}</td>
+        <td>{{ user.groom }}</td>
+        <td>{{ user.contactNumber }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <p-tag
+            [value]="user.status"
+            [severity]="getSeverity(user.status)"
+            [style]="{ 'text-transform': 'capitalize' }"
+          />
+        </td>
+        <td>{{ user.createdOn }}</td>
+        <td>
+          <p-button
+            icon="pi pi-eye"
+            rounded
+            (click)="selectOLP(user)"
+            [pTooltip]="'View Events'"
+            tooltipPosition="top"
+            severity="info"
+          />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
 
-<div class="flex justify-center">
-    <p-dialog [header]="olpuserId" [(visible)]="visible" [modal]="true"
-        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '95vw',height:'100vw' }"
-        [draggable]="false" [resizable]="false">
-    </p-dialog>
-</div>
+<!-- Modal Dialog -->
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [header]="'User ID: ' + olpuserId"
+  [style]="{ width: '95vw', height: '90vh' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '95vw' }"
+>
+  <!-- You can add tab view for events, comments, etc. here -->
+  <ng-template pTemplate="content">
+    <p class="text-lg">Event details and budget will be shown here...</p>
+  </ng-template>
+</p-dialog>
