@@ -1,164 +1,188 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl, AbstractControl, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
-interface Invoice {
-  id: number;
-  customerName: string;
-  invoiceDate: Date;
-  dueDate: Date;
-  amount: number;
-  status: 'Paid' | 'Unpaid' | 'Overdue';
-}
 
-interface Quote {
-  id: number;
-  customerName: string;
-  quoteDate: Date;
-  amount: number;
-  validTill: Date;
-  status: 'Accepted' | 'Pending' | 'Rejected';
-}
 
-interface Payment {
-  id: number;
-  invoiceId: number;
-  paymentDate: Date;
-  amount: number;
-  paymentMethod: string;
-}
 
 @Component({
   selector: 'app-olp-invoice',
   templateUrl: './olp-invoice.component.html',
   styleUrl: './olp-invoice.component.css',
-  standalone:false
+  standalone: false,
+  providers:[MessageService]
 })
-export class OlpInvoiceComponent implements OnInit{
-  invoices: Invoice[] = [];
-  quotes: Quote[] = [];
-  payments: Payment[] = [];
+export class OlpInvoiceComponent implements OnInit {
+  invoiceData = [
+    {
+      id: 1,
+      olpId: '001OLP2025',
+      bride: 'John',
+      groom: 'Stella',
+      contactNumber: 6301587956,
+      email: 'msunnylive@gmail.com',
+      status: 'New',
+      createdOn: '27-05-2025 8:30AM',
+      calledBy: { id: 1, name: 'John', value: 'john' },
+      callDate: 'Wed Jun 04 2025',
+      budgetStatus: 'New',
+      budgetComments: '',
+      events: [
+        {
+          eventName: { id: 6, name: 'Wedding', value: 'wedding' },
+          eventDate: 'Wed Jun 04 2025',
+          eventLocation: 'banglore',
+          eventTime: { id: 2, name: 'Afternoon', value: 'afternoon' },
+          eventGuests: 1000,
+          eventBudget: 0
+        },
+        {
+          eventName: { id: 5, name: 'Reception', value: 'reception' },
+          eventDate: 'Wed Jun 01 2025',
+          eventLocation: 'chennai',
+          eventTime: { id: 4, name: 'Night', value: 'night' },
+          eventGuests: 500,
+          eventBudget: 0,
+        },
+      ]
+    },
+    {
+      id: 2,
+      olpId: '002OLP2025',
+      bride: 'John',
+      groom: 'Stella',
+      contactNumber: 6301587956,
+      email: 'msunnylive@gmail.com',
+      status: 'New',
+      createdOn: '27-05-2025 8:30AM',
+      calledBy: { id: 1, name: 'John', value: 'john' },
+      callDate: 'Wed Jun 04 2025',
+      budgetStatus: 'Completed',
+      budgetComments: 'Budget added waiting for customer confirmation',
+      events: [
+        {
+          eventName: { id: 6, name: 'Wedding', value: 'wedding' },
+          eventDate: 'Wed Jun 04 2025',
+          eventLocation: 'banglore',
+          eventTime: { id: 2, name: 'Afternoon', value: 'afternoon' },
+          eventGuests: 1000,
+          eventBudget: 200000
+        },
+        {
+          eventName: { id: 5, name: 'Reception', value: 'reception' },
+          eventDate: 'Wed Jun 01 2025',
+          eventLocation: 'chennai',
+          eventTime: { id: 4, name: 'Night', value: 'night' },
+          eventGuests: 500,
+          eventBudget: 100000,
+        },
+      ]
+    },
+    {
+      id: 3,
+      olpId: '003OLP2025',
+      bride: 'John',
+      groom: 'Stella',
+      contactNumber: 6301587956,
+      email: 'msunnylive@gmail.com',
+      status: 'New',
+      createdOn: '27-05-2025 8:30AM',
+      calledBy: { id: 1, name: 'John', value: 'john' },
+      callDate: 'Wed Jun 04 2025',
+      budgetStatus: 'Completed',
+      budgetComments: 'Budget added and confirmed by customer to start project',
+      events: [
+        {
+          eventName: { id: 6, name: 'Wedding', value: 'wedding' },
+          eventDate: 'Wed Jun 04 2025',
+          eventLocation: 'banglore',
+          eventTime: { id: 2, name: 'Afternoon', value: 'afternoon' },
+          eventGuests: 1000,
+          eventBudget: 200000
+        },
+        {
+          eventName: { id: 5, name: 'Reception', value: 'reception' },
+          eventDate: 'Wed Jun 01 2025',
+          eventLocation: 'chennai',
+          eventTime: { id: 4, name: 'Night', value: 'night' },
+          eventGuests: 500,
+          eventBudget: 100000,
+        },
+      ]
+    }
+  ];
 
-  displayInvoiceDialog = false;
-  displayQuoteDialog = false;
-  displayPaymentDialog = false;
+ groupedData: { [key: string]: any[] } = {};
+  budgetStatuses: string[] = ['New', 'In-progress', 'Completed', 'Rejected'];
+  budgetFormMap: { [key: string]: FormArray } = {};
 
-  invoiceForm: FormGroup;
-  quoteForm: FormGroup;
-  paymentForm: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    this.invoiceForm = this.fb.group({
-      id: [null],
-      customerName: ['', Validators.required],
-      invoiceDate: [null, Validators.required],
-      dueDate: [null, Validators.required],
-      amount: [0, [Validators.required, Validators.min(0.01)]],
-      status: ['Unpaid', Validators.required]
-    });
-
-    this.quoteForm = this.fb.group({
-      id: [null],
-      customerName: ['', Validators.required],
-      quoteDate: [null, Validators.required],
-      amount: [0, [Validators.required, Validators.min(0.01)]],
-      validTill: [null, Validators.required],
-      status: ['Pending', Validators.required]
-    });
-
-    this.paymentForm = this.fb.group({
-      id: [null],
-      invoiceId: [null, Validators.required],
-      paymentDate: [null, Validators.required],
-      amount: [0, [Validators.required, Validators.min(0.01)]],
-      paymentMethod: ['', Validators.required]
-    });
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    
-  }
-  // Invoice methods
-  openNewInvoice() {
-    this.invoiceForm.reset({ status: 'Unpaid' });
-    this.displayInvoiceDialog = true;
+    this.loadDummyData();
+    this.groupByBudgetStatus();
+    this.initializeForms();
   }
 
-  editInvoice(invoice: Invoice) {
-    this.invoiceForm.patchValue(invoice);
-    this.displayInvoiceDialog = true;
+  loadDummyData() {
+    this.invoiceData = this.invoiceData;
   }
 
-  saveInvoice() {
-    if (this.invoiceForm.invalid) return;
-    const invoice = this.invoiceForm.value as Invoice;
-    if (invoice.id) {
-      const index = this.invoices.findIndex(i => i.id === invoice.id);
-      if (index !== -1) this.invoices[index] = invoice;
-    } else {
-      invoice.id = this.invoices.length + 1;
-      this.invoices.push(invoice);
+  groupByBudgetStatus() {
+    this.groupedData = {};
+    for (const status of this.budgetStatuses) {
+      this.groupedData[status] = this.invoiceData.filter((i:any) => i.budgetStatus === status);
     }
-    this.displayInvoiceDialog = false;
   }
-
-  deleteInvoice(invoice: Invoice) {
-    this.invoices = this.invoices.filter(i => i.id !== invoice.id);
-  }
-
-  // Quote methods
-  openNewQuote() {
-    this.quoteForm.reset({ status: 'Pending' });
-    this.displayQuoteDialog = true;
-  }
-
-  editQuote(quote: Quote) {
-    this.quoteForm.patchValue(quote);
-    this.displayQuoteDialog = true;
-  }
-
-  saveQuote() {
-    if (this.quoteForm.invalid) return;
-    const quote = this.quoteForm.value as Quote;
-    if (quote.id) {
-      const index = this.quotes.findIndex(q => q.id === quote.id);
-      if (index !== -1) this.quotes[index] = quote;
-    } else {
-      quote.id = this.quotes.length + 1;
-      this.quotes.push(quote);
+getOlpFormGroup(status: string, index: number): FormGroup {
+  return this.budgetFormMap[status].at(index) as FormGroup;
+}
+  initializeForms() {
+    for (const status of this.budgetStatuses) {
+      this.budgetFormMap[status] = this.fb.array(
+        this.groupedData[status]?.map(olp => this.createOlpFormGroup(olp)) || []
+      );
     }
-    this.displayQuoteDialog = false;
   }
 
-  deleteQuote(quote: Quote) {
-    this.quotes = this.quotes.filter(q => q.id !== quote.id);
+  createOlpFormGroup(olp: any): FormGroup {
+    return this.fb.group({
+      olpId: [olp.olpId],
+      budgetComments: [olp.budgetComments || ''],
+      events: this.fb.array(
+        olp.events.map((event:any) => this.fb.group({
+          eventName: [event.eventName],
+          eventDate: [event.eventDate],
+          eventLocation: [event.eventLocation],
+          eventTime: [event.eventTime],
+          eventGuests: [event.eventGuests],
+          eventBudget: [event.eventBudget, [Validators.required, Validators.min(1)]]
+        }))
+      )
+    });
   }
 
-  // Payment methods
-  openNewPayment(invoiceId: number) {
-    this.paymentForm.reset({ invoiceId });
-    this.displayPaymentDialog = true;
+  getEvents(formGroup: FormGroup): FormArray {
+    return formGroup.get('events') as FormArray;
   }
 
-  editPayment(payment: Payment) {
-    this.paymentForm.patchValue(payment);
-    this.displayPaymentDialog = true;
-  }
-
-  savePayment() {
-    if (this.paymentForm.invalid) return;
-    const payment = this.paymentForm.value as Payment;
-    if (payment.id) {
-      const index = this.payments.findIndex(p => p.id === payment.id);
-      if (index !== -1) this.payments[index] = payment;
+  saveBudget(status: string, index: number) {
+    const formGroup = this.budgetFormMap[status].at(index) as FormGroup;
+    if (formGroup.valid) {
+      console.log('Saved Data:', formGroup.value);
+      // handle save logic here
     } else {
-      payment.id = this.payments.length + 1;
-      this.payments.push(payment);
+      formGroup.markAllAsTouched();
     }
-    this.displayPaymentDialog = false;
   }
 
-  deletePayment(payment: Payment) {
-    this.payments = this.payments.filter(p => p.id !== payment.id);
+  getSeverity(status: string) {
+    switch (status) {
+      case 'New': return 'info';
+      case 'In-progress': return 'warning';
+      case 'Completed': return 'success';
+      case 'Rejected': return 'danger';
+      default: return 'info';
+    }
   }
 }
-

@@ -34,6 +34,9 @@ import { BadgeModule } from 'primeng/badge';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ToolbarModule } from 'primeng/toolbar';
+import { AccordionModule } from 'primeng/accordion';
+import { ChipModule } from 'primeng/chip';
+import { FullCalendarModule } from '@fullcalendar/angular';
 @NgModule({
     declarations: [],
     imports: [
@@ -69,9 +72,12 @@ import { ToolbarModule } from 'primeng/toolbar';
         TooltipModule,
         SidebarModule,
         BadgeModule,
-        MultiSelectModule ,
+        MultiSelectModule,
         DragDropModule,
-        ToolbarModule
+        ToolbarModule,
+        AccordionModule,
+        ChipModule,
+        FullCalendarModule
     ],
     exports: [
         ButtonModule,
@@ -100,15 +106,18 @@ import { ToolbarModule } from 'primeng/toolbar';
         TabViewModule,
         InputNumberModule,
         CalendarModule,
-         ToastModule,
+        ToastModule,
         ConfirmDialogModule,
         MenuModule,
         TooltipModule,
-         SidebarModule,
+        SidebarModule,
         BadgeModule,
         MultiSelectModule,
         DragDropModule,
-        ToolbarModule
+        ToolbarModule,
+        AccordionModule,
+        ChipModule,
+        FullCalendarModule
     ],
     providers: [],
     bootstrap: []

@@ -1,184 +1,84 @@
-<p-tabView>
-  <!-- Invoices -->
-  <p-tabPanel header="Invoices">
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-       <button type="button" pButton label="Add Invoice" icon="pi pi-plus" (click)="openNewInvoice()"></button>
-      </div>
-    </p-toolbar>
-
-    <p-table [value]="invoices" dataKey="id" class="p-datatable-sm">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Customer</th>
-          <th>Invoice Date</th>
-          <th>Due Date</th>
-          <th>Amount</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-inv>
-        <tr>
-          <td>{{ inv.customerName }}</td>
-          <td>{{ inv.invoiceDate | date }}</td>
-          <td>{{ inv.dueDate | date }}</td>
-          <td>{{ inv.amount | currency }}</td>
-          <td>{{ inv.status }}</td>
-          <td>
-           <button type="button" pButton icon="pi pi-pencil" (click)="editInvoice(inv)" class="p-button-sm p-button-text"></button>
-<button type="button" pButton icon="pi pi-trash" (click)="deleteInvoice(inv)" class="p-button-sm p-button-danger p-button-text"></button>
-<button type="button" pButton icon="pi pi-dollar" (click)="openNewPayment(inv.id)" class="p-button-sm p-button-success p-button-text"></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-tabPanel>
-
-  <!-- Quotes -->
-  <p-tabPanel header="Quotes">
-    <p-toolbar>
-      <div class="p-toolbar-group-left">
-         <button type="button" pButton icon="pi pi-plus" (click)="openNewQuote()" class="p-button-sm p-button-text"></button>
-      </div>
-    </p-toolbar>
-
-    <p-table [value]="quotes" dataKey="id" class="p-datatable-sm">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Customer</th>
-          <th>Quote Date</th>
-          <th>Valid Till</th>
-          <th>Amount</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-q>
-        <tr>
-          <td>{{ q.customerName }}</td>
-          <td>{{ q.quoteDate | date }}</td>
-          <td>{{ q.validTill | date }}</td>
-          <td>{{ q.amount | currency }}</td>
-          <td>{{ q.status }}</td>
-          <td>
-            <button icon="pi pi-pencil" pButton (click)="editQuote(q)" class="p-button-sm p-button-text" ></button>
-            <button icon="pi pi-trash" pButton (click)="deleteQuote(q)" class="p-button-sm p-button-danger p-button-text" ></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-tabPanel>
-
-  <!-- Payments -->
-  <p-tabPanel header="Payments">
-    <p-table [value]="payments" dataKey="id" class="p-datatable-sm">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Invoice ID</th>
-          <th>Payment Date</th>
-          <th>Amount</th>
-          <th>Method</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-p>
-        <tr>
-          <td>{{ p.invoiceId }}</td>
-          <td>{{ p.paymentDate | date }}</td>
-          <td>{{ p.amount | currency }}</td>
-          <td>{{ p.paymentMethod }}</td>
-          <td>
-            <button icon="pi pi-pencil" pButton (click)="editPayment(p)" class="p-button-sm p-button-text" ></button>
-            <button icon="pi pi-trash" pButton (click)="deletePayment(p)" class="p-button-sm p-button-danger p-button-text" ></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-tabPanel>
-</p-tabView>
-
-<!-- Invoice Dialog -->
-<p-dialog header="Invoice" [(visible)]="displayInvoiceDialog" [modal]="true" [style]="{ width: '400px' }">
-  <form [formGroup]="invoiceForm">
-    <div class="p-fluid">
-      <div class="p-field">
-        <label>Customer</label>
-        <input pInputText formControlName="customerName" />
-      </div>
-      <div class="p-field">
-        <label>Invoice Date</label>
-        <p-calendar formControlName="invoiceDate" dateFormat="yy-mm-dd" />
-      </div>
-      <div class="p-field">
-        <label>Due Date</label>
-        <p-calendar formControlName="dueDate" dateFormat="yy-mm-dd" />
-      </div>
-      <div class="p-field">
-        <label>Amount</label>
-        <input pInputText type="number" formControlName="amount" />
-      </div>
-      <div class="p-field">
-        <label>Status</label>
-        <p-dropdown [options]="['Paid','Unpaid','Overdue']" formControlName="status" />
+<div class="p-4">
+  <!-- Summary Cards -->
+  <div class="grid mb-4">
+    <div *ngFor="let status of budgetStatuses" class="col-12 md:col-3">
+      <div class="summary-card surface-card shadow-2 p-3 border-round text-center">
+        <p-tag [value]="status" [severity]="getSeverity(status)"></p-tag>
+        <h3 class="mt-2 text-3xl font-bold">{{ groupedData[status].length || 0 }}</h3>
+        <!-- <p class="text-sm text-color-secondary">Budgets</p> -->
       </div>
     </div>
-  </form>
-  <ng-template pTemplate="footer">
-    <button pButton label="Save" (click)="saveInvoice()" [disabled]="invoiceForm.invalid" ></button>
-  </ng-template>
-</p-dialog>
+  </div>
 
-<!-- Quote Dialog -->
-<p-dialog header="Quote" [(visible)]="displayQuoteDialog" [modal]="true" [style]="{ width: '400px' }">
-  <form [formGroup]="quoteForm">
-    <div class="p-fluid">
-      <div class="p-field">
-        <label>Customer</label>
-        <input pInputText formControlName="customerName" />
-      </div>
-      <div class="p-field">
-        <label>Quote Date</label>
-        <p-calendar formControlName="quoteDate" dateFormat="yy-mm-dd" />
-      </div>
-      <div class="p-field">
-        <label>Valid Till</label>
-        <p-calendar formControlName="validTill" dateFormat="yy-mm-dd" />
-      </div>
-      <div class="p-field">
-        <label>Amount</label>
-        <input pInputText type="number" formControlName="amount" />
-      </div>
-      <div class="p-field">
-        <label>Status</label>
-        <p-dropdown [options]="['Accepted','Pending','Rejected']" formControlName="status" />
-      </div>
-    </div>
-  </form>
-  <ng-template pTemplate="footer">
-    <button pButton label="Save" (click)="saveQuote()" [disabled]="quoteForm.invalid" ></button>
-  </ng-template>
-</p-dialog>
+  <!-- Budget Groups -->
+  <div *ngFor="let status of budgetStatuses">
+    <h2 class="text-xl mb-3 text-primary font-semibold border-bottom-2 pb-2 border-primary">
+      {{ status }} Budgets
+    </h2>
 
-<!-- Payment Dialog -->
-<p-dialog header="Payment" [(visible)]="displayPaymentDialog" [modal]="true" [style]="{ width: '400px' }">
-  <form [formGroup]="paymentForm">
-    <div class="p-fluid">
-      <div class="p-field">
-        <label>Payment Date</label>
-        <p-calendar formControlName="paymentDate" dateFormat="yy-mm-dd" />
+    <ng-container *ngIf="groupedData[status]?.length; else noData">
+      <p-accordion [multiple]="true">
+        <p-accordionTab *ngFor="let olp of groupedData[status]; let i = index"
+          [header]="'OLP ID: ' + olp.olpId + ' | ' + olp.bride + ' & ' + olp.groom">
+          <form [formGroup]="getOlpFormGroup(status, i)">
+            <p class="text-sm mb-3 text-color-secondary">
+              Comments: {{ olp.budgetComments || '—' }}
+            </p>
+
+            <ng-container [formArrayName]="'events'">
+              <ng-container *ngIf="getOlpFormGroup(status, i) as olpFormGroup">
+                <ng-container *ngIf="getEvents(olpFormGroup) as eventArray">
+                  <div *ngFor="let eventGroup of eventArray.controls; let j = index" [formGroupName]="j"
+                    class="surface-section border-round p-3 mb-3 shadow-1">
+                    <div class="grid formgrid p-fluid">
+                      <div class="field col-12 md:col-4">
+                        <label>Event</label>
+                        <input pInputText [value]="eventGroup.get('eventName')?.value?.name" disabled />
+                      </div>
+                      <div class="field col-12 md:col-4">
+                        <label>Date</label>
+                        <input pInputText [value]="eventGroup.get('eventDate')?.value" disabled />
+                      </div>
+                      <div class="field col-12 md:col-4">
+                        <label>Location</label>
+                        <input pInputText [value]="eventGroup.get('eventLocation')?.value" disabled />
+                      </div>
+
+                      <div class="field col-12 md:col-4">
+                        <label>Guests</label>
+                        <input type="number" pInputText [value]="eventGroup.get('eventGuests')?.value" disabled />
+                      </div>
+
+                      <div class="field col-12 md:col-4">
+                        <label>Budget (₹)</label>
+                        <input pInputText formControlName="eventBudget" placeholder="Enter budget" />
+                        <small *ngIf="eventGroup.get('eventBudget')?.errors?.['required']" class="text-red-500">
+                          Budget is required.
+                        </small>
+                        <small *ngIf="eventGroup.get('eventBudget')?.errors?.['min']" class="text-red-500">
+                          Must be > 0.
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+
+            <div class="flex justify-content-end mt-3">
+              <p-button label="Save" icon="pi pi-save" (click)="saveBudget(status, i)" severity="success"
+                styleClass="w-full md:w-auto"></p-button>
+            </div>
+          </form>
+        </p-accordionTab>
+      </p-accordion>
+    </ng-container>
+
+    <ng-template #noData>
+      <div class="empty-state text-center p-4 surface-50 border-round shadow-1">
+        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png" alt="No Data" width="80" class="mb-2" />
+        <p class="text-secondary">No {{ status }} budgets to show</p>
       </div>
-      <div class="p-field">
-        <label>Amount</label>
-        <input pInputText type="number" formControlName="amount" />
-      </div>
-      <div class="p-field">
-        <label>Payment Method</label>
-        <input pInputText formControlName="paymentMethod" />
-      </div>
-    </div>
-  </form>
-  <ng-template pTemplate="footer">
-    <button pButton label="Save" (click)="savePayment()" [disabled]="paymentForm.invalid" ></button>
-  </ng-template>
-</p-dialog>
+    </ng-template>
+  </div>
+</div>
