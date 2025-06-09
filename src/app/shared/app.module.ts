@@ -37,6 +37,8 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { AccordionModule } from 'primeng/accordion';
 import { ChipModule } from 'primeng/chip';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpService } from '../services/http.service';
 @NgModule({
     declarations: [],
     imports: [
@@ -77,7 +79,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
         ToolbarModule,
         AccordionModule,
         ChipModule,
-        FullCalendarModule
+        FullCalendarModule,
+        HttpClientModule
     ],
     exports: [
         ButtonModule,
@@ -117,9 +120,10 @@ import { FullCalendarModule } from '@fullcalendar/angular';
         ToolbarModule,
         AccordionModule,
         ChipModule,
-        FullCalendarModule
+        FullCalendarModule,
+        HttpClientModule
     ],
-    providers: [],
+    providers: [HttpService],
     bootstrap: []
 })
 export class SharedModule { }

@@ -29,9 +29,6 @@
             "styles": [
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeflex/primeflex.css",
-               "node_modules/@fullcalendar/core/main.css",
-  "node_modules/@fullcalendar/daygrid/main.css",
-  "node_modules/@fullcalendar/timegrid/main.css",
               "src/styles.css",
               "src/styles/global.scss"
             ],
@@ -42,8 +39,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",

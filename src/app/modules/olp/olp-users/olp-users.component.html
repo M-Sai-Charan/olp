@@ -32,9 +32,9 @@
         <td>{{ user.contactNumber }}</td>
         <td>{{ user.email }}</td>
         <td>
-          <p-tag [value]="user.status" [severity]="getSeverity(user.status)"></p-tag>
+          <p-tag [value]="user.callStatus?.name" [severity]="getSeverity(user.callStatus?.name)"></p-tag>
         </td>
-        <td>{{ user.createdOn }}</td>
+        <td>{{ user.timestamp | date:'dd/MM/yyyy hh:mm a' }}</td>
         <td class="text-center">
           <p-button icon="pi pi-eye" (click)="selectOLP(user)" rounded severity="info" [pTooltip]="'View/Edit Events'"
             tooltipPosition="top" styleClass="p-button-sm p-button-rounded"></p-button>
@@ -63,6 +63,12 @@
           <label for="callDate">Call Date</label>
           <p-calendar inputId="callDate" formControlName="callDate" dateFormat="dd-mm-yy" placeholder="Select Date"
             styleClass="w-full"></p-calendar>
+        </div>
+
+        <div class="field col-12 md:col-6 lg:col-4">
+          <label for="callStatus">Call Status</label>
+          <p-dropdown inputId="callStatus" [options]="statusOptions" formControlName="callStatus" optionLabel="name"
+            placeholder="Select Status"></p-dropdown>
         </div>
       </div>
 
