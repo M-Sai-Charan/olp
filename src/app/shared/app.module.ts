@@ -32,6 +32,13 @@ import { TooltipModule } from 'primeng/tooltip';
 import { SidebarModule } from 'primeng/sidebar';
 import { BadgeModule } from 'primeng/badge';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ToolbarModule } from 'primeng/toolbar';
+import { AccordionModule } from 'primeng/accordion';
+import { ChipModule } from 'primeng/chip';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpService } from '../services/http.service';
 @NgModule({
     declarations: [],
     imports: [
@@ -67,7 +74,13 @@ import { MultiSelectModule } from 'primeng/multiselect';
         TooltipModule,
         SidebarModule,
         BadgeModule,
-        MultiSelectModule 
+        MultiSelectModule,
+        DragDropModule,
+        ToolbarModule,
+        AccordionModule,
+        ChipModule,
+        FullCalendarModule,
+        HttpClientModule
     ],
     exports: [
         ButtonModule,
@@ -96,15 +109,21 @@ import { MultiSelectModule } from 'primeng/multiselect';
         TabViewModule,
         InputNumberModule,
         CalendarModule,
-         ToastModule,
+        ToastModule,
         ConfirmDialogModule,
         MenuModule,
         TooltipModule,
-         SidebarModule,
+        SidebarModule,
         BadgeModule,
-        MultiSelectModule
+        MultiSelectModule,
+        DragDropModule,
+        ToolbarModule,
+        AccordionModule,
+        ChipModule,
+        FullCalendarModule,
+        HttpClientModule
     ],
-    providers: [],
+    providers: [HttpService],
     bootstrap: []
 })
 export class SharedModule { }

@@ -1,45 +1,18 @@
+<!-- Table Card -->
 <div class="card">
-  <p-table
-    #dt2
-    [value]="olpUsers"
-    [paginator]="true"
-    [rows]="5"
-    [rowsPerPageOptions]="[5, 10, 20]"
+  <p-table #dt2 [value]="olpUsers" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]"
     [globalFilterFields]="['bride', 'groom', 'contactNumber', 'email', 'status']"
-    [tableStyle]="{ 'min-width': '65rem' }"
-    tableStyleClass="my-custom-table"
-  >
-    <!-- Table Caption -->
+    [tableStyle]="{ 'min-width': '65rem' }" responsiveLayout="scroll">
+
     <ng-template #caption>
-      <div class="flex justify-between flex-wrap gap-4 items-center">
-        <div class="flex items-center gap-2">
-          <p-iconfield iconPosition="left">
-            <p-inputicon>
-              <i class="pi pi-search"></i>
-            </p-inputicon>
-            <input
-              pInputText
-              type="text"
-              (input)="onGlobalFilter($event)"
-              placeholder="Search bride, groom, email..."
-              class="w-64"
-            />
-          </p-iconfield>
-        </div>
-        <div class="ml-auto">
-          <p-dropdown
-            [options]="statusOptions"
-            [(ngModel)]="selectedStatus"
-            placeholder="Filter by Status"
-            optionLabel="label"
-            (onChange)="filterByStatus()"
-            styleClass="w-48"
-          ></p-dropdown>
-        </div>
+      <div class="flex justify-between align-items-center gap-4 flex-wrap">
+        <p-iconfield iconPosition="left">
+          <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+          <input pInputText type="text" (input)="onGlobalFilter($event)" placeholder="Search here..." class="w-64" />
+        </p-iconfield>
       </div>
     </ng-template>
 
-    <!-- Table Header -->
     <ng-template #header>
       <tr>
         <th>Bride</th>
@@ -48,34 +21,23 @@
         <th>Email</th>
         <th>Status</th>
         <th>Created On</th>
-        <th>Actions</th>
+        <th class="text-center">Actions</th>
       </tr>
     </ng-template>
 
-    <!-- Table Body -->
     <ng-template #body let-user>
-      <tr class="hover:bg-surface-200 transition-all duration-150">
+      <tr class="hover:bg-surface-200">
         <td>{{ user.bride }}</td>
         <td>{{ user.groom }}</td>
         <td>{{ user.contactNumber }}</td>
         <td>{{ user.email }}</td>
         <td>
-          <p-tag
-            [value]="user.status"
-            [severity]="getSeverity(user.status)"
-            [style]="{ 'text-transform': 'capitalize' }"
-          />
+          <p-tag [value]="user.callStatus?.name" [severity]="getSeverity(user.callStatus?.name)"></p-tag>
         </td>
-        <td>{{ user.createdOn }}</td>
-        <td>
-          <p-button
-            icon="pi pi-eye"
-            rounded
-            (click)="selectOLP(user)"
-            [pTooltip]="'View Events'"
-            tooltipPosition="top"
-            severity="info"
-          />
+        <td>{{ user.timestamp | date:'dd/MM/yyyy hh:mm a' }}</td>
+        <td class="text-center">
+          <p-button icon="pi pi-eye" (click)="selectOLP(user)" rounded severity="info" [pTooltip]="'View/Edit Events'"
+            tooltipPosition="top" styleClass="p-button-sm p-button-rounded"></p-button>
         </td>
       </tr>
     </ng-template>
@@ -83,17 +45,82 @@
 </div>
 
 <!-- Modal Dialog -->
-<p-dialog
-  [(visible)]="visible"
-  [modal]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [header]="'User ID: ' + olpuserId"
-  [style]="{ width: '95vw', height: '90vh' }"
-  [breakpoints]="{ '1199px': '75vw', '575px': '95vw' }"
->
-  <!-- You can add tab view for events, comments, etc. here -->
+<p-dialog [(visible)]="visible" [modal]="true" [draggable]="false" [resizable]="false"
+  [style]="{ width: '85vw', maxHeight: '90vh' }" [breakpoints]="{ '1199px': '75vw', '575px': '95vw' }"
+  [header]="'User ID: ' + olpuserId" class="olp-dialog">
+
   <ng-template pTemplate="content">
-    <p class="text-lg">Event details and budget will be shown here...</p>
+    <form [formGroup]="eventForm" class="p-fluid">
+      <!-- Call Info -->
+      <div class="grid formgrid surface-card p-4 border-round shadow-2 mb-4">
+        <div class="field col-12 md:col-6 lg:col-4">
+          <label for="calledBy">Call Initiated By</label>
+          <p-dropdown inputId="calledBy" [options]="olpEmployeesLists" formControlName="calledBy" optionLabel="name"
+            placeholder="Select Employee"></p-dropdown>
+        </div>
+
+        <div class="field col-12 md:col-6 lg:col-4">
+          <label for="callDate">Call Date</label>
+          <p-calendar inputId="callDate" formControlName="callDate" dateFormat="dd-mm-yy" placeholder="Select Date"
+            styleClass="w-full"></p-calendar>
+        </div>
+
+        <div class="field col-12 md:col-6 lg:col-4">
+          <label for="callStatus">Call Status</label>
+          <p-dropdown inputId="callStatus" [options]="statusOptions" formControlName="callStatus" optionLabel="name"
+            placeholder="Select Status"></p-dropdown>
+        </div>
+      </div>
+
+      <!-- Event Blocks -->
+      <div formArrayName="events">
+        <div *ngFor="let eventGroup of eventsFormArray.controls; let i = index" [formGroupName]="i"
+          class="surface-card p-4 border-round shadow-2 mb-4">
+          <div class="grid formgrid p-fluid">
+            <div class="field col-12 md:col-6 lg:col-4">
+              <label for="eventName-{{ i }}">Event</label>
+              <p-dropdown inputId="eventName-{{ i }}" [options]="olpEventsLists" formControlName="eventName"
+                optionLabel="name" placeholder="Select Event"></p-dropdown>
+            </div>
+
+            <div class="field col-12 md:col-6 lg:col-4">
+              <label for="eventDate-{{ i }}">Date</label>
+              <p-calendar inputId="eventDate-{{ i }}" formControlName="eventDate" dateFormat="dd-mm-yy"
+                placeholder="Select Date" styleClass="w-full"></p-calendar>
+            </div>
+
+            <div class="field col-12 md:col-6 lg:col-4">
+              <label for="eventLocation-{{ i }}">Location</label>
+              <input pInputText formControlName="eventLocation" />
+            </div>
+
+            <div class="field col-12 md:col-6 lg:col-4">
+              <label for="eventTime-{{ i }}">Time</label>
+              <p-dropdown inputId="eventTime-{{ i }}" [options]="olpEventsTimes" formControlName="eventTime"
+                optionLabel="name" placeholder="Select Time"></p-dropdown>
+            </div>
+
+            <div class="field col-12 md:col-6 lg:col-4">
+              <label for="eventGuests-{{ i }}">Guests</label>
+              <input type="number" pInputText formControlName="eventGuests" />
+            </div>
+
+            <div class="field col-12 md:col-12 flex justify-content-end mt-2">
+              <p-button *ngIf="eventsFormArray.length > 1" icon="pi pi-trash" label="Remove" severity="danger"
+                (click)="removeEvent(i)" styleClass="p-button-sm"></p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add & Save Buttons -->
+      <div class="flex justify-content-between flex-column md:flex-row gap-3 mt-4">
+        <p-button icon="pi pi-plus" label="Add Event" severity="secondary" (click)="addEvent()"
+          styleClass="w-full md:w-auto"></p-button>
+        <p-button icon="pi pi-save" label="Save" severity="success" (click)="saveEvents()"
+          styleClass="w-full md:w-auto"></p-button>
+      </div>
+    </form>
   </ng-template>
 </p-dialog>
+<p-toast></p-toast>

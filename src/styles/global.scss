@@ -415,17 +415,51 @@ body.dark-mode .sidebar a:hover {
 }
 
 /* Dialog styling */
-.p-dialog {
-  background-color: #374151 !important;
-  color: #e5e5e5;
-  border-radius: 12px;
+:host ::ng-deep .event-card {
+  background-color: var(--surface-0);
+  border: 1px solid var(--surface-border);
+  border-radius: 1rem;
+  transition: box-shadow 0.3s ease;
 }
 
-.p-dialog-header {
-  border-bottom: 2px solid #1e1e2f;
-  background-color: #1f2937 Im !important;
-  color: white;
+:host ::ng-deep .event-card:hover {
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
 }
+
+:host ::ng-deep .p-dropdown,
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-calendar {
+  border-radius: 0.5rem;
+}
+
+:host ::ng-deep .p-button-danger {
+  background-color: #f44336;
+  border: none;
+  padding: 0.75rem 1.5rem;
+}
+
+.olp-dialog .p-dialog-content {
+  background-color: #f1f5f9 !important;
+  padding: 1.5rem 2rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.olp-dialog .p-dialog-header {
+  background-color:#131921 !important;
+  font-weight: 600;
+  color: whitesmoke;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  padding: 1rem 2rem;
+}
+
+:host ::ng-deep .event-card {
+  border: 1px solid var(--surface-border);
+  border-radius: 0.75rem;
+  background: var(--surface-0);
+}
+
 
 .p-dialog .p-dialog-content {
   padding: 1.5rem;
@@ -965,3 +999,273 @@ textarea,
     margin: 0;
   }
 }
+
+// team assing .scss
+/* olp-team-assign.component.scss */
+
+.team-pending {
+  color: #f39c12; /* orange */
+  font-weight: 600;
+}
+
+.team-assigned {
+  color: #27ae60; /* green */
+  font-weight: 600;
+}
+
+.assigned-team {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #ddd;
+  color: #444;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: default;
+  user-select: none;
+}
+
+/* Role-specific colors */
+.photographer {
+  background-color: #007ad9;
+  color: white;
+}
+.videographer {
+  background-color: #e67300;
+  color: white;
+}
+.editor {
+  background-color: #009688;
+  color: white;
+}
+
+/* Tooltip */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: max-content;
+  max-width: 160px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 5px 8px;
+  border-radius: 4px;
+
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* above avatar */
+  left: 50%;
+  transform: translateX(-50%);
+
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+// invoice .scss
+.card {
+  padding: 1rem;
+
+  .event-card {
+    border-left: 5px solid var(--primary-color);
+    transition: box-shadow 0.2s;
+  }
+
+  .event-card:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-sm {
+    font-size: 0.85rem;
+  }
+
+  h5 {
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+
+  .pi {
+    font-size: 0.9rem;
+    vertical-align: middle;
+  }
+
+  .p-tag {
+    font-size: 0.75rem;
+  }
+}
+
+// task.scss
+:host {
+  display: block;
+  padding: 1rem;
+  background-color: var(--surface-ground);
+  color: var(--text-color);
+}
+
+.card {
+  background-color: var(--surface-card);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+}
+
+h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+p-table {
+  .p-datatable-tbody > tr > td {
+    vertical-align: top;
+  }
+
+  .p-button {
+    font-size: 0.85rem;
+  }
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+li.olp-tasks {
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before {
+    content: "✔️";
+    color: var(--green-500);
+    font-size: 0.8rem;
+  }
+}
+
+.p-dialog .p-field {
+  margin-bottom: 1rem;
+}
+
+::ng-deep .p-dropdown {
+  width: 100%;
+}
+
+.p-dialog-header {
+  background-color: var(--surface-section);
+  color: var(--text-color);
+  font-weight: 600;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.p-dialog-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--surface-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.p-text-secondary {
+  font-style: italic;
+  color: var(--text-color-secondary);
+}
+
+
+// post tracker
+.card {
+  padding: 1.5rem;
+  background-color: var(--surface-card);
+  border-radius: 8px;
+  box-shadow: var(--shadow-2);
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .delivery-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .item {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+
+      .status-text {
+        margin-left: 0.4rem;
+        font-weight: 500;
+      }
+
+      .delivered-on {
+        margin-left: 0.4rem;
+        color: var(--text-color-secondary);
+        font-style: italic;
+      }
+    }
+  }
+}
+
+.calendar-card {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: var(--surface-card);
+  border-radius: 8px;
+  box-shadow: var(--shadow-2);
+  h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Customize event colors in FullCalendar tooltip */
+.fc-event {
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 4px !important;
+  padding: 2px 5px !important;
+}
+
+/* Responsive tweak for calendar */
+@media (max-width: 768px) {
+  .calendar-card {
+    max-width: 100%;
+    padding: 0.5rem;
+  }
+}
+:host {
+  display: block;
+  padding: 1rem;
+}
+
+.filter-toolbar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+p-card {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  border-radius: 8px;
+}
+
