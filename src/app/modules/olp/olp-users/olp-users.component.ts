@@ -86,7 +86,7 @@ export class OlpUsersComponent implements OnInit {
 
   selectOLP(user: any) {
     this.visible = true;
-    this.olpuserId = user.id;
+    this.olpuserId = user.olpId;
     this.selectedUser = user;
     this.previousUserData = JSON.parse(JSON.stringify(user)); // Deep clone for undo
     this.initEventForm(user.events);

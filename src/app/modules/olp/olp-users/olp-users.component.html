@@ -34,7 +34,12 @@
         <td>
           <p-tag [value]="user.callStatus?.name" [severity]="getSeverity(user.callStatus?.name)"></p-tag>
         </td>
-        <td>{{ user.createdOn | date:'dd/MM/yyyy hh:mm a' }}</td>
+        <td style="text-align: center;">
+          <i class="pi pi-info-circle"
+            pTooltip="Created On: {{user.createdOn | date:'dd/MM/yyyy hh:mm a'}}&#10;Updated On: {{user.updatedOn | date:'dd/MM/yyyy hh:mm a'}}"
+            tooltipPosition="top">
+          </i>
+        </td>
         <td class="text-center">
           <p-button icon="pi pi-eye" (click)="selectOLP(user)" rounded severity="info" [pTooltip]="'View/Edit Events'"
             tooltipPosition="top" styleClass="p-button-sm p-button-rounded"></p-button>
