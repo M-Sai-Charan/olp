@@ -25,59 +25,37 @@ export class OlpUsersComponent implements OnInit {
   isViewOnly = false;
   selectedEventTypes: any[] = [];
   filteredUsers: any[] = [];
-  statusOptions = [
-    { name: 'New', value: 'New' },
-    { name: 'In-progress', value: 'In-progress' },
-    { name: 'Pending', value: 'Pending' },
-    { name: 'Closed', value: 'Closed' },
-    { name: 'Blocked', value: 'Blocked' }
-  ];
-
-  olpEventsLists = [
-    { id: 1, name: 'Haldi', value: 'haldi' },
-    { id: 2, name: 'Nalugu', value: 'nalugu' },
-    { id: 3, name: 'Mehandi', value: 'mehandi' },
-    { id: 4, name: 'Sangeeth', value: 'sangeeth' },
-    { id: 5, name: 'Reception', value: 'reception' },
-    { id: 6, name: 'Wedding', value: 'wedding' }
-  ];
-
-  olpEmployeesLists = [
-    { id: 1, name: "John", value: "john" },
-    { id: 2, name: "Bose", value: "bose" },
-    { id: 3, name: "Stella", value: "stella" },
-    { id: 4, name: "Sam", value: "sam" }
-  ];
-
-  olpEventsTimes = [
-    { id: 1, name: "Early Morning", value: "morning" },
-    { id: 2, name: "Afternoon", value: "afternoon" },
-    { id: 3, name: "Evening", value: "evening" },
-    { id: 4, name: "Night", value: "night" }
-  ];
-  olpCallStatus = [
-    { id: 1, name: "Not Interested", value: "notinterested" },
-    { id: 2, name: "Follow Up", value: "followup" },
-    { id: 3, name: "Booked", value: "booked" }
-  ];
+  olpStatusLists: any = [];
+  olpEventsLists: any = [];
+  olpEmployeesLists: any = [];
+  olpEventsTimes: any = [];
   olpUsers: any = []
 
   constructor(private fb: FormBuilder, private messageService: MessageService, private olpService: OlpService) { }
   ngOnInit(): void {
     this.filteredUsers = [...this.olpUsers];
-    this.getOLPEnquires()
+    this.getOLPEnquires();
+    this.getOLPMaster();
   }
 
   getOLPEnquires() {
     this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
       if (data) {
         data.forEach((item: { callStatus: any; }) => {
-          if (item.callStatus === '') {
+          if (item.callStatus?.name === '') {
             item.callStatus = { name: 'New', value: 'New' };
           }
         });
         this.olpUsers = data
       }
+    })
+  }
+  getOLPMaster() {
+    this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
+      this.olpStatusLists = data.statuses;
+      this.olpEventsLists = data.events;
+      this.olpEventsTimes = data.eventTimes;
+      this.olpEmployeesLists = data.employees;
     })
   }
   onGlobalFilter(event: Event): void {
@@ -112,8 +90,22 @@ export class OlpUsersComponent implements OnInit {
     this.selectedUser = user;
     this.previousUserData = JSON.parse(JSON.stringify(user)); // Deep clone for undo
     this.initEventForm(user.events);
+    // Check for blocked status
+    if (user.callStatus?.value === 'Blocked') {
+      this.setFormDisabled(true);
+    } else {
+      this.setFormDisabled(false);
+    }
   }
-
+  setFormDisabled(disabled: boolean) {
+    if (disabled) {
+      this.eventForm.disable({ emitEvent: false });
+      this.isViewOnly = true;
+    } else {
+      this.eventForm.enable({ emitEvent: false });
+      this.isViewOnly = false;
+    }
+  }
   initEventForm(events: any[]) {
     this.eventForm = this.fb.group({
       calledBy: [this.selectedUser.calledBy || null],
@@ -174,7 +166,8 @@ export class OlpUsersComponent implements OnInit {
         eventTime: {
           ...originalEvent.eventTime,
           ...(updatedForm.eventTime || {})
-        }
+        },
+        eventGuests: String(updatedForm.eventGuests || '')
       };
     });
 
@@ -194,6 +187,8 @@ export class OlpUsersComponent implements OnInit {
           detail: 'User event updated successfully.'
         });
         this.visible = false;
+        this.getOLPEnquires();
+        this.getOLPMaster();
       },
       error: () => {
         this.messageService.add({
@@ -203,19 +198,6 @@ export class OlpUsersComponent implements OnInit {
         });
       }
     });
-  }
-
-
-  undoChanges() {
-    if (this.previousUserData) {
-      const idx = this.olpUsers.findIndex((u: { id: any; }) => u.id === this.previousUserData.id);
-      if (idx !== -1) {
-        this.olpUsers[idx] = JSON.parse(JSON.stringify(this.previousUserData));
-        this.filteredUsers = [...this.olpUsers];
-        this.messageService.add({ severity: 'warn', summary: 'Undone', detail: 'Changes reverted.' });
-        this.visible = false;
-      }
-    }
   }
   downloadPDF() {
     const doc = new jsPDF();
