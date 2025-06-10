@@ -154,22 +154,14 @@ export class OlpUsersComponent implements OnInit {
     }
 
     const formEvents = this.eventForm.value.events;
-    const updatedEvents = this.selectedUser.events.map((originalEvent: any, index: number) => {
-      const updatedForm = formEvents[index];
-      return {
-        ...originalEvent,
-        ...updatedForm,
-        eventName: {
-          ...originalEvent.eventName,
-          ...(updatedForm.eventName || {})
-        },
-        eventTime: {
-          ...originalEvent.eventTime,
-          ...(updatedForm.eventTime || {})
-        },
-        eventGuests: String(updatedForm.eventGuests || '')
-      };
-    });
+
+    const updatedEvents = formEvents.map((formEvent: any) => ({
+      eventName: formEvent.eventName || {},
+      eventDate: formEvent.eventDate,
+      eventLocation: formEvent.eventLocation,
+      eventTime: formEvent.eventTime || {},
+      eventGuests: String(formEvent.eventGuests || '')
+    }));
 
     const updatedUser = {
       ...this.selectedUser,
@@ -178,7 +170,6 @@ export class OlpUsersComponent implements OnInit {
       callStatus: this.eventForm.value.callStatus,
       events: updatedEvents
     };
-
     this.olpService.updateOLPEnquiry(this.selectedUser.id, updatedUser).subscribe({
       next: () => {
         this.messageService.add({
@@ -199,6 +190,7 @@ export class OlpUsersComponent implements OnInit {
       }
     });
   }
+
   downloadPDF() {
     const doc = new jsPDF();
     doc.text(`OLP Events - ${this.selectedUser.bride} & ${this.selectedUser.groom}`, 10, 10);
