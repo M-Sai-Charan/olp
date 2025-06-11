@@ -41,11 +41,12 @@ export class OlpUsersComponent implements OnInit {
   getOLPEnquires() {
     this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
       if (data) {
-        data.forEach((item: { callStatus: any; }) => {
-          if (item.callStatus?.name === '') {
-            item.callStatus = { name: 'New', value: 'New' };
-          }
-        });
+        // data.forEach((item: { callStatus: any; }) => {
+        //   if (item.callStatus?.name === '') {
+        //     item.callStatus = { name: 'New', value: 'New' };
+        //   }
+        // });
+        data = data.filter((i: any) => i.callStatus.name === 'New')
         this.olpUsers = data
       }
     })

@@ -409,11 +409,14 @@ body.dark-mode .sidebar a:hover {
 
 /* PrimeNG paginator styling */
 .p-paginator {
-  background: #1f2937 !important;
-  border-top: 1px solid #374151 !important;
+  // background: #1f2937 !important;
+  // border-top: 1px solid #374151 !important;
   color: #e5e7eb !important;
 }
-
+.p-datatable-thead > tr > th{
+  background-color: #10b981  !important;
+  color: white !important;
+}
 /* Dialog styling */
 :host ::ng-deep .event-card {
   background-color: var(--surface-0);
