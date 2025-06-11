@@ -446,7 +446,7 @@ body.dark-mode .sidebar a:hover {
 }
 
 .olp-dialog .p-dialog-header {
-  background-color:#131921 !important;
+  background-color: #131921 !important;
   font-weight: 600;
   color: whitesmoke;
   border-top-left-radius: 1rem;
@@ -1004,12 +1004,14 @@ textarea,
 /* olp-team-assign.component.scss */
 
 .team-pending {
-  color: #f39c12; /* orange */
+  color: #f39c12;
+  /* orange */
   font-weight: 600;
 }
 
 .team-assigned {
-  color: #27ae60; /* green */
+  color: #27ae60;
+  /* green */
   font-weight: 600;
 }
 
@@ -1040,10 +1042,12 @@ textarea,
   background-color: #007ad9;
   color: white;
 }
+
 .videographer {
   background-color: #e67300;
   color: white;
 }
+
 .editor {
   background-color: #009688;
   color: white;
@@ -1062,7 +1066,8 @@ textarea,
 
   position: absolute;
   z-index: 1;
-  bottom: 125%; /* above avatar */
+  bottom: 125%;
+  /* above avatar */
   left: 50%;
   transform: translateX(-50%);
 
@@ -1077,40 +1082,128 @@ textarea,
 
 // invoice .scss
 .card-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
 }
 
 .olp-card {
-  width: 180px;
-  padding: 1rem;
   background-color: var(--surface-card);
   border-radius: 1rem;
-  box-shadow: var(--card-shadow);
-  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
   text-align: center;
-  transition: transform 0.2s ease;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    background-color: var(--surface-100);
+    border: 2px solid var(--surface-border);
+  }
+
+  .olp-id {
+    font-weight: bold;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .names {
+    font-size: 0.95rem;
+    color: var(--text-color-secondary);
+  }
 }
 
-.olp-card:hover {
-  transform: scale(1.05);
+::ng-deep .custom-budget-dialog .p-dialog-content {
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 2rem;
 }
 
-.avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+.event-block {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 1rem;
+  background-color: var(--surface-card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.olp-id {
-  font-weight: bold;
-  margin-top: 0.5rem;
+.event-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
 }
 
-.names {
-  font-size: 0.9rem;
+.text-muted {
   color: var(--text-color-secondary);
+}
+
+input[disabled],
+textarea[disabled] {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+::ng-deep .p-dialog .p-dialog-content {
+  background-color: var(--surface-0);
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.border {
+  border: 1px solid #e0e0e0;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.animated-dialog {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 
@@ -1136,7 +1229,7 @@ h2 {
 }
 
 p-table {
-  .p-datatable-tbody > tr > td {
+  .p-datatable-tbody>tr>td {
     vertical-align: top;
   }
 
@@ -1238,6 +1331,7 @@ li.olp-tasks {
   background-color: var(--surface-card);
   border-radius: 8px;
   box-shadow: var(--shadow-2);
+
   h3 {
     text-align: center;
     margin-bottom: 1rem;
@@ -1259,6 +1353,7 @@ li.olp-tasks {
     padding: 0.5rem;
   }
 }
+
 :host {
   display: block;
   padding: 1rem;
@@ -1272,7 +1367,6 @@ li.olp-tasks {
 }
 
 p-card {
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
 }
-
