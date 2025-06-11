@@ -24,17 +24,17 @@
           </a>
         </li>
         <li>
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/invoice">
+            <i class="pi pi-receipt"></i>
+            <span class="menu-label">Invoice</span>
+          </a>
+        </li>
+        <li>
           <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/budget">
             <i class="pi pi-wallet"></i>
             <span class="menu-label">Budget</span>
           </a>
         </li>
-        <!-- <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/inventory">
-            <i class="pi pi-warehouse"></i>
-            <span class="menu-label">Inventory</span>
-          </a>
-        </li> -->
         <li>
           <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/team-assign">
             <i class="pi pi-clipboard"></i>
@@ -42,17 +42,17 @@
           </a>
         </li>
         <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/invoice">
-            <i class="pi pi-receipt"></i>
-            <span class="menu-label">Invoice</span>
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/inventory-assign">
+            <i class="pi pi-warehouse"></i>
+            <span class="menu-label">Inventory Assign</span>
           </a>
         </li>
-        <li>
+        <!-- <li>
           <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/tasks">
             <i class="pi pi-list-check"></i>
             <span class="menu-label">Tasks</span>
           </a>
-        </li>
+        </li> -->
         <!-- <li>
           <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/employees">
             <i class="pi pi-cloud"></i>

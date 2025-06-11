@@ -1,84 +1,113 @@
-<div class="p-4">
-  <!-- Summary Cards -->
-  <div class="grid mb-4">
-    <div *ngFor="let status of budgetStatuses" class="col-12 md:col-3">
-      <div class="summary-card surface-card shadow-2 p-3 border-round text-center">
+<!-- Header -->
+<div
+  class="header invoice-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
+  <img src="olp-logo.png" alt="Logo" height="30" class="mr-3">
+  <h2 style="text-align: center;
+    margin: 10px;
+    padding-left: 100px;">OLP Event Invoices</h2>
+  <small class="italic">Delivering timeless moments beautifully</small>
+</div>
+
+
+<!-- Dynamic Tabs -->
+<p-tabView [(activeIndex)]="activeTabIndex" scrollable>
+  <p-tabPanel *ngFor="let status of budgetStatuses" [header]="''" [leftIcon]="'pi pi-folder'">
+    <ng-template pTemplate="header">
+      <div class="flex items-center gap-2">
         <p-tag [value]="status" [severity]="getSeverity(status)"></p-tag>
-        <h3 class="mt-2 text-3xl font-bold">{{ groupedData[status].length || 0 }}</h3>
-        <!-- <p class="text-sm text-color-secondary">Budgets</p> -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Budget Groups -->
-  <div *ngFor="let status of budgetStatuses">
-    <h2 class="text-xl mb-3 text-primary font-semibold border-bottom-2 pb-2 border-primary">
-      {{ status }} Budgets
-    </h2>
-
-    <ng-container *ngIf="groupedData[status]?.length; else noData">
-      <p-accordion [multiple]="true">
-        <p-accordionTab *ngFor="let olp of groupedData[status]; let i = index"
-          [header]="'OLP ID: ' + olp.olpId + ' | ' + olp.bride + ' & ' + olp.groom">
-          <form [formGroup]="getOlpFormGroup(status, i)">
-            <p class="text-sm mb-3 text-color-secondary">
-              Comments: {{ olp.budgetComments || '—' }}
-            </p>
-
-            <ng-container [formArrayName]="'events'">
-              <ng-container *ngIf="getOlpFormGroup(status, i) as olpFormGroup">
-                <ng-container *ngIf="getEvents(olpFormGroup) as eventArray">
-                  <div *ngFor="let eventGroup of eventArray.controls; let j = index" [formGroupName]="j"
-                    class="surface-section border-round p-3 mb-3 shadow-1">
-                    <div class="grid formgrid p-fluid">
-                      <div class="field col-12 md:col-4">
-                        <label>Event</label>
-                        <input pInputText [value]="eventGroup.get('eventName')?.value?.name" disabled />
-                      </div>
-                      <div class="field col-12 md:col-4">
-                        <label>Date</label>
-                        <input pInputText [value]="eventGroup.get('eventDate')?.value" disabled />
-                      </div>
-                      <div class="field col-12 md:col-4">
-                        <label>Location</label>
-                        <input pInputText [value]="eventGroup.get('eventLocation')?.value" disabled />
-                      </div>
-
-                      <div class="field col-12 md:col-4">
-                        <label>Guests</label>
-                        <input type="number" pInputText [value]="eventGroup.get('eventGuests')?.value" disabled />
-                      </div>
-
-                      <div class="field col-12 md:col-4">
-                        <label>Budget (₹)</label>
-                        <input pInputText formControlName="eventBudget" placeholder="Enter budget" />
-                        <small *ngIf="eventGroup.get('eventBudget')?.errors?.['required']" class="text-red-500">
-                          Budget is required.
-                        </small>
-                        <small *ngIf="eventGroup.get('eventBudget')?.errors?.['min']" class="text-red-500">
-                          Must be > 0.
-                        </small>
-                      </div>
-                    </div>
-                  </div>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-
-            <div class="flex justify-content-end mt-3">
-              <p-button label="Save" icon="pi pi-save" (click)="saveBudget(status, i)" severity="success"
-                styleClass="w-full md:w-auto"></p-button>
-            </div>
-          </form>
-        </p-accordionTab>
-      </p-accordion>
-    </ng-container>
-
-    <ng-template #noData>
-      <div class="empty-state text-center p-4 surface-50 border-round shadow-1">
-        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png" alt="No Data" width="80" class="mb-2" />
-        <p class="text-secondary">No {{ status }} budgets to show</p>
+        <p-badge [value]="groupedData[status].length" severity="contrast" styleClass="ml-2" />
       </div>
     </ng-template>
-  </div>
-</div>
+    <div class="card-grid fade-in">
+      <div class="olp-card" *ngFor="let olp of groupedData[status]" (click)="openOlpDialog(olp)">
+        <i class="pi pi-file-pdf text-red-600 absolute right-2 top-2 cursor-pointer" style="font-size: 1.2rem;right: 10px;top: 10px;" (click)="downloadPdf($event, olp)">
+        </i>
+        <p-avatar [label]="olp.bride.charAt(0) + olp.groom.charAt(0)" shape="circle" class="avatar"
+          class="bg-indigo-100 text-indigo-700"></p-avatar>
+        <!-- <img class="avatar" src="assets/avatar-logo.png" alt="logo" /> -->
+        <div class="olp-id">{{ olp.olpId }}</div>
+        <div class="names">{{ olp.bride }} & {{ olp.groom }}</div>
+      </div>
+    </div>
+  </p-tabPanel>
+</p-tabView>
+
+<!-- Dialog -->
+<p-dialog header="OLP Budget Details" [(visible)]="dialogVisible" [modal]="true" [closable]="true"
+  [dismissableMask]="true" [style]="{ width: '90vw', maxWidth: '1000px' }"
+  [contentStyle]="{ 'max-height': '80vh', 'overflow': 'auto' }" [breakpoints]="{ '960px': '95vw' }"
+  [styleClass]="'animated-dialog slide-in-up border-round-xl shadow-4'">
+  <form [formGroup]="selectedForm" *ngIf="selectedForm" class="p-4 space-y-4">
+
+    <!-- View-only Message -->
+    <p *ngIf="selectedOlp?.callStatus?.name !== 'In-progress'" class="text-gray-600 text-sm italic">
+      This entry is view-only as it is <strong>{{ selectedOlp?.callStatus?.name }}</strong>.
+    </p>
+    <div class="grid formgrid p-fluid">
+      <div class="field col-12 md:col-6 lg:col-4">
+        <div class="p-float-label">
+          <label for="olpId">OLP ID</label>
+          <input pInputText id="olpId" formControlName="olpId" />
+        </div>
+      </div>
+      <div class="field col-12 md:col-6 lg:col-4">
+        <div class="p-float-label">
+          <label for="olpId">Status</label>
+          <p-dropdown inputId="callStatus" [options]="olpStatusLists" formControlName="callStatus" optionLabel="name"
+            placeholder="Select Status"></p-dropdown>
+        </div>
+      </div>
+    </div>
+    <br>
+    <!-- Events -->
+    <div formArrayName="events" class="flex flex-column gap-4">
+      <div *ngFor="let event of eventsFormArray.controls; let i = index" [formGroupName]="i" class="event-card"
+        style="border-radius: 10px;" class="p-3 border border-gray-300 rounded-lg bg-white shadow-sm animate-fade-in">
+        <h5 class="text-lg font-semibold text-primary mb-3">{{ event.value.eventName }}</h5>
+        <div class="grid formgrid p-fluid">
+          <div class="field col-12 md:col-6 lg:col-4">
+            <div class="p-float-label">
+              <label for="date{{ i }}">Date</label>
+              <p-calendar inputId="eventDate{{ i }}" formControlName="eventDate" dateFormat="dd-mm-yy"
+                placeholder="Select Date" styleClass="w-full"></p-calendar>
+            </div>
+          </div>
+
+          <div class="field col-12 md:col-6 lg:col-4">
+            <div class="p-float-label">
+              <label for="loc{{ i }}">Location</label>
+              <input pInputText id="loc{{ i }}" formControlName="eventLocation" />
+            </div>
+          </div>
+
+          <div class="field col-12 md:col-6 lg:col-4">
+            <div class="p-float-label">
+              <label for="time{{ i }}">Time</label>
+              <input pInputText id="time{{ i }}" formControlName="eventTime" />
+            </div>
+          </div>
+
+          <div class="field col-12 md:col-6 lg:col-4">
+            <div class="p-float-label">
+              <label for="guests{{ i }}">Guests</label>
+              <input type="number" pInputText id="guests{{ i }}" formControlName="eventGuests" />
+            </div>
+          </div>
+
+          <div class="p-col-12 mb-3">
+            <div class="p-float-label">
+              <label for="budget{{ i }}">Budget</label>
+              <input type="number" pInputText id="budget{{ i }}" formControlName="eventBudget"
+                [disabled]="selectedOlp?.callStatus?.name !== 'In-progress'" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Save Button -->
+    <div class="text-right mt-3" *ngIf="selectedOlp?.callStatus?.name === 'In-progress'">
+      <button pButton label="Save" icon="pi pi-check" class="p-button-success" (click)="saveBudget()"></button>
+    </div>
+  </form>
+</p-dialog>
+<p-toast></p-toast>

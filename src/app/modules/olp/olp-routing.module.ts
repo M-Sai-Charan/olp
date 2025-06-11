@@ -11,6 +11,7 @@ import { OlpInventoryComponent } from './olp-inventory/olp-inventory.component';
 import { OlpTeamAssignComponent } from '../../olp-team-assign/olp-team-assign.component';
 import { OlpInvoiceComponent } from './olp-invoice/olp-invoice.component';
 import { OlpTasksComponent } from './olp-tasks/olp-tasks.component';
+import { OlpInventoryAssignComponent } from './olp-inventory-assign/olp-inventory-assign.component';
 
 const routes: Routes = [
   { path: '', component: OlpLoginComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
       { path: 'budget', component: OlpBudgetComponent },
       { path: 'inventory', component: OlpInventoryComponent },
       { path: 'team-assign', component: OlpTeamAssignComponent },
+      { path: 'inventory-assign', component: OlpInventoryAssignComponent },
       { path: 'invoice', component: OlpInvoiceComponent },
       { path: 'tasks', component: OlpTasksComponent },
       { path: '', redirectTo: 'login', pathMatch: 'full' }

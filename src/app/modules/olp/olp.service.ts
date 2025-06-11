@@ -14,6 +14,9 @@ export class OlpService {
    getAllOLPEnquires(url:string): Observable<any[]> {
     return this.httpService.get<any[]>(`${this.baseUrl}/${url}`);
   }
+  getOLPMaster(url:string): Observable<any[]> {
+    return this.httpService.get<any[]>(`${this.baseUrl}/${url}`);
+  }
    updateOLPEnquiry(id: number, payload: any): Observable<any> {
     return this.httpService.put<any>(`${this.baseUrl}WeddingEvents/${id}`, payload);
   }

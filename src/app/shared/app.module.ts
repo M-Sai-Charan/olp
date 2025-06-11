@@ -22,7 +22,6 @@ import { ChartModule } from 'primeng/chart';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { InputTextarea } from 'primeng/inputtextarea';
 import { MessageModule } from 'primeng/message';
-import { TabViewModule } from 'primeng/tabview';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
@@ -39,6 +38,7 @@ import { ChipModule } from 'primeng/chip';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
+import { TabViewModule } from 'primeng/tabview';
 @NgModule({
     declarations: [],
     imports: [
@@ -65,7 +65,6 @@ import { HttpService } from '../services/http.service';
         ProgressBarModule,
         InputTextarea,
         MessageModule,
-        TabViewModule,
         InputNumberModule,
         CalendarModule,
         ToastModule,
@@ -80,7 +79,8 @@ import { HttpService } from '../services/http.service';
         AccordionModule,
         ChipModule,
         FullCalendarModule,
-        HttpClientModule
+        HttpClientModule,
+        TabViewModule
     ],
     exports: [
         ButtonModule,
@@ -106,7 +106,6 @@ import { HttpService } from '../services/http.service';
         ProgressBarModule,
         InputTextarea,
         MessageModule,
-        TabViewModule,
         InputNumberModule,
         CalendarModule,
         ToastModule,
@@ -121,7 +120,8 @@ import { HttpService } from '../services/http.service';
         AccordionModule,
         ChipModule,
         FullCalendarModule,
-        HttpClientModule
+        HttpClientModule,
+        TabViewModule
     ],
     providers: [HttpService],
     bootstrap: []
