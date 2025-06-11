@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { OlpService } from '../modules/olp/olp.service';
 
 @Component({
   selector: 'app-olp-team-assign',
@@ -8,98 +9,49 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
   standalone: false
 })
-export class OlpTeamAssignComponent {
-  events = [
-    {
-      id: 1,
-      olpId: '001OLP2025',
-      bride: 'John',
-      groom: 'Stella',
-      contactNumber: 6301587956,
-      email: 'msunnylive@gmail.com',
-      status: 'New',
-      createdOn: '27-05-2025 8:30AM',
-      calledBy: { id: 1, name: 'John', value: 'john' },
-      callDate: 'Wed Jun 04 2025',
-      budgetStatus: 'Completed',
-      budgetComments: 'Budget added',
-      events: [
-        {
-          eventName: { id: 6, name: 'Wedding', value: 'wedding' },
-          eventDate: 'Wed Jun 04 2025',
-          eventLocation: 'Bangalore',
-          eventTime: { id: 2, name: 'Afternoon', value: 'afternoon' },
-          eventGuests: 1000,
-          eventBudget: 200000,
-          eventTeams: [],
-        },
-        {
-          eventName: { id: 5, name: 'Reception', value: 'reception' },
-          eventDate: 'Wed Jun 01 2025',
-          eventLocation: 'Chennai',
-          eventTime: { id: 4, name: 'Night', value: 'night' },
-          eventGuests: 500,
-          eventBudget: 100000,
-          eventTeams: [],
-        },
-      ],
-    },
-    {
-      id: 2,
-      olpId: '002OLP2025',
-      bride: 'John',
-      groom: 'Stella',
-      contactNumber: 6301587956,
-      email: 'msunnylive@gmail.com',
-      status: 'New',
-      createdOn: '27-05-2025 8:30AM',
-      calledBy: { id: 1, name: 'John', value: 'john' },
-      callDate: 'Wed Jun 04 2025',
-      budgetStatus: 'Completed',
-      budgetComments: 'Budget added',
-      events: [
-        {
-          eventName: { id: 6, name: 'Wedding', value: 'wedding' },
-          eventDate: 'Wed Jun 04 2025',
-          eventLocation: 'Bangalore',
-          eventTime: { id: 2, name: 'Afternoon', value: 'afternoon' },
-          eventGuests: 1000,
-          eventBudget: 200000,
-          eventTeams: [],
-        },
-        {
-          eventName: { id: 5, name: 'Reception', value: 'reception' },
-          eventDate: 'Wed Jun 01 2025',
-          eventLocation: 'Chennai',
-          eventTime: { id: 4, name: 'Night', value: 'night' },
-          eventGuests: 500,
-          eventBudget: 100000,
-          eventTeams: [],
-        },
-      ],
-    }
-  ];
+export class OlpTeamAssignComponent implements OnInit {
 
-  olpTeamLists = [
-    { id: 1, name: 'Alice', role: 'Photographer' },
-    { id: 2, name: 'Bob', role: 'Videographer' },
-    { id: 3, name: 'Charlie', role: 'Editor' },
-    { id: 4, name: 'Diana', role: 'Photographer' },
-    { id: 5, name: 'Eva', role: 'Editor' },
-    { id: 6, name: 'Sam', role: 'Lightman' },
-    { id: 7, name: 'Druh', role: 'Drone Operator' },
-    { id: 8, name: 'Drak', role: 'Lightman' },
-    { id: 9, name: 'Jiu', role: 'Videographer' },
-  ];
 
-  roles = ['Photographer', 'Videographer', 'Editor', 'Drone Operator'];
+
+  roles: any = [];
   expandedOlpRows = {};
   selectedOlp: any = null;
   selectedEvent: any = null;
   selectedAssignments: { [role: string]: any } = {};
   displayDialog: boolean = false;
+  OLPEventTeamData: any = [];
+  olpTeamLists: any = []
+  constructor(private messageService: MessageService, private olpService: OlpService) {
+  }
 
-  constructor(private messageService: MessageService) {
+  ngOnInit(): void {
+    this.getOLPEventTeamData();
+    this.getOLPMaster();
+  }
+  getOLPEventTeamData() {
+    this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
+      if (data) {
+        data.forEach((lead: any) => {
+          if (lead.events && Array.isArray(lead.events)) {
+            lead.events = lead.events.map((event: any) => ({
+              ...event,
+              eventTeams: event.eventTeams ?? [] 
+            }));
+          }
+           const allAssigned = lead.events.every((ev: any) => ev.eventTeams.length > 0);
+            lead.teamStatus = allAssigned ? 'Closed' : 'New';
+        });
+
+        data = data.filter((i: any) => i.callStatus.name === 'Closed')
+        this.OLPEventTeamData = data
+      }
+    })
+  }
+  getOLPMaster() {
+    this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
+      this.olpTeamLists = data.olpAssignTeams;
+      this.roles = [...new Set(this.olpTeamLists.map((member: any) => member.value))];
+    })
   }
   openAssignDialog(olp: any, event: any) {
     this.selectedOlp = olp;
@@ -107,7 +59,7 @@ export class OlpTeamAssignComponent {
     this.selectedAssignments = {};
 
     for (const role of this.roles) {
-      const assigned = event.eventTeams.find((m: any) => m.role === role);
+      const assigned = event.eventTeams.find((m: any) => m.value === role);
       this.selectedAssignments[role] = assigned || null;
     }
 
@@ -119,14 +71,14 @@ export class OlpTeamAssignComponent {
 
     return this.olpTeamLists.filter(
       (e: any) =>
-        e.role === role &&
+        e.value === role &&
         !this.isAlreadyAssigned(e.id, role)
     );
   }
 
   isAlreadyAssigned(employeeId: number, roleToAssign: string): boolean {
     return this.selectedEvent.eventTeams.some(
-      (m: any) => m.id === employeeId && m.role !== roleToAssign
+      (m: any) => m.id === employeeId && m.value !== roleToAssign
     );
   }
 
@@ -163,7 +115,7 @@ export class OlpTeamAssignComponent {
 
   updateOlpTeamStatus(olp: any) {
     const allAssigned = olp.events.every((ev: any) => ev.eventTeams.length > 0);
-    olp.team = allAssigned ? 'assigned' : 'pending';
+    olp.teamStatus = allAssigned ? 'Closed' : 'In-progress';
   }
 
   getInitials(name: string): string {
@@ -186,4 +138,46 @@ export class OlpTeamAssignComponent {
         return '';
     }
   }
+  getStatusSeverity(status: string): string {
+    switch (status) {
+      case 'New': return 'info';
+      case 'In-progress': return 'warning';
+      case 'Closed': return 'success';
+      case 'Pending': return 'danger';
+      default: return 'secondary';
+    }
+  }
+  areAllTeamsAssigned(olp: any): boolean {
+    return olp.events.every((ev: any) => ev.eventTeams && ev.eventTeams.length > 0);
+  }
+
+  submitOlpTeam(olp: any): void {
+    // Replace with your real API endpoint
+    const payload = {
+      olpId: olp.olpId,
+      assignedTeams: olp.events.map((event: any) => ({
+        eventId: event.eventName.id, // or event.id if available
+        eventName: event.eventName.name,
+        team: event.eventTeams
+      }))
+    };
+    console.log(olp)
+    // this.olpService.submitAssignedTeams(payload).subscribe({
+    //   next: () => {
+    //     this.messageService.add({
+    //       severity: 'success',
+    //       summary: 'Submitted',
+    //       detail: `Team assignment submitted for ${olp.olpId}`
+    //     });
+    //   },
+    //   error: () => {
+    //     this.messageService.add({
+    //       severity: 'error',
+    //       summary: 'Error',
+    //       detail: 'Failed to submit team assignments'
+    //     });
+    //   }
+    // });
+  }
+
 }
