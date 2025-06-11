@@ -1089,6 +1089,7 @@ textarea,
 }
 
 .olp-card {
+   position: relative;
   background-color: var(--surface-card);
   border-radius: 1rem;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
