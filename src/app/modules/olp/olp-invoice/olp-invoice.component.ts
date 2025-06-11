@@ -34,11 +34,8 @@ export class OlpInvoiceComponent implements OnInit {
     this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
       this.invoiceData = data || [];
       this.groupedData = {};
-      console.log('budgetStatuses', this.budgetStatuses)
       for (const status of this.budgetStatuses) {
-        console.log('status', status)
         this.groupedData[status] = this.invoiceData.filter(i => i.callStatus.name === status);
-        console.log('this.groupedData[status]', this.groupedData[status])
       }
     });
   }

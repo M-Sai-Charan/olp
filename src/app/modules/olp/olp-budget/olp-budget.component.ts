@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { MessageService } from 'primeng/api';
+import { OlpService } from '../olp.service';
 @Component({
   selector: 'app-olp-budget',
   templateUrl: './olp-budget.component.html',
@@ -18,76 +19,42 @@ export class OlpBudgetComponent implements OnInit {
   rejectComment: string = '';
   showRejectDialog = false;
 
-  customers = [
-    {
-      id: 1,
-      name: 'John Doe',
-      phone: '9876543210',
-      email: 'john@example.com',
-      status: 'new',
-      events: [
-        { name: 'Wedding', budget: 0 },
-        { name: 'Reception', budget: 0 }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Priya Sharma',
-      phone: '8765432109',
-      email: 'priya@example.com',
-      status: 'in-progress',
-      events: [
-        { name: 'Engagement', budget: 50000 },
-        { name: 'Mehendi', budget: 20000 }
-      ]
-    },
-    {
-      id: 3,
-      name: 'Amit Kumar',
-      phone: '9988776655',
-      email: 'amit@example.com',
-      status: 'done',
-      events: [
-        { name: 'Birthday', budget: 30000 }
-      ]
-    },
-    {
-      id: 4,
-      name: 'Sita Rao',
-      phone: '9090909090',
-      email: 'sita@example.com',
-      status: 'rejected',
-      events: [
-        { name: 'Baby Shower', budget: 45000 }
-      ]
-    }
-  ];
-
-  constructor(private fb: FormBuilder, private messageService: MessageService) {}
+  olpBudgetLists = [];
+  olpStatusLists = []
+  constructor(private fb: FormBuilder, private messageService: MessageService, private olpService: OlpService) { }
 
   ngOnInit() {
+    this.getOLPBudgetData();
+    this.getOLPMaster();
     this.budgetForm = this.fb.group({
       customer: [null, Validators.required]
     });
   }
-
+  getOLPBudgetData() {
+    this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
+      if (data) {
+        data = data.filter((i: any) => i.callStatus.name === 'Pending')
+        this.olpBudgetLists = data
+      }
+    })
+  }
   get formModeTitle() {
     if (!this.selectedCustomer) return '';
-    switch (this.selectedCustomer.status) {
-      case 'new': return 'Add Budget';
-      case 'in-progress': return 'Review & Approve Budget';
-      case 'done': return 'View Approved Budget';
-      case 'rejected': return 'Rejected Budget (Undo Available)';
+    switch (this.selectedCustomer.callStatus.name) {
+      case 'New': return 'Add Budget';
+      case 'Pending': return 'Review & Approve Budget';
+      case 'Closed': return 'View Approved Budget';
+      case 'Undo': return 'Rejected Budget (Undo Available)';
       default: return '';
     }
   }
 
   getStatusSeverity(status: string): string {
     switch (status) {
-      case 'new': return 'info';
-      case 'in-progress': return 'warning';
-      case 'done': return 'success';
-      case 'rejected': return 'danger';
+      case 'New': return 'info';
+      case 'In-progress': return 'warning';
+      case 'Closed': return 'success';
+      case 'Pending': return 'danger';
       default: return 'secondary';
     }
   }
@@ -102,10 +69,14 @@ export class OlpBudgetComponent implements OnInit {
   calculateTotalBudget() {
     if (this.selectedCustomer)
       this.totalBudget = this.selectedCustomer.events.reduce(
-        (sum: number, e: any) => sum + (e.budget || 0), 0
+        (sum: number, e: any) => sum + (+e.eventBudget || 0), 0
       );
   }
-
+  getOLPMaster() {
+    this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
+      this.olpStatusLists = data.statuses;
+    })
+  }
   onSubmit() {
     if (this.budgetForm.valid) {
       this.selectedCustomer.status = 'in-progress';
@@ -121,9 +92,26 @@ export class OlpBudgetComponent implements OnInit {
   }
 
   approve(customer: any) {
-    customer.status = 'done';
-    this.selectedCustomer = null;
-    this.messageService.add({ severity: 'success', summary: 'Approved', detail: 'Budget approved.' });
+    customer['callStatus'] = { name: "Closed", value: "Closed" }
+    this.olpService.updateOLPEnquiry(customer.id, customer).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Approved',
+          detail: 'Budget approved successfully.'
+        });
+        this.selectedCustomer = null;
+        this.getOLPBudgetData();
+        this.getOLPMaster();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: 'Something went wrong while saving.'
+        });
+      }
+    });
   }
 
   reject(customer: any) {
