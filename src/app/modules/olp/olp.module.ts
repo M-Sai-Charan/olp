@@ -14,6 +14,7 @@ import { OlpTeamAssignComponent } from '../../olp-team-assign/olp-team-assign.co
 import { OlpInvoiceComponent } from './olp-invoice/olp-invoice.component';
 import { OlpTasksComponent } from './olp-tasks/olp-tasks.component';
 import { OlpService } from './olp.service';
+import { OlpInventoryAssignComponent } from './olp-inventory-assign/olp-inventory-assign.component';
 @NgModule({
   declarations: [
     OlpDashboardComponent,
@@ -26,7 +27,8 @@ import { OlpService } from './olp.service';
     OlpInventoryComponent,
     OlpTeamAssignComponent,
     OlpInvoiceComponent,
-    OlpTasksComponent
+    OlpTasksComponent,
+    OlpInventoryAssignComponent
   ],
   imports: [
     CommonModule,
