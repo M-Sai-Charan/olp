@@ -1,91 +1,66 @@
+<p-toast></p-toast>
+
 <div
   class="header invoice-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
-  <img src="olp-logo.png" alt="Logo" height="30" class="mr-3">
-  <h2 style="text-align: center;
-    margin: 10px;
-    padding-left: 100px;">OLP Inventory Assign</h2>
+  <img src="olp-logo.png" alt="Logo" height="30">
+  <h2 class="pl-3">OLP Inventory Assign</h2>
   <small class="italic">Delivering timeless moments beautifully</small>
 </div>
-
 <div class="p-grid">
   <div *ngFor="let booking of bookings" class="p-col-12 p-md-6 p-lg-4">
-    <p-panel 
-      [header]="'Booking ID: ' + booking.olpId" 
-      [toggleable]="true"
-      [collapsed]="true"
-      class="booking-panel m-2"
-    >
-      <div class="booking-details">
-        <!-- <p><strong>Bride:</strong> {{ booking.bride }}</p>
-        <p><strong>Groom:</strong> {{ booking.groom }}</p>
-        <p><strong>Location:</strong> {{ booking.location }}</p>
-        <p><strong>Contact:</strong> {{ booking.contactNumber }}</p>
-        <p><strong>Source:</strong> {{ booking.source }}</p> -->
+    <p-panel [header]="'Booking ID: ' + booking.olpId" [toggleable]="true" [collapsed]="true" class="booking-panel m-2">
+      <div *ngFor="let event of booking.events" class="event-block mb-3">
+        <p-panel [header]="event.eventName.name + ' - ' + (event.eventTime?.name || '')" [toggleable]="true"
+          [collapsed]="true">
+          <p><strong>Date:</strong> {{ event.eventDate | date: 'longDate' }}</p>
+          <p><strong>Location:</strong> {{ event.eventLocation }}</p>
+          <p><strong>Guests:</strong> {{ event.eventGuests }}</p>
 
-        <!-- Events Section -->
-        <div *ngFor="let event of booking.events" class="event-block mb-3">
-          <p-panel 
-            [header]="event.eventName.name + ' - ' + (event.eventTime?.name || '')"
-            [toggleable]="true"
-            [collapsed]="true"
-            (onBeforeToggle)="event.showDetails = !event.showDetails"
-          >
-            <p><strong>Date:</strong> {{ event.eventDate | date: 'longDate' }}</p>
-            <p><strong>Location:</strong> {{ event.eventLocation }}</p>
-            <p><strong>Guests:</strong> {{ event.eventGuests }}</p>
-
-            <p-table 
-              [value]="event.eventTeams" 
-              class="p-datatable-sm p-datatable-gridlines" 
-              [responsiveLayout]="'scroll'"
-            >
+          <ng-container *ngIf="event.eventTeams?.length; else noTeam">
+            <p-table [value]="event.eventTeams" class="p-datatable-sm p-datatable-gridlines"
+              [responsiveLayout]="'scroll'">
               <ng-template pTemplate="header">
                 <tr>
                   <th>Name</th>
                   <th>Role</th>
                   <th>Assign Inventory</th>
-                  <th>Assigned Inventory</th>
+                  <th>Assigned</th>
                 </tr>
               </ng-template>
-
               <ng-template pTemplate="body" let-member>
                 <tr>
                   <td>{{ member.name }}</td>
                   <td>{{ member.value }}</td>
                   <td>
-                    <p-dropdown
-                      [options]="inventories"
-                      (onChange)="assignInventory(member, $event.value)"
-                      placeholder="Select Inventory"
-                      styleClass="inventory-dropdown"
-                    ></p-dropdown>
+                    <p-select [options]="groupedInventories" optionLabel="name" optionGroupLabel="label"
+                      optionGroupChildren="items" [group]="true" [(ngModel)]="member.tempSelectedInventory"
+                      (onChange)="assignInventory(member, $event.value)" placeholder="Select Inventory"
+                      [showClear]="true" [style]="{ width: '250px' }" [filter]="true" appendTo="body"></p-select>
+
                   </td>
                   <td>
                     <ng-container *ngIf="member.assignedInventory?.length > 0; else noneAssigned">
-                      <span *ngFor="let item of member.assignedInventory" class="inventory-chip">
-                        {{ item }}
+                      <span *ngFor="let item of member.assignedInventory" class="p-chip p-mr-2 p-mb-1">
+                        {{ item.name }}
+                        <i class="pi pi-times ml-2 text-red-500 cursor-pointer"
+                          (click)="removeInventory(member, item.id)"></i>
                       </span>
                     </ng-container>
                     <ng-template #noneAssigned>
-                      <i class="pi pi-times-circle" style="color: #ccc;"> None</i>
+                      <span class="text-muted">None</span>
                     </ng-template>
                   </td>
                 </tr>
               </ng-template>
             </p-table>
-          </p-panel>
-        </div>
-
-        <!-- Submit button -->
-        <div class="submit-bar mt-3">
-          <button 
-            pButton 
-            type="button" 
-            label="Submit All" 
-            class="p-button-success"
-            (click)="submitAll()"
-          ></button>
-        </div>
+          </ng-container>
+          <ng-template #noTeam>
+            <p class="text-muted text-sm italic">No team assigned for this event.</p>
+          </ng-template>
+        </p-panel>
+      </div>
+      <div class="text-center mt-3">
+        <button pButton type="button" label="Submit All" class="p-button-success" (click)="submitAll()"></button>
       </div>
     </p-panel>
   </div>

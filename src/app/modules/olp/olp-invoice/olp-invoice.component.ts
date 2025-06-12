@@ -90,7 +90,7 @@ export class OlpInvoiceComponent implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Updated',
-            detail: 'Budget saved successfully.'
+            detail: 'Invoice saved and moved to Budget successfully.'
           });
           this.dialogVisible = false;
           this.loadDummyData();

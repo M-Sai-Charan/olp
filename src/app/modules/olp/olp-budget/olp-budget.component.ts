@@ -98,7 +98,7 @@ export class OlpBudgetComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Approved',
-          detail: 'Budget approved successfully.'
+          detail: 'Budget approved and moved to Team Assign successfully.'
         });
         this.selectedCustomer = null;
         this.getOLPBudgetData();

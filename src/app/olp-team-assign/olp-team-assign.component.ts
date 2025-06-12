@@ -35,14 +35,14 @@ export class OlpTeamAssignComponent implements OnInit {
           if (lead.events && Array.isArray(lead.events)) {
             lead.events = lead.events.map((event: any) => ({
               ...event,
-              eventTeams: event.eventTeams ?? [] 
+              eventTeams: event.eventTeams ?? []
             }));
           }
-           const allAssigned = lead.events.every((ev: any) => ev.eventTeams.length > 0);
-            lead.teamStatus = allAssigned ? 'Closed' : 'New';
+          const allAssigned = lead.events.every((ev: any) => ev.eventTeams.length > 0);
+          lead.teamStatus = allAssigned ? 'Closed' : 'New';
         });
 
-        data = data.filter((i: any) => i.callStatus.name === 'Closed')
+        data = data.filter((i: any) => i.callStatus.name === 'Closed' && i.teamStatus === 'New')
         this.OLPEventTeamData = data
       }
     })
@@ -152,32 +152,25 @@ export class OlpTeamAssignComponent implements OnInit {
   }
 
   submitOlpTeam(olp: any): void {
-    // Replace with your real API endpoint
-    const payload = {
-      olpId: olp.olpId,
-      assignedTeams: olp.events.map((event: any) => ({
-        eventId: event.eventName.id, // or event.id if available
-        eventName: event.eventName.name,
-        team: event.eventTeams
-      }))
-    };
     console.log(olp)
-    // this.olpService.submitAssignedTeams(payload).subscribe({
-    //   next: () => {
-    //     this.messageService.add({
-    //       severity: 'success',
-    //       summary: 'Submitted',
-    //       detail: `Team assignment submitted for ${olp.olpId}`
-    //     });
-    //   },
-    //   error: () => {
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Error',
-    //       detail: 'Failed to submit team assignments'
-    //     });
-    //   }
-    // });
+    this.olpService.updateOLPEnquiry(olp.id, olp).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Approved',
+          detail: 'Team Assign and moved to Inventory Assign successfully.'
+        });
+        this.getOLPEventTeamData();
+        this.getOLPMaster();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: 'Something went wrong while saving.'
+        });
+      }
+    });
   }
 
 }
