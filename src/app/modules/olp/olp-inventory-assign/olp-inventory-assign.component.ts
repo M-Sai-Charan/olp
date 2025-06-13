@@ -15,7 +15,7 @@ interface TeamMember {
   templateUrl: './olp-inventory-assign.component.html',
   styleUrls: ['./olp-inventory-assign.component.css'],
   providers: [MessageService],
-  standalone:false
+  standalone: false
 })
 export class OlpInventoryAssignComponent {
   bookings: any[] = [];
@@ -36,7 +36,7 @@ export class OlpInventoryAssignComponent {
 
   groupedInventories: any[] = [];
 
-  constructor(private olpService: OlpService, private toast: MessageService) {}
+  constructor(private olpService: OlpService, private toast: MessageService) { }
 
   ngOnInit(): void {
     this.groupedInventories = this.groupInventoryOptions();
@@ -47,7 +47,7 @@ export class OlpInventoryAssignComponent {
     this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
       if (data) {
         this.bookings = data
-          .filter((i: any) => i.callStatus.name === 'Closed' && i.teamStatus === 'Closed')
+          .filter((i: any) => i.callStatus.name === 'Closed' && i.teamStatus === 'Closed' && i.inventoryStatus === "")
           .map((booking: any) => ({
             ...booking,
             events: booking.events.map((event: any) => ({
@@ -77,9 +77,25 @@ export class OlpInventoryAssignComponent {
     member.assignedInventory = (member.assignedInventory || []).filter(i => i.id !== inventoryId);
   }
 
-  submitAll() {
-    console.log('Updated Bookings:', this.bookings);
-    this.toast.add({ severity: 'success', summary: 'Success', detail: 'Inventory assigned successfully!' });
+  submitAll(olp: any) {
+    olp['inventoryStatus'] = "Closed";
+    this.olpService.updateOLPEnquiry(olp.id, olp).subscribe({
+      next: () => {
+        this.toast.add({
+          severity: 'success',
+          summary: 'Updated',
+          detail: 'Inventory Assigned successfully.'
+        });
+        this.getOLPEnquires();
+      },
+      error: () => {
+        this.toast.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: 'Something went wrong while saving.'
+        });
+      }
+    });
   }
 
   groupInventoryOptions(): any[] {
