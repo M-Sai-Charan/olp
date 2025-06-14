@@ -1,5 +1,5 @@
 <!-- Table Card -->
- <div
+<div
   class="header invoice-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
   <img src="olp-logo.png" alt="Logo" height="30" class="mr-3">
   <h2 style="text-align: center;
@@ -79,7 +79,10 @@
         </div>
 
         <div class="field col-12 md:col-6 lg:col-4">
-          <label for="callStatus">Call Status</label>
+          <label for="callStatus">Call Status <span> <i 
+          style="color: #0a6f4d;font-size: 11px;" class="pi pi-info-circle"
+           pTooltip="Change to In-progress status to add Invoice"
+            tooltipPosition="top"></i></span></label>
           <p-dropdown inputId="callStatus" [options]="olpStatusLists" formControlName="callStatus" optionLabel="name"
             placeholder="Select Status"></p-dropdown>
         </div>

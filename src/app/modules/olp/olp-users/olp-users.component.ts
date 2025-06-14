@@ -41,14 +41,14 @@ export class OlpUsersComponent implements OnInit {
   getOLPEnquires() {
     this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
       if (data) {
-        data = data.filter((i: any) => i.callStatus.name === 'New')
+        data = data.filter((i: any) => i.callStatus.name === 'New' || i.callStatus.name === 'Blocked')
         this.olpUsers = data
       }
     })
   }
   getOLPMaster() {
     this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
-      this.olpStatusLists = data.statuses;
+      this.olpStatusLists = [data.statuses[0],data.statuses[1],data.statuses[4]];
       this.olpEventsLists = data.events;
       this.olpEventsTimes = data.eventTimes;
       this.olpEmployeesLists = data.employees;

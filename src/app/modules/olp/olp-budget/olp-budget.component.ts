@@ -117,6 +117,26 @@ export class OlpBudgetComponent implements OnInit {
   reject(customer: any) {
     this.rejectComment = '';
     this.showRejectDialog = true;
+     customer['callStatus'] = {name: "In-progress", value: "In-progress"}
+    this.olpService.updateOLPEnquiry(customer.id, customer).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'danger',
+          summary: 'Rejected',
+          detail: 'Budget rejected and moved to Invoice successfully.'
+        });
+        this.selectedCustomer = null;
+        this.getOLPBudgetData();
+        this.getOLPMaster();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: 'Something went wrong while saving.'
+        });
+      }
+    });
   }
 
   confirmReject() {

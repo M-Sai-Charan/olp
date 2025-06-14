@@ -52,7 +52,10 @@
       </div>
       <div class="field col-12 md:col-6 lg:col-4">
         <div class="p-float-label">
-          <label for="olpId">Status</label>
+          <label for="olpId">Status <span> <i 
+          style="color: #0a6f4d;font-size: 11px;" class="pi pi-info-circle"
+           pTooltip="Change to Pending status for Budget Approve."
+            tooltipPosition="top"></i></span></label>
           <p-dropdown inputId="callStatus" [options]="olpStatusLists" formControlName="callStatus" optionLabel="name"
             placeholder="Select Status"></p-dropdown>
         </div>
