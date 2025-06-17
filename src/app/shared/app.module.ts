@@ -40,6 +40,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
 import { TabViewModule } from 'primeng/tabview';
 import { SelectModule } from 'primeng/select';
+import { ColorPickerModule } from 'primeng/colorpicker';
 @NgModule({
     declarations: [],
     imports: [
@@ -82,7 +83,8 @@ import { SelectModule } from 'primeng/select';
         FullCalendarModule,
         HttpClientModule,
         TabViewModule,
-        SelectModule
+        SelectModule,
+        ColorPickerModule
     ],
     exports: [
         ButtonModule,
@@ -124,7 +126,8 @@ import { SelectModule } from 'primeng/select';
         FullCalendarModule,
         HttpClientModule,
         TabViewModule,
-        SelectModule
+        SelectModule,
+        ColorPickerModule
     ],
     providers: [HttpService],
     bootstrap: []

@@ -18,9 +18,10 @@
         <p-badge [value]="groupedData[status].length" severity="contrast" styleClass="ml-2" />
       </div>
     </ng-template>
-    <div class="card-grid fade-in">
+    <div class="card-grid fade-in" *ngIf="groupedData[status].length > 0; else noData">
       <div class="olp-card" *ngFor="let olp of groupedData[status]" (click)="openOlpDialog(olp)">
-        <i class="pi pi-file-pdf text-red-600 absolute right-2 top-2 cursor-pointer" style="font-size: 1.2rem;right: 10px;top: 10px;" (click)="downloadPdf($event, olp)">
+        <i class="pi pi-file-pdf text-red-600 absolute right-2 top-2 cursor-pointer"
+          style="font-size: 1.2rem;right: 10px;top: 10px;" (click)="downloadPdf($event, olp)">
         </i>
         <p-avatar [label]="olp.bride.charAt(0) + olp.groom.charAt(0)" shape="circle" class="avatar"
           class="bg-indigo-100 text-indigo-700"></p-avatar>
@@ -29,6 +30,13 @@
         <div class="names">{{ olp.bride }} & {{ olp.groom }}</div>
       </div>
     </div>
+    <ng-template #noData>
+      <div class="flex flex-column align-items-center justify-content-center py-6 fadein animation-duration-300">
+    <i class="pi pi-folder-open text-500" style="font-size: 2.5rem;"></i>
+    <p class="mt-2 text-gray-500 font-medium">No entries available for this status</p>
+  </div>
+    </ng-template>
+
   </p-tabPanel>
 </p-tabView>
 
@@ -52,10 +60,8 @@
       </div>
       <div class="field col-12 md:col-6 lg:col-4">
         <div class="p-float-label">
-          <label for="olpId">Status <span> <i 
-          style="color: #0a6f4d;font-size: 11px;" class="pi pi-info-circle"
-           pTooltip="Change to Pending status for Budget Approve."
-            tooltipPosition="top"></i></span></label>
+          <label for="olpId">Status <span> <i style="color: #0a6f4d;font-size: 11px;" class="pi pi-info-circle"
+                pTooltip="Change to Pending status for Budget Approve." tooltipPosition="top"></i></span></label>
           <p-dropdown inputId="callStatus" [options]="olpStatusLists" formControlName="callStatus" optionLabel="name"
             placeholder="Select Status"></p-dropdown>
         </div>
