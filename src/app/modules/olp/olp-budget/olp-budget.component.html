@@ -1,11 +1,11 @@
 <p-toast></p-toast>
 <div
-  class="header invoice-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
-  <img src="olp-logo.png" alt="Logo" height="30" class="mr-3">
-  <h2 style="text-align: center;
+    class="header invoice-header flex align-items-center justify-content-between mb-4 p-3 bg-primary text-white border-round shadow-2">
+    <img src="olp-logo.png" alt="Logo" height="30" class="mr-3">
+    <h2 style="text-align: center;
     margin: 10px;
     padding-left: 100px;">OLP Event Budgets</h2>
-  <small class="italic">Delivering timeless moments beautifully</small>
+    <small class="italic">Delivering timeless moments beautifully</small>
 </div>
 <p-card>
     <div class="budget-olp">
@@ -58,6 +58,22 @@
                 </tr>
             </ng-template>
         </p-table>
+        <!-- 📸 Photography-themed No Data Message -->
+        <div *ngIf="olpBudgetLists?.length === 0" class="no-data-container">
+            <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 64 64"
+                fill="none">
+                <path d="M8 20h48v28a4 4 0 01-4 4H12a4 4 0 01-4-4V20z" fill="#F0F0F0" stroke="#3F51B5"
+                    stroke-width="2" />
+                <path d="M24 20l2.667-4h10.666L40 20" fill="#3F51B5" />
+                <circle cx="32" cy="34" r="9" fill="#fff" stroke="#3F51B5" stroke-width="2" />
+                <circle cx="32" cy="34" r="5" fill="#3F51B5" />
+                <rect x="46" y="25" width="6" height="6" rx="1" fill="#3F51B5" />
+                <path d="M8 20l8-10h14l2 2h12l2-2h10l8 10" stroke="#3F51B5" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+            <p class="no-data-text">No budget entries found for any events.</p>
+        </div>
+
         <div *ngIf="selectedCustomer" class="slide-in-form">
             <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()" class="mt-4">
                 <div class="grid">

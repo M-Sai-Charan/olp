@@ -12,7 +12,7 @@ import { OlpTeamAssignComponent } from '../../olp-team-assign/olp-team-assign.co
 import { OlpInvoiceComponent } from './olp-invoice/olp-invoice.component';
 import { OlpTasksComponent } from './olp-tasks/olp-tasks.component';
 import { OlpInventoryAssignComponent } from './olp-inventory-assign/olp-inventory-assign.component';
-
+import { OlpClientDetailsComponent } from './olp-client-details/olp-client-details.component';
 const routes: Routes = [
   { path: '', component: OlpLoginComponent },
   { path: 'login', component: OlpLoginComponent },
@@ -30,6 +30,7 @@ const routes: Routes = [
       { path: 'inventory-assign', component: OlpInventoryAssignComponent },
       { path: 'invoice', component: OlpInvoiceComponent },
       { path: 'tasks', component: OlpTasksComponent },
+      { path: 'clients', component: OlpClientDetailsComponent },
       { path: '', redirectTo: 'login', pathMatch: 'full' }
     ]
   }

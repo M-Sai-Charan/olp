@@ -41,19 +41,14 @@ export class OlpUsersComponent implements OnInit {
   getOLPEnquires() {
     this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
       if (data) {
-        // data.forEach((item: { callStatus: any; }) => {
-        //   if (item.callStatus?.name === '') {
-        //     item.callStatus = { name: 'New', value: 'New' };
-        //   }
-        // });
-        data = data.filter((i: any) => i.callStatus.name === 'New')
+        data = data.filter((i: any) => i.callStatus.name === 'New' || i.callStatus.name === 'Blocked')
         this.olpUsers = data
       }
     })
   }
   getOLPMaster() {
     this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
-      this.olpStatusLists = data.statuses;
+      this.olpStatusLists = [data.statuses[0],data.statuses[1],data.statuses[4]];
       this.olpEventsLists = data.events;
       this.olpEventsTimes = data.eventTimes;
       this.olpEmployeesLists = data.employees;
@@ -176,7 +171,7 @@ export class OlpUsersComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Updated',
-          detail: 'User event updated successfully.'
+          detail: 'User event updated  and moved to Invoice successfully.'
         });
         this.visible = false;
         this.getOLPEnquires();

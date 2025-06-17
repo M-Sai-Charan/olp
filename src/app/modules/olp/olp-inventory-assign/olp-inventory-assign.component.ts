@@ -1,134 +1,114 @@
 import { Component } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { OlpService } from '../olp.service';
+
 interface TeamMember {
   id: number;
   name: string;
   value: string; // role
-  assignedInventory?: string[];
+  assignedInventory?: any[];
+  tempSelectedInventory?: any;
 }
+
 @Component({
   selector: 'app-olp-inventory-assign',
   templateUrl: './olp-inventory-assign.component.html',
-  styleUrl: './olp-inventory-assign.component.css',
+  styleUrls: ['./olp-inventory-assign.component.css'],
+  providers: [MessageService],
   standalone: false
 })
 export class OlpInventoryAssignComponent {
-  bookings: any = [];
-  inventories: string[] = ['Camera', 'Tripod', 'Lighting Kit', 'Drone', 'Gimbal'];
+  bookings: any[] = [];
+
+  olpInventories = [
+    { id: 1, name: 'Canon EOS R5', value: 'camera' },
+    { id: 2, name: 'Nikon Z9', value: 'camera' },
+    { id: 3, name: 'Sony A7S III', value: 'camera' },
+    { id: 4, name: 'Manfrotto Tripod', value: 'tripod' },
+    { id: 5, name: 'Benro Tripod', value: 'tripod' },
+    { id: 6, name: 'Godox LED Panel', value: 'lighting' },
+    { id: 7, name: 'Aputure Light Storm', value: 'lighting' },
+    { id: 8, name: 'DJI Mavic 3', value: 'drone' },
+    { id: 9, name: 'DJI Air 2S', value: 'drone' },
+    { id: 10, name: 'Zhiyun Crane 3S', value: 'gimbal' },
+    { id: 11, name: 'DJI Ronin-S', value: 'gimbal' }
+  ];
+
+  groupedInventories: any[] = [];
+
+  constructor(private olpService: OlpService, private toast: MessageService) { }
 
   ngOnInit(): void {
-    this.bookings = [
-      {
-        id: 2,
-        olpId: "002OLP2025",
-        bride: "test",
-        groom: "test",
-        contactNumber: "8383848382",
-        email: "test@gmail.com",
-        status: "New",
-        location: "fd",
-        comments: "fd",
-        source: "Instagram",
-        createdOn: "2025-06-11T06:15:51.7593635Z",
-        updatedOn: "2025-06-11T09:03:32.230655Z",
-        callDate: "2025-06-11T07:50:42.386Z",
-        teamStatus: "Closed",
-        calledBy: { id: 4, name: "Sam", value: "sam" },
-        callStatus: { name: "Closed", value: "Closed" },
-        events: [
-          {
-            eventName: { id: 4, name: "Sangeeth", value: "sangeeth" },
-            eventDate: "2025-06-28T18:30:00.000Z",
-            eventLocation: "chennai",
-            eventTime: { id: 3, name: "Evening", value: "evening" },
-            eventGuests: "1000",
-            eventBudget: "250000",
-            eventTeams: [
-              { id: 1, name: "Steve", value: "photographer" },
-              { id: 6, name: "Pollard", value: "editor" },
-              { id: 11, name: "Narine", value: "lightman" },
-              { id: 16, name: "Daniel", value: "droneoperator" },
-              { id: 20, name: "Alice", value: "videographer" }
-            ]
-          },
-          {
-            eventName: { id: 4, name: "Marriage", value: "marriage" },
-            eventDate: "2025-06-28T18:30:00.000Z",
-            eventLocation: "chennai",
-            eventTime: { id: 3, name: "Evening", value: "evening" },
-            eventGuests: "1000",
-            eventBudget: "250000",
-            eventTeams: [
-              { id: 1, name: "Steve", value: "photographer" },
-              { id: 6, name: "Pollard", value: "editor" },
-              { id: 11, name: "Narine", value: "lightman" },
-              { id: 16, name: "Daniel", value: "droneoperator" },
-              { id: 20, name: "Alice", value: "videographer" }
-            ]
-          }
-        ],
-        showEvents: false
-      },
-      {
-        id: 3,
-        olpId: "003OLP2025",
-        bride: "test",
-        groom: "test",
-        contactNumber: "8383848382",
-        email: "test@gmail.com",
-        status: "New",
-        location: "fd",
-        comments: "fd",
-        source: "Instagram",
-        createdOn: "2025-06-11T06:15:51.7593635Z",
-        updatedOn: "2025-06-11T09:03:32.230655Z",
-        callDate: "2025-06-11T07:50:42.386Z",
-        teamStatus: "Closed",
-        calledBy: { id: 4, name: "Sam", value: "sam" },
-        callStatus: { name: "Closed", value: "Closed" },
-        events: [
-          {
-            eventName: { id: 4, name: "Sangeeth", value: "sangeeth" },
-            eventDate: "2025-06-28T18:30:00.000Z",
-            eventLocation: "chennai",
-            eventTime: { id: 3, name: "Evening", value: "evening" },
-            eventGuests: "1000",
-            eventBudget: "250000",
-            eventTeams: [
-              { id: 1, name: "Steve", value: "photographer" },
-              { id: 6, name: "Pollard", value: "editor" },
-              { id: 11, name: "Narine", value: "lightman" },
-              { id: 16, name: "Daniel", value: "droneoperator" },
-              { id: 20, name: "Alice", value: "videographer" }
-            ]
-          }
-        ],
-        showEvents: false
+    this.groupedInventories = this.groupInventoryOptions();
+    this.getOLPEnquires();
+  }
+
+  getOLPEnquires() {
+    this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
+      if (data) {
+        this.bookings = data
+          .filter((i: any) => i.callStatus.name === 'Closed' && i.teamStatus === 'Closed' && i.inventoryStatus === "")
+          .map((booking: any) => ({
+            ...booking,
+            events: booking.events.map((event: any) => ({
+              ...event,
+              eventTeams: (event.eventTeams || []).map((member: any) => ({
+                ...member,
+                assignedInventory: [],
+                tempSelectedInventory: null
+              }))
+            }))
+          }));
       }
-    ];
-    this.bookings.forEach((booking: any) => {
-      booking.showEvents = false;
-      booking.events.forEach((event: any) => {
-        event.showDetails = false;
-      });
     });
-
   }
 
-  toggleEvents(booking: any) {
-    booking.showEvents = !booking.showEvents;
-  }
-
-  assignInventory(member: TeamMember, inventory: string) {
+  assignInventory(member: TeamMember, inventory: any) {
     if (!member.assignedInventory) {
       member.assignedInventory = [];
     }
-    if (!member.assignedInventory.includes(inventory)) {
+    if (!member.assignedInventory.some(inv => inv.id === inventory.id)) {
       member.assignedInventory.push(inventory);
     }
-    console.log(`${member.name} assigned inventory:`, member.assignedInventory);
+    member.tempSelectedInventory = null;
   }
 
-  submitAll() {
-    console.log('Updated Bookings:', JSON.stringify(this.bookings, null, 2));
+  removeInventory(member: TeamMember, inventoryId: number) {
+    member.assignedInventory = (member.assignedInventory || []).filter(i => i.id !== inventoryId);
+  }
+
+  submitAll(olp: any) {
+    olp['inventoryStatus'] = "Closed";
+    this.olpService.updateOLPEnquiry(olp.id, olp).subscribe({
+      next: () => {
+        this.toast.add({
+          severity: 'success',
+          summary: 'Updated',
+          detail: 'Inventory Assigned successfully.'
+        });
+        this.getOLPEnquires();
+      },
+      error: () => {
+        this.toast.add({
+          severity: 'error',
+          summary: 'Failed',
+          detail: 'Something went wrong while saving.'
+        });
+      }
+    });
+  }
+
+  groupInventoryOptions(): any[] {
+    const grouped = this.olpInventories.reduce((acc, item) => {
+      const key = item.value;
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(item);
+      return acc;
+    }, {} as { [key: string]: any[] });
+
+    return Object.entries(grouped).map(([label, items]) => ({
+      label: label.charAt(0).toUpperCase() + label.slice(1),
+      items
+    }));
   }
 }
