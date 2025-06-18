@@ -1,12 +1,15 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-olp-login',
   templateUrl: './olp-login.component.html',
   styleUrl: './olp-login.component.css',
-  standalone: false
+  standalone: false,
+  providers: [MessageService]
 })
 export class OlpLoginComponent implements OnInit {
   olpLoginForm: FormGroup | undefined;
@@ -15,21 +18,25 @@ export class OlpLoginComponent implements OnInit {
   loading: boolean = true;
   currentSlide = 0;
   slideshowImages: string[] = [
-    'https://images.unsplash.com/photo-1527525443983-6e60c75fff46?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHRlYW18ZW58MHx8MHx8fDA%3D',
-    'https://images.unsplash.com/photo-1563461660947-507ef49e9c47?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTh8fHRlYW18ZW58MHx8MHx8fDA%3D',
-    'https://images.unsplash.com/photo-1552581234-26160f608093?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzB8fHRlYW18ZW58MHx8MHx8fDA%3D'
+    'olp-slider1.jpg',
+    'olp-slider2.webp',
+    'olp-slider3.jpg',
+    'olp-slider4.jpg'
   ];
 
   @ViewChild('bgMusic') bgMusicRef!: ElementRef<HTMLAudioElement>;
 
-  constructor(private router: Router, private fb: FormBuilder) { }
+  constructor(private router: Router, private fb: FormBuilder,
+    private authService: AuthService,
+    private messageService: MessageService
+  ) { }
 
   ngOnInit(): void {
     this.initFormValidation();
     setTimeout(() => {
       this.loading = false;
       this.bgMusicRef?.nativeElement?.play();
-       this.startSlideshow();
+      this.startSlideshow();
     }, 2000);
     this.startSlideshow();
   }
@@ -40,12 +47,23 @@ export class OlpLoginComponent implements OnInit {
       password: ['', [Validators.required]],
     });
   }
-
   onLogin(): void {
     if (this.olpLoginForm?.valid) {
-      const formValue = this.olpLoginForm.value;
-      console.log('Login submitted', formValue);
-      this.router.navigateByUrl('/dashboard');
+      const { userName, password } = this.olpLoginForm.value;
+
+      const success = this.authService.login(userName, password);
+      if (success) {
+        const allowedRoutes = this.authService.getAllowedRoutes();
+        const redirectTo = allowedRoutes[0] === '*' ? '/dashboard' : allowedRoutes[0];
+        this.router.navigateByUrl(redirectTo);
+      } else {
+       this.messageService.add({
+        severity: 'error',
+        summary: 'Login Failed',
+        detail: 'Invalid Photographer ID or Secret Code',
+        life: 3000
+      });
+      }
     }
   }
 

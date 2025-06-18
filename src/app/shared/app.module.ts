@@ -41,6 +41,8 @@ import { HttpService } from '../services/http.service';
 import { TabViewModule } from 'primeng/tabview';
 import { SelectModule } from 'primeng/select';
 import { ColorPickerModule } from 'primeng/colorpicker';
+import { FieldsetModule } from 'primeng/fieldset';
+
 @NgModule({
     declarations: [],
     imports: [
@@ -84,7 +86,8 @@ import { ColorPickerModule } from 'primeng/colorpicker';
         HttpClientModule,
         TabViewModule,
         SelectModule,
-        ColorPickerModule
+        ColorPickerModule,
+        FieldsetModule
     ],
     exports: [
         ButtonModule,
@@ -127,7 +130,8 @@ import { ColorPickerModule } from 'primeng/colorpicker';
         HttpClientModule,
         TabViewModule,
         SelectModule,
-        ColorPickerModule
+        ColorPickerModule,
+        FieldsetModule
     ],
     providers: [HttpService],
     bootstrap: []

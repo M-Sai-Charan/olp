@@ -13,6 +13,7 @@ import { OlpInvoiceComponent } from './olp-invoice/olp-invoice.component';
 import { OlpTasksComponent } from './olp-tasks/olp-tasks.component';
 import { OlpInventoryAssignComponent } from './olp-inventory-assign/olp-inventory-assign.component';
 import { OlpClientDetailsComponent } from './olp-client-details/olp-client-details.component';
+import { RoleGuard } from '../../guards/role.guard';
 const routes: Routes = [
   { path: '', component: OlpLoginComponent },
   { path: 'login', component: OlpLoginComponent },
@@ -20,17 +21,17 @@ const routes: Routes = [
     path: '',
     component: OlpMenuComponent,
     children: [
-      { path: 'dashboard', component: OlpDashboardComponent },
-      { path: 'users', component: OlpUsersComponent },
-      { path: 'employees', component: OlpEmployeesComponent },
-      { path: 'admin', component: OlpAdminComponent },
-      { path: 'budget', component: OlpBudgetComponent },
-      { path: 'inventory', component: OlpInventoryComponent },
-      { path: 'team-assign', component: OlpTeamAssignComponent },
-      { path: 'inventory-assign', component: OlpInventoryAssignComponent },
-      { path: 'invoice', component: OlpInvoiceComponent },
-      { path: 'tasks', component: OlpTasksComponent },
-      { path: 'clients', component: OlpClientDetailsComponent },
+      { path: 'dashboard', component: OlpDashboardComponent, canActivate: [RoleGuard] },
+      { path: 'users', component: OlpUsersComponent, canActivate: [RoleGuard] },
+      { path: 'employees', component: OlpEmployeesComponent, canActivate: [RoleGuard] },
+      { path: 'admin', component: OlpAdminComponent, canActivate: [RoleGuard] },
+      { path: 'budget', component: OlpBudgetComponent, canActivate: [RoleGuard] },
+      { path: 'inventory', component: OlpInventoryComponent, canActivate: [RoleGuard] },
+      { path: 'team-assign', component: OlpTeamAssignComponent, canActivate: [RoleGuard] },
+      { path: 'inventory-assign', component: OlpInventoryAssignComponent, canActivate: [RoleGuard] },
+      { path: 'invoice', component: OlpInvoiceComponent, canActivate: [RoleGuard] },
+      { path: 'tasks', component: OlpTasksComponent, canActivate: [RoleGuard] },
+      { path: 'clients', component: OlpClientDetailsComponent, canActivate: [RoleGuard] },
       { path: '', redirectTo: 'login', pathMatch: 'full' }
     ]
   }
