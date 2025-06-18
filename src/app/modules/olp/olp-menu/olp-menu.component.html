@@ -4,8 +4,15 @@
       <span class="header-text">OLP</span>
     </div>
     <div class="header-right">
-      <span class="welcome-text">Welcome, {{ employeeName }}</span>
+      <div class="color-picker-wrapper">
+        <div class="color-picker-bg" pTooltip="Pick Theme Color" tooltipPosition="bottom">
+          <i class="pi pi-palette color-icon"></i>
+          <p-colorPicker [(ngModel)]="selectedColor" (onChange)="applyThemeColor()"
+            [style]="{ width: '1.5rem', height: '1.5rem' }" [appendTo]="'body'" />
+        </div>
+      </div>
 
+      <span class="welcome-text">Welcome, {{ employeeName }}</span>
       <div class="profile-section" [ngClass]="{ 'dropdown-open': profileDropdownOpen }"
         (click)="toggleProfileDropdown()">
         <img class="avatar" [src]="employeeAvatarUrl" alt="Employee Avatar">
@@ -14,83 +21,25 @@
           <li><a routerLink="/profile"><i class="pi pi-user"></i> Profile</a></li>
           <li><a routerLink="/settings"><i class="pi pi-cog"></i> Settings</a></li>
           <li><a (click)="logout()"><i class="pi pi-sign-out"></i> Logout</a></li>
-          <!-- <li><a (click)="toggleTheme()"><i class="pi" [ngClass]="isDarkMode ? 'pi-sun' : 'pi-moon'"></i>{{isDarkMode ? 'Sun' : 'Moon'}}</a></li> -->
         </ul>
       </div>
-      <button class="theme-toggle" (click)="toggleTheme()">
-        <i class="pi" [ngClass]="isDarkMode ? 'pi-sun' : 'pi-moon'"></i>
-      </button>
     </div>
   </header>
 
   <div class="dashboard-layout">
     <nav class="sidebar">
       <ul>
-        <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/dashboard">
-            <i class="pi pi-home"></i>
-            <span class="menu-label">Dashboard</span>
+        <li *ngFor="let item of allowedMenuItems">
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="item.route">
+            <i [class]="item.icon"></i>
+            <span class="menu-label">{{ item.label }}</span>
           </a>
         </li>
-        <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/users">
-            <i class="pi pi-users"></i>
-            <span class="menu-label">Users</span>
-          </a>
-        </li>
-        <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/invoice">
-            <i class="pi pi-receipt"></i>
-            <span class="menu-label">Invoice</span>
-          </a>
-        </li>
-        <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/budget">
-            <i class="pi pi-wallet"></i>
-            <span class="menu-label">Budget</span>
-          </a>
-        </li>
-        <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/team-assign">
-            <i class="pi pi-clipboard"></i>
-            <span class="menu-label">Team Assign</span>
-          </a>
-        </li>
-        <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/inventory-assign">
-            <i class="pi pi-warehouse"></i>
-            <span class="menu-label">Inventory Assign</span>
-          </a>
-        </li>
-        <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/clients">
-            <i class="pi pi-users"></i>
-            <span class="menu-label">Clients</span>
-          </a>
-        </li>
-        <!-- <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/tasks">
-            <i class="pi pi-list-check"></i>
-            <span class="menu-label">Tasks</span>
-          </a>
-        </li> -->
-        <!-- <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/employees">
-            <i class="pi pi-cloud"></i>
-            <span class="menu-label">Employees</span>
-          </a>
-        </li>
-        <li>
-          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="/admin">
-            <i class="pi pi-cog"></i>
-            <span class="menu-label">Admin</span>
-          </a>
-        </li> -->
       </ul>
     </nav>
-
     <main class="main-content">
       <router-outlet></router-outlet>
     </main>
   </div>
 </div>
+<p-toast></p-toast>

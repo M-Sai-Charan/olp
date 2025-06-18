@@ -18,11 +18,12 @@
                 </div>
             </ng-template>
 
-            <div class="bride-groom text-lg mb-2">
-                💍 {{ client.bride }} ❤️ {{ client.groom }}
-            </div>
+            <!-- <div class="bride-groom text-lg mb-2">
+                {{ client.bride[0] }} ❤️ {{ client.groom[0] }}
+            </div> -->
 
-            <button pButton type="button" (click)="selectedClient = client" label="Show" icon="pi pi-eye"
+            <button pButton type="button" (click)="selectedClient = client" label="Show" icon="pi pi-eye"  pTooltip="{{ client.bride}} ❤️ {{client.groom}}"
+            tooltipPosition="top"
                 class="p-button-sm p-button-outlined view-btn">
             </button>
         </p-card>
