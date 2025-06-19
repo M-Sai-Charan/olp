@@ -112,29 +112,7 @@
                 styleClass="w-full"></p-calendar>
               <p-message *ngIf="isInvalid('dob')" severity="error" text="Date of Birth is Required"></p-message>
             </div>
-            <div class="field col-12 md:col-4">
-              <label class="font-medium text-900 mb-2 block">Profile Picture</label>
-              <div
-                class="flex flex-column align-items-center gap-3 border-1 border-dashed border-primary border-round p-3 shadow-2 bg-white">
 
-                <!-- Preview -->
-                <img *ngIf="profilePicPreview" [src]="profilePicPreview" alt="Profile Preview"
-                  class="border-circle shadow-3" style="width: 120px; height: 120px; object-fit: cover;" />
-
-                <div *ngIf="!profilePicPreview"
-                  class="w-6rem h-6rem border-circle bg-gray-200 flex align-items-center justify-content-center text-500">
-                  <i class="pi pi-user" style="font-size: 2rem;"></i>
-                </div>
-
-                <!-- Upload Button -->
-                <p-fileUpload name="profilePic" accept="image/*" mode="basic" [auto]="true"
-                  (uploadHandler)="onProfilePicUpload($event)" chooseLabel="Choose" customUpload="true"
-                  class="w-full"></p-fileUpload>
-
-                <button *ngIf="profilePicPreview" pButton type="button" label="Remove" icon="pi pi-times"
-                  class="p-button-outlined p-button-danger mt-2" (click)="removeProfilePic()"></button>
-              </div>
-            </div>
 
           </div>
         </p-fieldset>
@@ -236,6 +214,29 @@
               <p-select styleClass="w-full" [options]="bloodGroups" formControlName="bloodGroup"
                 placeholder="Select Blood Group"></p-select>
               <p-message *ngIf="isInvalid('bloodGroup')" severity="error" text="Blood Group is Required"></p-message>
+            </div>
+            <div class="field col-12 md:col-4">
+              <label class="font-medium text-900 mb-2 block">Profile Picture</label>
+              <div
+                class="flex flex-column align-items-center gap-3 border-1 border-dashed border-primary border-round p-3 shadow-2 bg-white">
+
+                <!-- Preview -->
+                <img *ngIf="profilePicPreview" [src]="profilePicPreview" alt="Profile Preview"
+                  class="border-circle shadow-3" style="width: 120px; height: 120px; object-fit: cover;" />
+
+                <div *ngIf="!profilePicPreview"
+                  class="w-6rem h-6rem border-circle bg-gray-200 flex align-items-center justify-content-center text-500">
+                  <i class="pi pi-user" style="font-size: 2rem;"></i>
+                </div>
+
+                <!-- Upload Button -->
+                <p-fileUpload name="profilePic" accept="image/*" mode="basic" [auto]="true"
+                  (uploadHandler)="onProfilePicUpload($event)" chooseLabel="Choose" customUpload="true"
+                  class="w-full"></p-fileUpload>
+
+                <button *ngIf="profilePicPreview" pButton type="button" label="Remove" icon="pi pi-times"
+                  class="p-button-outlined p-button-danger mt-2" (click)="removeProfilePic()"></button>
+              </div>
             </div>
           </div>
         </p-fieldset>
