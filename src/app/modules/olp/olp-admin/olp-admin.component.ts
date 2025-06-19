@@ -163,7 +163,11 @@ export class OlpAdminComponent implements OnInit {
       address: employee.address,
       joiningDate: new Date(employee.joiningDate),
       exitDate: employee.exitDate ? new Date(employee.exitDate) : null,
-      role: employee.role,
+      role: {
+        id: `${employee.role?.id}`,
+        name: employee.role?.name,
+        description: employee.role?.description,
+      },
       routes: employee.allowedRoutes,
       team: employee.teamId,
       aadhar: employee.aadhar,
