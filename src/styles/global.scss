@@ -2184,6 +2184,17 @@ p-card {
   border: 0px !important;
 }
 
+.p-button-success {
+  background: var(--main) !important;
+  border: 0px !important;
+  color: #fff;
+}
+
+.p-button-sm.p-button-icon-only.p-button-rounded {
+  background: var(--main) !important;
+  border: 0px !important;
+}
+
 .color-picker-wrapper {
   margin-left: 1rem;
   display: flex;
@@ -2210,4 +2221,10 @@ p-card {
     cursor: pointer;
     display: block;
   }
+}
+
+.table-skeleton {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
 }
