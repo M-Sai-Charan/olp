@@ -45,7 +45,7 @@ export class OlpAdminComponent implements OnInit {
   showemployeeHeader = false;
   selectedUserData: any;
   olpEmployeeMode: any = 'Add';
-
+  loading: boolean = false;
   constructor(private fb: FormBuilder, private olpService: OlpService, private messageService: MessageService) {
     this.adminForm = this.fb.group({
       profilePic: [''],
@@ -75,9 +75,16 @@ export class OlpAdminComponent implements OnInit {
   }
 
   getOLPEmployees() {
-    this.olpService.getAllOLPEnquires('employee').subscribe((data: any) => {
-      if (data) {
-        this.olpEmployees = data;
+    this.loading = true;
+    this.olpService.getAllOLPEnquires('employee').subscribe({
+      next: (data: any) => {
+        this.olpEmployees = data || [];
+      },
+      error: (err) => {
+        console.error('Error fetching employees:', err);
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
   }
@@ -97,14 +104,17 @@ export class OlpAdminComponent implements OnInit {
     this.isSubmitted = true;
 
     if (this.adminForm.valid) {
-      const employeeData = this.convertOLPEmployee(this.adminForm.value);
+      const employeeData = this.convertOLPEmployee(this.adminForm.value, this.olpEmployeeMode);
 
       // Set the correct API URL based on the mode
       const endpoint = this.olpEmployeeMode === 'Add' ? 'Employee/create' : `Employee/update`;
 
       this.olpService.saveOLPEmployee(endpoint, employeeData, this.olpEmployeeMode).subscribe(
         (res: any) => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Employee saved successfully!' });
+          this.messageService.add({
+            severity: 'success', summary: 'Success',
+            detail: this.olpEmployeeMode === 'Add' ? 'Employee saved successfully!' : 'Employee updated successfully!'
+          });
           this.getOLPEmployees();
           this.adminForm.reset();
           this.isSubmitted = false;
@@ -170,16 +180,19 @@ export class OlpAdminComponent implements OnInit {
     });
   }
 
-  convertOLPEmployee(olpEmployee: any): any {
+  convertOLPEmployee(olpEmployee: any, mode: any): any {
     const rawProfilePic = this.adminForm.get('profilePic')?.value || '';
     const profilePicWithPrefix =
       rawProfilePic && !rawProfilePic.startsWith('data:image')
         ? `data:image/jpeg;base64,${rawProfilePic}`
         : rawProfilePic;
-    return {
+    const data = mode === 'Add' ? {} : {
       id: this.selectedUserData ? this.selectedUserData?.id : '',
       photographerId: this.selectedUserData ? this.selectedUserData?.photographerId : '',
       secretCode: this.selectedUserData ? this.selectedUserData?.secretCode : '',
+    }
+    return {
+      ...data,
       name: olpEmployee.name,
       email: olpEmployee.email,
       phone: olpEmployee.phone,

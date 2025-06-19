@@ -43,6 +43,7 @@ import { SelectModule } from 'primeng/select';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
+import { SkeletonModule } from 'primeng/skeleton';
 @NgModule({
     declarations: [],
     imports: [
@@ -88,7 +89,8 @@ import { FileUploadModule } from 'primeng/fileupload';
         SelectModule,
         ColorPickerModule,
         FieldsetModule,
-        FileUploadModule
+        FileUploadModule,
+        SkeletonModule
     ],
     exports: [
         ButtonModule,
@@ -133,7 +135,8 @@ import { FileUploadModule } from 'primeng/fileupload';
         SelectModule,
         ColorPickerModule,
         FieldsetModule,
-        FileUploadModule
+        FileUploadModule,
+        SkeletonModule
     ],
     providers: [HttpService],
     bootstrap: []
