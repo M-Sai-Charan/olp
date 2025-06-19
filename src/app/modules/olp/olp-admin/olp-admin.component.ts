@@ -1,30 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OlpService } from '../olp.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-olp-admin',
   templateUrl: './olp-admin.component.html',
   styleUrl: './olp-admin.component.css',
-  standalone: false
+  standalone: false,
+  providers: [MessageService]
 })
 export class OlpAdminComponent implements OnInit {
   adminForm: FormGroup;
   teams = [
     { name: 'Team A', value: 'A' },
     { name: 'Team B', value: 'B' },
+    { name: 'Team C', value: 'C' },
+    { name: 'Team D', value: 'D' },
+    { name: 'Team E', value: 'E' }
   ];
-  roles = [
-    { name: 'Cameraman', value: 'cameraman' },
-    { name: 'Lightman', value: 'lightman' },
-    { name: 'Editor', value: 'editor' },
-  ];
+  roles = [];
   bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
   statuses = ['Active', 'Inactive', 'On Leave'];
   genders = [
-    { label: 'Male', value: 'Male' },
-    { label: 'Female', value: 'Female' },
-    { label: 'Other', value: 'Other' }
+    { name: 'Male', value: 'Male' },
+    { name: 'Female', value: 'Female' },
+    { name: 'Other', value: 'Other' }
   ];
   Routes = [
     { label: 'Dashboard', icon: 'pi pi-home', route: '/dashboard' },
@@ -35,13 +36,19 @@ export class OlpAdminComponent implements OnInit {
     { label: 'Inventory Assign', icon: 'pi pi-warehouse', route: '/inventory-assign' },
     { label: 'Clients', icon: 'pi pi-users', route: '/clients' },
     { label: 'Admin', icon: 'pi-cog', route: '/admin' },
-  ]
+  ];
+
+  profilePicPreview: string | ArrayBuffer | null = null;
   isSubmitted = false;
-  olpEmployees: any = []
+  olpEmployees: any = [];
   employeeHeader: any;
   showemployeeHeader = false;
-  constructor(private fb: FormBuilder, private olpService: OlpService) {
+  selectedUserData: any;
+  olpEmployeeMode: any = 'Add';
+
+  constructor(private fb: FormBuilder, private olpService: OlpService, private messageService: MessageService) {
     this.adminForm = this.fb.group({
+      profilePic: [''],
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
@@ -49,30 +56,38 @@ export class OlpAdminComponent implements OnInit {
       joiningDate: ['', Validators.required],
       exitDate: [''],
       role: ['', Validators.required],
-      routes:['',Validators.required],
+      routes: ['', Validators.required],
       team: ['', Validators.required],
-      status: [''],
-      aadhar: [''],
-      pan: [''],
-      bloodGroup: [''],
+      aadhar: ['', Validators.required],
+      pan: ['', Validators.required],
+      bloodGroup: ['', Validators.required],
       gender: ['', Validators.required],
       dob: ['', Validators.required],
-      emergencyName: [''],
-      emergencyRelation: [''],
-      emergencyPhone: [''],
+      emergencyName: ['', Validators.required],
+      emergencyRelation: ['', Validators.required],
+      emergencyPhone: ['', Validators.required],
     });
+  }
 
-  }
   ngOnInit(): void {
-    this.getOLPEmployees()
+    this.getOLPEmployees();
+    this.getOLPMaster();
   }
+
   getOLPEmployees() {
     this.olpService.getAllOLPEnquires('employee').subscribe((data: any) => {
       if (data) {
-        this.olpEmployees = data
+        this.olpEmployees = data;
       }
-    })
+    });
   }
+
+  getOLPMaster() {
+    this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
+      this.roles = data.roles;
+    });
+  }
+
   isInvalid(field: string): boolean {
     const control = this.adminForm.get(field);
     return !!(control && control.invalid && (control.dirty || control.touched || this.isSubmitted));
@@ -80,22 +95,146 @@ export class OlpAdminComponent implements OnInit {
 
   submitForm() {
     this.isSubmitted = true;
+
     if (this.adminForm.valid) {
-      console.log('Submitted Data:', this.adminForm.value);
-      alert('Employee data saved successfully!');
-      this.adminForm.reset();
-      this.isSubmitted = false;
-    this.showemployeeHeader = false;
+      const employeeData = this.convertOLPEmployee(this.adminForm.value);
+
+      // Set the correct API URL based on the mode
+      const endpoint = this.olpEmployeeMode === 'Add' ? 'Employee/create' : `Employee/update`;
+
+      this.olpService.saveOLPEmployee(endpoint, employeeData, this.olpEmployeeMode).subscribe(
+        (res: any) => {
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Employee saved successfully!' });
+          this.getOLPEmployees();
+          this.adminForm.reset();
+          this.isSubmitted = false;
+          this.showemployeeHeader = false;
+        },
+        (err: any) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to save employee.' });
+          this.getOLPEmployees();
+          this.adminForm.reset();
+          this.isSubmitted = false;
+          this.showemployeeHeader = false;
+        }
+      );
     }
   }
+
 
   onReset() {
     this.adminForm.reset();
     this.isSubmitted = false;
+    this.olpEmployeeMode = 'Add';
   }
 
   onAddNewEmployee() {
     this.showemployeeHeader = true;
-    this.employeeHeader = 'Add New Employee'
+    this.employeeHeader = 'Add New Employee';
+    this.olpEmployeeMode = 'Add';
+  }
+
+  selectOLPEmployee(employee: any) {
+    this.showemployeeHeader = true;
+    this.employeeHeader = 'Edit Employee';
+    this.olpEmployeeMode = 'Edit';
+    this.selectedUserData = employee;
+
+    this.profilePicPreview = employee.profilePic
+      ? employee.profilePic.startsWith('data:image')
+        ? employee.profilePic
+        : `data:image/jpeg;base64,${employee.profilePic}`
+      : null;
+
+    this.adminForm.patchValue({
+      name: employee.name,
+      email: employee.email,
+      phone: employee.phone,
+      address: employee.address,
+      joiningDate: new Date(employee.joiningDate),
+      exitDate: employee.exitDate ? new Date(employee.exitDate) : null,
+      role: employee.role,
+      routes: employee.allowedRoutes,
+      team: employee.teamId,
+      aadhar: employee.aadhar,
+      pan: employee.pan,
+      bloodGroup: employee.bloodGroup,
+      gender: employee.gender,
+      dob: new Date(employee.dob),
+      emergencyName: employee.emergencyContact?.name,
+      emergencyRelation: employee.emergencyContact?.relation,
+      emergencyPhone: employee.emergencyContact?.phone,
+      profilePic: employee.profilePic?.startsWith('data:image')
+        ? employee.profilePic.split(',')[1]
+        : employee.profilePic || ''
+    });
+  }
+
+  convertOLPEmployee(olpEmployee: any): any {
+    const rawProfilePic = this.adminForm.get('profilePic')?.value || '';
+    const profilePicWithPrefix =
+      rawProfilePic && !rawProfilePic.startsWith('data:image')
+        ? `data:image/jpeg;base64,${rawProfilePic}`
+        : rawProfilePic;
+    return {
+      id: this.selectedUserData ? this.selectedUserData?.id : '',
+      photographerId: this.selectedUserData ? this.selectedUserData?.photographerId : '',
+      secretCode: this.selectedUserData ? this.selectedUserData?.secretCode : '',
+      name: olpEmployee.name,
+      email: olpEmployee.email,
+      phone: olpEmployee.phone,
+      address: olpEmployee.address,
+      joiningDate: olpEmployee.joiningDate,
+      exitDate: olpEmployee.exitDate || null,
+      role: {
+        id: +olpEmployee.role.id,
+        name: olpEmployee.role.name,
+        description: olpEmployee.role.description
+      },
+      allowedRoutes: olpEmployee.routes.map((r: any) => ({
+        label: r.label,
+        icon: r.icon,
+        route: r.route
+      })),
+      teamId: {
+        name: olpEmployee.team.name,
+        value: olpEmployee.team.value
+      },
+      aadhar: olpEmployee.aadhar,
+      pan: olpEmployee.pan,
+      bloodGroup: olpEmployee.bloodGroup,
+      gender: {
+        name: olpEmployee.gender.name,
+        value: olpEmployee.gender.value
+      },
+      dob: olpEmployee.dob,
+      emergencyContact: {
+        name: olpEmployee.emergencyName,
+        relation: olpEmployee.emergencyRelation,
+        phone: olpEmployee.emergencyPhone
+      },
+      profilePic: profilePicWithPrefix
+    };
+  }
+
+  onProfilePicUpload(event: any) {
+    const file: File = event.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const base64Image = reader.result as string;
+      this.profilePicPreview = base64Image;
+      const base64String = base64Image.split(',')[1];
+      this.adminForm.get('profilePic')?.setValue(base64String);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeProfilePic() {
+    this.profilePicPreview = null;
+    this.adminForm.get('profilePic')?.setValue('');
   }
 }

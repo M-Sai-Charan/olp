@@ -42,7 +42,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { SelectModule } from 'primeng/select';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { FieldsetModule } from 'primeng/fieldset';
-
+import { FileUploadModule } from 'primeng/fileupload';
 @NgModule({
     declarations: [],
     imports: [
@@ -87,7 +87,8 @@ import { FieldsetModule } from 'primeng/fieldset';
         TabViewModule,
         SelectModule,
         ColorPickerModule,
-        FieldsetModule
+        FieldsetModule,
+        FileUploadModule
     ],
     exports: [
         ButtonModule,
@@ -131,7 +132,8 @@ import { FieldsetModule } from 'primeng/fieldset';
         TabViewModule,
         SelectModule,
         ColorPickerModule,
-        FieldsetModule
+        FieldsetModule,
+        FileUploadModule
     ],
     providers: [HttpService],
     bootstrap: []

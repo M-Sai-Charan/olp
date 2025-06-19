@@ -16,7 +16,7 @@ $transition: all 0.3s ease;
   --sidebar-bg: #ffffff;
   --hover-bg: #f1f5f9;
   --header-bg: #ffffff;
-  --main:#111827
+  --main: #111827
 }
 
 * {
@@ -53,7 +53,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--main)!important;
+  background-color: var(--main) !important;
   padding: 0 1.5rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
   color: #fff !important;
@@ -1213,6 +1213,26 @@ body.dark-mode .sidebar a:hover {
 
 
 // admin screen
+.profile-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.border-dashed {
+  border-style: dashed !important;
+}
+
+.border-circle {
+  border-radius: 50% !important;
+}
+
+.shadow-3 {
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
 .form-container {
   margin: 2rem auto;
   background: #f9fafb;
@@ -2054,7 +2074,7 @@ p-card {
   top: 10px;
 
   &.new {
-    background-color: var(--main)  !important;
+    background-color: var(--main) !important;
   }
 
   &.in-progress {
@@ -2157,11 +2177,13 @@ p-card {
   max-height: 80vh;
   overflow-y: auto;
 }
+
 .p-button-outlined {
-    background: var(--main) !important;
-    color: white !important;
-    border: 0px !important;
+  background: var(--main) !important;
+  color: white !important;
+  border: 0px !important;
 }
+
 .color-picker-wrapper {
   margin-left: 1rem;
   display: flex;
