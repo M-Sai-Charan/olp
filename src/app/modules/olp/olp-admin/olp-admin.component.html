@@ -32,7 +32,11 @@
 
     <ng-template #body let-user>
       <tr class="hover:bg-surface-200">
-        <td>{{ user.name }}</td>
+        <td class="flex align-items-center gap-2">
+          <img [src]="user.profilePic ? user.profilePic : 'assets/default-avatar.png'" alt="Avatar"
+            class="border-circle" style="width: 32px; height: 32px; object-fit: cover;" />
+          <span>{{ user.name }}</span>
+        </td>
         <td>{{ user.phone }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.role?.name }}</td>
@@ -92,6 +96,31 @@
                 styleClass="w-full"></p-calendar>
               <p-message *ngIf="isInvalid('dob')" severity="error" text="Required"></p-message>
             </div>
+            <div class="field col-12 md:col-4">
+              <label class="font-medium text-900 mb-2 block">Profile Picture</label>
+
+              <div
+                class="flex flex-column align-items-center gap-3 border-1 border-dashed border-primary border-round p-3 shadow-2 bg-white">
+
+                <!-- Preview -->
+                <img *ngIf="profilePicPreview" [src]="profilePicPreview" alt="Profile Preview"
+                  class="border-circle shadow-3" style="width: 120px; height: 120px; object-fit: cover;" />
+
+                <div *ngIf="!profilePicPreview"
+                  class="w-6rem h-6rem border-circle bg-gray-200 flex align-items-center justify-content-center text-500">
+                  <i class="pi pi-user" style="font-size: 2rem;"></i>
+                </div>
+
+                <!-- Upload Button -->
+                <p-fileUpload name="profilePic" accept="image/*" mode="basic" [auto]="true"
+                  (uploadHandler)="onProfilePicUpload($event)" chooseLabel="Choose" customUpload="true"
+                  class="w-full"></p-fileUpload>
+
+                <button *ngIf="profilePicPreview" pButton type="button" label="Remove" icon="pi pi-times"
+                  class="p-button-outlined p-button-danger mt-2" (click)="removeProfilePic()"></button>
+              </div>
+            </div>
+
           </div>
         </p-fieldset>
 

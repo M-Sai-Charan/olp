@@ -21,12 +21,13 @@ export class OlpService {
     return this.httpService.put<any>(`${this.baseUrl}WeddingEvents/${id}`, payload);
   }
 
-  saveOLPEmployee(url: any, payload: any,mode:any): Observable<any> {
-    if(mode==='Add') {
+  saveOLPEmployee(url: string, payload: any, mode: 'Add' | 'Edit'): Observable<any> {
+    if (mode === 'Add') {
       return this.httpService.post<any>(`${this.baseUrl}${url}`, payload);
     } else {
-     return this.httpService.put<any>(`${this.baseUrl}WeddingEvents`, payload);
+      return this.httpService.put<any>(`${this.baseUrl}${url}/${payload.id}`, payload);
     }
   }
+
 
 }

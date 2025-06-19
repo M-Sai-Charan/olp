@@ -36,15 +36,19 @@ export class OlpAdminComponent implements OnInit {
     { label: 'Inventory Assign', icon: 'pi pi-warehouse', route: '/inventory-assign' },
     { label: 'Clients', icon: 'pi pi-users', route: '/clients' },
     { label: 'Admin', icon: 'pi-cog', route: '/admin' },
-  ]
+  ];
+
+  profilePicPreview: string | ArrayBuffer | null = null;
   isSubmitted = false;
-  olpEmployees: any = []
+  olpEmployees: any = [];
   employeeHeader: any;
   showemployeeHeader = false;
   selectedUserData: any;
-  olpEmployeeMode:any = 'Add';
+  olpEmployeeMode: any = 'Add';
+
   constructor(private fb: FormBuilder, private olpService: OlpService, private messageService: MessageService) {
     this.adminForm = this.fb.group({
+      profilePic: [''],
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
@@ -63,24 +67,27 @@ export class OlpAdminComponent implements OnInit {
       emergencyRelation: ['', Validators.required],
       emergencyPhone: ['', Validators.required],
     });
-
   }
+
   ngOnInit(): void {
     this.getOLPEmployees();
     this.getOLPMaster();
   }
+
   getOLPEmployees() {
     this.olpService.getAllOLPEnquires('employee').subscribe((data: any) => {
       if (data) {
-        this.olpEmployees = data
+        this.olpEmployees = data;
       }
-    })
+    });
   }
+
   getOLPMaster() {
     this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
       this.roles = data.roles;
-    })
+    });
   }
+
   isInvalid(field: string): boolean {
     const control = this.adminForm.get(field);
     return !!(control && control.invalid && (control.dirty || control.touched || this.isSubmitted));
@@ -88,8 +95,14 @@ export class OlpAdminComponent implements OnInit {
 
   submitForm() {
     this.isSubmitted = true;
+
     if (this.adminForm.valid) {
-      this.olpService.saveOLPEmployee('Employee/create', this.convertOLPEmployee(this.adminForm.value),this.olpEmployeeMode).subscribe(
+      const employeeData = this.convertOLPEmployee(this.adminForm.value);
+
+      // Set the correct API URL based on the mode
+      const endpoint = this.olpEmployeeMode === 'Add' ? 'Employee/create' : `Employee/update`;
+
+      this.olpService.saveOLPEmployee(endpoint, employeeData, this.olpEmployeeMode).subscribe(
         (res: any) => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Employee saved successfully!' });
           this.getOLPEmployees();
@@ -108,6 +121,7 @@ export class OlpAdminComponent implements OnInit {
     }
   }
 
+
   onReset() {
     this.adminForm.reset();
     this.isSubmitted = false;
@@ -119,11 +133,19 @@ export class OlpAdminComponent implements OnInit {
     this.employeeHeader = 'Add New Employee';
     this.olpEmployeeMode = 'Add';
   }
+
   selectOLPEmployee(employee: any) {
     this.showemployeeHeader = true;
     this.employeeHeader = 'Edit Employee';
     this.olpEmployeeMode = 'Edit';
     this.selectedUserData = employee;
+
+    this.profilePicPreview = employee.profilePic
+      ? employee.profilePic.startsWith('data:image')
+        ? employee.profilePic
+        : `data:image/jpeg;base64,${employee.profilePic}`
+      : null;
+
     this.adminForm.patchValue({
       name: employee.name,
       email: employee.email,
@@ -141,11 +163,23 @@ export class OlpAdminComponent implements OnInit {
       dob: new Date(employee.dob),
       emergencyName: employee.emergencyContact?.name,
       emergencyRelation: employee.emergencyContact?.relation,
-      emergencyPhone: employee.emergencyContact?.phone
+      emergencyPhone: employee.emergencyContact?.phone,
+      profilePic: employee.profilePic?.startsWith('data:image')
+        ? employee.profilePic.split(',')[1]
+        : employee.profilePic || ''
     });
   }
+
   convertOLPEmployee(olpEmployee: any): any {
+    const rawProfilePic = this.adminForm.get('profilePic')?.value || '';
+    const profilePicWithPrefix =
+      rawProfilePic && !rawProfilePic.startsWith('data:image')
+        ? `data:image/jpeg;base64,${rawProfilePic}`
+        : rawProfilePic;
     return {
+      id: this.selectedUserData ? this.selectedUserData?.id : '',
+      photographerId: this.selectedUserData ? this.selectedUserData?.photographerId : '',
+      secretCode: this.selectedUserData ? this.selectedUserData?.secretCode : '',
       name: olpEmployee.name,
       email: olpEmployee.email,
       phone: olpEmployee.phone,
@@ -178,8 +212,29 @@ export class OlpAdminComponent implements OnInit {
         name: olpEmployee.emergencyName,
         relation: olpEmployee.emergencyRelation,
         phone: olpEmployee.emergencyPhone
-      }
+      },
+      profilePic: profilePicWithPrefix
     };
   }
 
+  onProfilePicUpload(event: any) {
+    const file: File = event.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const base64Image = reader.result as string;
+      this.profilePicPreview = base64Image;
+      const base64String = base64Image.split(',')[1];
+      this.adminForm.get('profilePic')?.setValue(base64String);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removeProfilePic() {
+    this.profilePicPreview = null;
+    this.adminForm.get('profilePic')?.setValue('');
+  }
 }
