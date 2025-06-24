@@ -81,22 +81,22 @@
       <div class="grid formgrid surface-card p-4 border-round shadow-2 mb-4">
         <div class="field col-12 md:col-6 lg:col-4">
           <label for="calledBy">Call Initiated By</label>
-          <p-dropdown inputId="calledBy" [options]="olpEmployeesLists" formControlName="calledBy" optionLabel="name"
-            placeholder="Select Employee"></p-dropdown>
+          <p-select inputId="calledBy" [options]="olpEmployeesLists" formControlName="calledBy" optionLabel="name"
+            styleClass="w-full" placeholder="Select Employee"></p-select>
         </div>
 
         <div class="field col-12 md:col-6 lg:col-4">
           <label for="callDate">Call Date</label>
-          <p-calendar inputId="callDate" formControlName="callDate" dateFormat="dd-mm-yy" placeholder="Select Date"
-            styleClass="w-full"></p-calendar>
+          <p-datepicker appendTo="body" inputId="callDate" formControlName="callDate" dateFormat="dd-mm-yy"
+            placeholder="Select Date" styleClass="w-full"></p-datepicker>
         </div>
 
         <div class="field col-12 md:col-6 lg:col-4">
           <label for="callStatus">Call Status <span> <i style="color: #0a6f4d;font-size: 11px;"
                 class="pi pi-info-circle" pTooltip="Change to In-progress status to add Invoice"
                 tooltipPosition="top"></i></span></label>
-          <p-dropdown inputId="callStatus" [options]="olpStatusLists" formControlName="callStatus" optionLabel="name"
-            placeholder="Select Status"></p-dropdown>
+          <p-select inputId="callStatus" [options]="olpStatusLists" formControlName="callStatus" optionLabel="name"
+            styleClass="w-full" placeholder="Select Status"></p-select>
         </div>
       </div>
 
@@ -107,14 +107,14 @@
           <div class="grid formgrid p-fluid">
             <div class="field col-12 md:col-6 lg:col-4">
               <label for="eventName-{{ i }}">Event</label>
-              <p-dropdown inputId="eventName-{{ i }}" [options]="olpEventsLists" formControlName="eventName"
-                optionLabel="name" placeholder="Select Event"></p-dropdown>
+              <p-select inputId="eventName-{{ i }}" [options]="olpEventsLists" formControlName="eventName"
+                optionLabel="name" placeholder="Select Event" styleClass="w-full"></p-select>
             </div>
 
             <div class="field col-12 md:col-6 lg:col-4">
               <label for="eventDate-{{ i }}">Date</label>
-              <p-calendar inputId="eventDate-{{ i }}" formControlName="eventDate" dateFormat="dd-mm-yy"
-                placeholder="Select Date" styleClass="w-full"></p-calendar>
+              <p-datepicker appendTo="body" inputId="eventDate-{{ i }}" formControlName="eventDate"
+                dateFormat="dd-mm-yy" placeholder="Select Date" styleClass="w-full"></p-datepicker>
             </div>
 
             <div class="field col-12 md:col-6 lg:col-4">
@@ -124,8 +124,8 @@
 
             <div class="field col-12 md:col-6 lg:col-4">
               <label for="eventTime-{{ i }}">Time</label>
-              <p-dropdown inputId="eventTime-{{ i }}" [options]="olpEventsTimes" formControlName="eventTime"
-                optionLabel="name" placeholder="Select Time"></p-dropdown>
+              <p-select inputId="eventTime-{{ i }}" [options]="olpEventsTimes" formControlName="eventTime"
+                optionLabel="name" placeholder="Select Time" styleClass="w-full"></p-select>
             </div>
 
             <div class="field col-12 md:col-6 lg:col-4">

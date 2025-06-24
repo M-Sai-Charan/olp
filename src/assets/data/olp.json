@@ -1,46 +1,4 @@
 {
-    "EventMaster": [
-        {
-            "EventID": 1,
-            "EventName": "Muhurtham"
-        },
-        {
-            "EventID": 2,
-            "EventName": "Engagement"
-        },
-        {
-            "EventID": 1002,
-            "EventName": "Pre-wedding shoot"
-        },
-        {
-            "EventID": 1003,
-            "EventName": "Bride Mangalsnanam"
-        },
-        {
-            "EventID": 1004,
-            "EventName": "Groom Mangalsnanam"
-        },
-        {
-            "EventID": 1005,
-            "EventName": "Bride Nalugu"
-        },
-        {
-            "EventID": 1006,
-            "EventName": "Groom Nalugu"
-        },
-        {
-            "EventID": 1007,
-            "EventName": "Mehandi"
-        },
-        {
-            "EventID": 1008,
-            "EventName": "Sangeeth"
-        },
-        {
-            "EventID": 1009,
-            "EventName": "Reception"
-        }
-    ],
     "EnquiryDetails": [
         {
             "EnquiryID": 1,
