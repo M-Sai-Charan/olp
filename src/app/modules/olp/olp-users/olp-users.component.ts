@@ -35,20 +35,31 @@ export class OlpUsersComponent implements OnInit {
   ngOnInit(): void {
     this.filteredUsers = [...this.olpUsers];
     this.getOLPEnquires();
-    this.getOLPMaster();
+    // this.getOLPMaster();
   }
 
   getOLPEnquires() {
-    this.olpService.getAllOLPEnquires('WeddingEvents').subscribe((data: any) => {
+    this.olpService.getAllOLPEnquires('GetMasterData').subscribe((data: any) => {
       if (data) {
-        data = data.filter((i: any) => i.callStatus.name === 'New' || i.callStatus.name === 'Blocked')
-        this.olpUsers = data
+        let olpUsers =  this.getOLPData(data)?.EnquiryDetails
+        olpUsers = olpUsers.filter((i: any) => i.Status === 'New')
+        this.olpUsers = olpUsers
+        this.olpEventsLists = data?.EventMaster
       }
     })
   }
+  getOLPData(data: any) {
+    data.EnquiryDetails.forEach((element: any) => {
+      const matchingEvents = data.EventDetails.filter((event: any) => {
+        return event.EnquiryID === element.EnquiryID
+      })
+      element.events = matchingEvents
+    });
+    return data
+  }
   getOLPMaster() {
     this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
-      this.olpStatusLists = [data.statuses[0],data.statuses[1],data.statuses[4]];
+      this.olpStatusLists = [data.statuses[0], data.statuses[1], data.statuses[4]];
       this.olpEventsLists = data.events;
       this.olpEventsTimes = data.eventTimes;
       this.olpEmployeesLists = data.employees;
@@ -112,12 +123,13 @@ export class OlpUsersComponent implements OnInit {
   }
 
   createEventGroup(event: any): FormGroup {
+    console.log(event)
     return this.fb.group({
-      eventName: [event.eventName || null, Validators.required],
-      eventDate: [event.eventDate ? new Date(event.eventDate) : null, Validators.required],
-      eventLocation: [event.eventLocation || '', Validators.required],
-      eventTime: [event.eventTime || null, Validators.required],
-      eventGuests: [event.eventGuests ?? null, [Validators.required, Validators.min(1)]]
+      eventName: [event.EventName || null, Validators.required],
+      eventDate: [event.Date ? new Date(event.Date) : null, Validators.required],
+      eventLocation: [event.Location || '', Validators.required],
+      eventTime: [event.Time || null, Validators.required],
+      eventGuests: [event.Guests ?? null, [Validators.required, Validators.min(1)]]
     });
   }
   get eventsFormArray(): FormArray {

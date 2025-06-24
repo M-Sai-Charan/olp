@@ -9,7 +9,7 @@
 </div>
 <p-card>
   <p-table #dt2 [value]="olpUsers" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]"
-    [globalFilterFields]="['bride', 'groom', 'contactNumber', 'email', 'status']"
+    [globalFilterFields]="['Bride', 'Groom', 'ContactNumber', 'Email', 'Status']"
     [tableStyle]="{ 'min-width': '65rem' }" responsiveLayout="scroll">
 
     <ng-template #caption>
@@ -35,16 +35,16 @@
 
     <ng-template #body let-user>
       <tr class="hover:bg-surface-200">
-        <td>{{ user.bride }}</td>
-        <td>{{ user.groom }}</td>
-        <td>{{ user.contactNumber }}</td>
-        <td>{{ user.email }}</td>
+        <td>{{ user.Bride }}</td>
+        <td>{{ user.Groom }}</td>
+        <td>{{ user.ContactNumber }}</td>
+        <td>{{ user.Email }}</td>
         <td>
-          <p-tag [value]="user.callStatus?.name" [severity]="getSeverity(user.callStatus?.name)"></p-tag>
+          <p-tag [value]="user.Status" [severity]="getSeverity(user.Status)"></p-tag>
         </td>
         <td style="text-align: center;">
           <i class="pi pi-info-circle"
-            pTooltip="Created On: {{user.createdOn | date:'dd/MM/yyyy hh:mm a'}}&#10;Updated On: {{user.updatedOn | date:'dd/MM/yyyy hh:mm a'}}"
+            pTooltip="Created On: {{user.EnquirySubmissionDate | date:'dd/MM/yyyy hh:mm a'}}&#10;Updated On: {{user.updatedOn | date:'dd/MM/yyyy hh:mm a'}}"
             tooltipPosition="top">
           </i>
         </td>
@@ -108,7 +108,7 @@
             <div class="field col-12 md:col-6 lg:col-4">
               <label for="eventName-{{ i }}">Event</label>
               <p-select inputId="eventName-{{ i }}" [options]="olpEventsLists" formControlName="eventName"
-                optionLabel="name" placeholder="Select Event" styleClass="w-full"></p-select>
+                optionLabel="EventName" optionValue="EventName" placeholder="Select Event" styleClass="w-full"></p-select>
             </div>
 
             <div class="field col-12 md:col-6 lg:col-4">
