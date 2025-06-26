@@ -35,13 +35,13 @@ export class OlpUsersComponent implements OnInit {
   ngOnInit(): void {
     this.filteredUsers = [...this.olpUsers];
     this.getOLPEnquires();
-    // this.getOLPMaster();
+    this.getOLPMaster();
   }
 
   getOLPEnquires() {
     this.olpService.getAllOLPEnquires('GetMasterData').subscribe((data: any) => {
       if (data) {
-        let olpUsers =  this.getOLPData(data)?.EnquiryDetails
+        let olpUsers = this.getOLPData(data)?.EnquiryDetails
         olpUsers = olpUsers.filter((i: any) => i.Status === 'New')
         this.olpUsers = olpUsers
         this.olpEventsLists = data?.EventMaster
@@ -58,12 +58,18 @@ export class OlpUsersComponent implements OnInit {
     return data
   }
   getOLPMaster() {
-    this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
-      this.olpStatusLists = [data.statuses[0], data.statuses[1], data.statuses[4]];
-      this.olpEventsLists = data.events;
-      this.olpEventsTimes = data.eventTimes;
-      this.olpEmployeesLists = data.employees;
-    })
+    this.olpEventsTimes = [
+      { id: 1, name: "Early Morning", value: "morning" },
+      { id: 2, name: "Afternoon", value: "afternoon" },
+      { id: 3, name: "Evening", value: "evening" },
+      { id: 4, name: "Night", value: "night" }
+    ]
+    // this.olpService.getOLPMaster('OlpMaster/getOlpMaster').subscribe((data: any) => {
+    //   this.olpStatusLists = [data.statuses[0], data.statuses[1], data.statuses[4]];
+    //   this.olpEventsLists = data.events;
+    //   this.olpEventsTimes = data.eventTimes;
+    //   this.olpEmployeesLists = data.employees;
+    // })
   }
   onGlobalFilter(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -123,7 +129,6 @@ export class OlpUsersComponent implements OnInit {
   }
 
   createEventGroup(event: any): FormGroup {
-    console.log(event)
     return this.fb.group({
       eventName: [event.EventName || null, Validators.required],
       eventDate: [event.Date ? new Date(event.Date) : null, Validators.required],
@@ -165,7 +170,7 @@ export class OlpUsersComponent implements OnInit {
 
     const updatedEvents = formEvents.map((formEvent: any) => ({
       eventName: formEvent.eventName || {},
-      eventDate: formEvent.eventDate,
+      eventDate: this.formatDateToYMD(formEvent.eventDate),
       eventLocation: formEvent.eventLocation,
       eventTime: formEvent.eventTime || {},
       eventGuests: String(formEvent.eventGuests || '')
@@ -173,32 +178,38 @@ export class OlpUsersComponent implements OnInit {
 
     const updatedUser = {
       ...this.selectedUser,
-      calledBy: this.eventForm.value.calledBy,
-      callDate: this.eventForm.value.callDate,
-      callStatus: this.eventForm.value.callStatus,
+      // calledBy: this.eventForm.value.calledBy,
+      // callDate: this.eventForm.value.callDate,
+      // callStatus: this.eventForm.value.callStatus,
       events: updatedEvents
     };
-    this.olpService.updateOLPEnquiry(this.selectedUser.id, updatedUser).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Updated',
-          detail: 'User event updated  and moved to Invoice successfully.'
-        });
-        this.visible = false;
-        this.getOLPEnquires();
-        this.getOLPMaster();
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Failed',
-          detail: 'Something went wrong while saving.'
-        });
-      }
-    });
+    console.log(updatedUser)
+    // this.olpService.updateOLPEnquiry(this.selectedUser.id, updatedUser).subscribe({
+    //   next: () => {
+    //     this.messageService.add({
+    //       severity: 'success',
+    //       summary: 'Updated',
+    //       detail: 'User event updated  and moved to Invoice successfully.'
+    //     });
+    //     this.visible = false;
+    //     this.getOLPEnquires();
+    //     this.getOLPMaster();
+    //   },
+    //   error: () => {
+    //     this.messageService.add({
+    //       severity: 'error',
+    //       summary: 'Failed',
+    //       detail: 'Something went wrong while saving.'
+    //     });
+    //   }
+    // });
   }
-
+   formatDateToYMD(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // months are 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
   downloadPDF() {
     const doc = new jsPDF();
     doc.text(`OLP Events - ${this.selectedUser.bride} & ${this.selectedUser.groom}`, 10, 10);
