@@ -17,7 +17,7 @@
     "@angular/core": "^19.0.0",
     "@angular/forms": "^19.0.0",
     "@angular/platform-browser": "^19.0.0",
-    "@angular/platform-browser-dynamic": "^19.0.0",
+    "@angular/platform-browser-dynamic": "^21.2.15",
     "@angular/router": "^19.0.0",
     "@fullcalendar/angular": "^6.1.17",
     "@fullcalendar/daygrid": "^6.1.17",
