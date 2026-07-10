@@ -7,7 +7,8 @@ import { HttpService } from '../../services/http.service';
 })
 export class OlpService {
 
-  private baseUrl = 'https://olp-deploy.azurewebsites.net/api/';
+  // private baseUrl = 'https://olp-deploy.azurewebsites.net/api/';
+  private baseUrl = 'https://onelookphotography.azurewebsites.net/api/olp/';
 
   constructor(private httpService: HttpService) { }
 

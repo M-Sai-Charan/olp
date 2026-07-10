@@ -44,6 +44,7 @@ import { ColorPickerModule } from 'primeng/colorpicker';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
 import { SkeletonModule } from 'primeng/skeleton';
+import { DatePickerModule } from 'primeng/datepicker';
 @NgModule({
     declarations: [],
     imports: [
@@ -90,7 +91,8 @@ import { SkeletonModule } from 'primeng/skeleton';
         ColorPickerModule,
         FieldsetModule,
         FileUploadModule,
-        SkeletonModule
+        SkeletonModule,
+        DatePickerModule
     ],
     exports: [
         ButtonModule,
@@ -136,7 +138,8 @@ import { SkeletonModule } from 'primeng/skeleton';
         ColorPickerModule,
         FieldsetModule,
         FileUploadModule,
-        SkeletonModule
+        SkeletonModule,
+        DatePickerModule
     ],
     providers: [HttpService],
     bootstrap: []
